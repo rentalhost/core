@@ -1,0 +1,5 @@
+# Esta regra permite o acesso direto à arquivos de pastas públicas de cada módulo
+# Qualquer outra informação resultará em um Forbidden
+
+RewriteEngine On
+RewriteRule !^.+/publics/.+$ - [F,L]
