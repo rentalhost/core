@@ -1,1 +1,1 @@
-["object",[1.23,["object",[1.23,"456",3],"stdClass"],true],"array"]
+["object",[["float",1.23],["object",[["float",1.23],["string","456"],["number",3]],"stdClass"],["boolean",true]],"array"]

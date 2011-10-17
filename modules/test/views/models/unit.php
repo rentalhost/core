@@ -14,6 +14,8 @@
     </ul>
 </div>
 
+<?php if($result): ?>
 <div class="unit-result code <?php echo $type; ?>-type hidden">
     <?php echo call( '__export::export_html', $result ); ?>
 </div>
+<?php endif; ?>

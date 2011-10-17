@@ -2,6 +2,15 @@
 
     // Controla as informações das classes
     class test_class_library extends core_library {
+        // Tipo numerico / prioridade
+        static private $_priority = array(
+            'success' => 1,
+            'new' => 2,
+            'failed' => 3,
+            'exception' => 4,
+            'unavailable' => 5
+        );
+
         // Obtém informações sobre as classes existentes
         static public function get_all() {
             library( 'atom_dir' );
@@ -32,8 +41,25 @@
                 }
             }
 
+            $max_priority = 0;
+            foreach($data as $key => $value) {
+                $data_priority[$key] = self::$_priority[$value['type']];
+                $max_priority = max($max_priority, $data_priority[$key]);
+
+                $data_method[$key] = $value['method'];
+                $data_prefix[$key] = $value['prefix'];
+                $data_index[$key] = $value['index'];
+            }
+
+            array_multisort($data_priority, SORT_DESC,
+                            $data_method, SORT_ASC,
+                            $data_prefix, SORT_STRING,
+                            $data_index, SORT_NUMERIC,
+                            $data);
+
             return array(
                 'classname' => substr($item, 5, -8),
+                'type' => array_search($max_priority, self::$_priority),
                 'methods' => $data
             );
         }
@@ -89,20 +115,24 @@
         public function test( $index, $result, $comment = null ) {
             $id = "{$this->_id_class}.{$this->_id_method}.{$this->_id_prefix}.{$index}";
 
-            $this->_results["{$this->_id_prefix}-{$index}"] = array(
-                'id' => $id,
-                'method' => $this->_id_method,
-                'prefix' => $this->_id_prefix,
-                'index' => $index
-            );
-
-            if( isset($this->_results["{$this->_id_prefix}-{$index}"]['type']) ) {
-                $this->_results["{$this->_id_prefix}-{$index}"]+= array(
+            if( isset($this->_results[$id]) ) {
+                $this->_results[$id] = array(
+                    'id' => $id,
+                    'method' => $this->_id_method,
+                    'prefix' => $this->_id_prefix,
+                    'index' => $index,
                     'type' => 'exception',
                     'message' => 'O index #' . $index . ' já está sendo utilizado.'
                 );
                 return;
             }
+
+            $this->_results[$id] = array(
+                'id' => $id,
+                'method' => $this->_id_method,
+                'prefix' => $this->_id_prefix,
+                'index' => $index
+            );
 
             $result = call( '__export::prepare_result', $result );
             $result_type = 'new';
@@ -112,10 +142,15 @@
 
             if( is_file("{$file}.valid") ) {
                 $old_result = json_decode( file_get_contents("{$file}.valid"), true );
-                $result_type = $old_result === $result ? 'success' : 'failed';
+
+                if( $old_result === $result )
+                    $result_type = 'success';
+                else {
+                    $result_type = 'failed';
+                }
             }
 
-            $this->_results["{$this->_id_prefix}-{$index}"]+= array(
+            $this->_results[$id]+= array(
                 'type' => $result_type,
                 'result' => $result,
                 'message' => $comment

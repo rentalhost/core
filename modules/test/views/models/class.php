@@ -1,12 +1,12 @@
-<div class="unit-class waiting-type">
+<div class="unit-class <?php echo $type; ?>-type">
     <span class="strong">classe</span>
     <span class="name"><?php echo htmlspecialchars($classname); ?></span>
     <span>::</span>
-    <span class="result">aguardando resultados...</span>
+    <span class="result"><?php echo $type; ?></span>
     <span class="message"></span>
 </div>
 
-<div class="unit-tests waiting-type">
+<div class="unit-tests <?php echo $type; ?>-type">
     <?php
 
         // Imprime informações sobre cada método da classe
@@ -17,4 +17,4 @@
     ?>
 </div>
 
-<div class="unit-footer waiting-type"></div>
+<div class="unit-footer <?php echo $type; ?>-type"></div>

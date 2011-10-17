@@ -4,22 +4,18 @@
     class test_export_library extends core_library {
         // Exporta um resultado em HTML
         static public function export_html( $data, $exclude_header = false ) {
-            $type = self::_get_type($data);
-            switch($type) {
+            switch(self::_get_type($data)) {
                 case 'boolean':
-                    return self::_typefy_html($type, $data ? 'true' : 'false', null, null, $exclude_header);
+                    return self::_typefy_html($data[0], $data[1] ? 'true' : 'false', null, null, $exclude_header);
                     break;
                 case 'string':
-                    return self::_typefy_html($type, $data, '"', 'htmlspecialchars', $exclude_header);
+                    return self::_typefy_html($data[0], $data[1], '"', 'htmlspecialchars', $exclude_header);
                     break;
                 case 'object':
                     return self::_typefy_html_object($data[1], $data[2]);
                     break;
-                case 'resource':
-                    return self::_typefy_html($type, $data[1], null, null, $exclude_header);
-                    break;
                 default:
-                    return self::_typefy_html($type, $data, null, null, $exclude_header);
+                    return self::_typefy_html($data[0], $data[1], null, null, $exclude_header);
             }
         }
 
@@ -30,6 +26,22 @@
 
         // Prepara um resultado
         static private function _prepare_result_walker( $data ) {
+            if( is_string( $data ) ) {
+                return array( 'string', $data );
+            }
+            else
+            if( is_bool( $data ) ) {
+                return array( 'boolean', $data );
+            }
+            else
+            if( is_int( $data ) ) {
+                return array( 'number', $data );
+            }
+            else
+            if( is_float( $data ) ) {
+                return array( 'float', $data );
+            }
+            else
             if( is_array( $data )
             ||  is_a( $data, 'stdClass' ) ) {
                 $data_values = (array) $data;
@@ -51,11 +63,13 @@
                 return array('object', $data_values, $object_type);
             }
             else
+            if( is_null( $data ) ) {
+                return array( 'null', $data );
+            }
+            else
             if( is_resource( $data ) ) {
                 return array('resource', get_resource_type($data));
             }
-
-            return $data;
         }
 
         // Obtém o tipo básico da informação
