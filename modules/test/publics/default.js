@@ -24,9 +24,6 @@ $(function(){
     // Dá um auto-click em alguns tipos de classes
     div_classes.filter('.unavailable-type, .success-type').click();
 
-    // Dá um auto-click em coverages que estão em 100%
-    div_classes.filter('[data-percentage="100.00"]').click();
-
     // Dá um auto-click em alguns tipos de resultados
     div_units.filter('.new-type, .removed-type, .failed-type, .exception-type').click();
 
