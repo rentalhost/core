@@ -71,6 +71,23 @@ ul#toolbar {
     list-style: none;
     border-radius: 0 0 5px 5px;
 }
+ul#toolbar > li {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 8pt;
+    color: #004583;
+    cursor: pointer;
+    margin-right: 15px;
+    transition: color 0.075s ease-in-out;
+}
+ul#toolbar > li:hover {
+    color: #ff0000;
+}
+ul#toolbar > li.disabled {
+    cursor: default;
+    color: #c6c6c6;
+}
 
 /** CLASSE */
 div.unit-class {
@@ -295,4 +312,35 @@ div.type-resource > span.code-value {
 }
 span.object-type {
     color: #008;
+}
+
+/** LINHA DOS ARQUIVOS */
+ul.file-lines {
+    margin: 0;
+    list-style-type: decimal;
+    font: 8pt "Consolas";
+    padding: 15px 25px 0px 60px;
+    color: silver;
+    white-space: pre-wrap;
+}
+ul.file-lines li {
+    margin-top: -20px;
+}
+ul.file-lines li > span {
+    color: gray;
+    display: block;
+    padding: 2px 0;
+}
+
+ul.file-lines li.coverage-on > span {
+    background-color: #efe;
+    color: #242;
+}
+ul.file-lines li.coverage-off > span {
+    background-color: #fee;
+    color: #422;
+}
+ul.file-lines li.coverage-dead > span {
+    background-color: #f9f9f9;
+    color: #222;
 }

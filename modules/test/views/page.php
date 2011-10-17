@@ -21,15 +21,37 @@
         <div id="content">
             <div class="content">
                 <ul id="toolbar">
+                    <li data-href="?default">Executar</li>
+                    <?php if(extension_loaded('xdebug')): ?>
+                    <li data-href="?coverage">Code Coverage</li>
+                    <?php else: ?>
+                    <li class="disabled">Code Coverage</li>
+                    <?php endif; ?>
                 </ul>
 
                 <div id="classes-realm">
                     <?php
 
+                        // Se necessário, inicia o sistema de depuração
+                        if( isset($_GET['coverage']) )
+                            xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+
                         // Obtém e imprime as classes diretamente no modelo
+                        $result = '';
                         foreach( call('__class::get_all') as $value ) {
-                            load('models/class', $value);
+                            $result.= load('models/class', $value, true);
                         }
+
+                        if( isset($_GET['coverage']) ) {
+                            foreach( xdebug_get_code_coverage() as $file => $lines ) {
+                                load('coverage/class', array(
+                                    'file' => $file,
+                                    'lines' => $lines
+                                ));
+                            }
+                        }
+
+                        echo $result;
 
                     ?>
                 </div>

@@ -56,4 +56,9 @@ $(function(){
     // Cancela o default behavior em clicks
     div_units.find('li.button').click(false);
 
+    // Ao clicar em um item do toolbar, utilizar seu href
+    $('ul#toolbar li[data-href]').click(function(){
+        location.search = $(this).data('href');
+    });
+
 });
