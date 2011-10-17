@@ -147,6 +147,10 @@
                     $result_type = 'success';
                 else {
                     $result_type = 'failed';
+                    $result = array(
+                        'old' => $old_result,
+                        'new' => $result
+                    );
                 }
             }
 

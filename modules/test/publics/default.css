@@ -262,10 +262,7 @@ div.type-object div.code-header.special {
 }
 
 div.code-title {
-    font: 8pt "Trebuchet MS";
-    margin-left: 0px;
-    font-weight: bold;
-    padding-bottom: 5px;
+    font: 7pt "Trebuchet MS";
 }
 div.code-body {
     margin-left: 20px;

@@ -15,7 +15,18 @@
 </div>
 
 <?php if($result): ?>
-<div class="unit-result code <?php echo $type; ?>-type hidden">
-    <?php echo call( '__export::export_html', $result ); ?>
-</div>
+    <?php if(isset($result['new'])): ?>
+        <div class="unit-result code <?php echo $type; ?>-type hidden">
+            <div class="code-title">Resultado obtido:</div>
+            <?php echo call( '__export::export_html', $result['new'] ); ?>
+        </div>
+        <div class="unit-result code <?php echo $type; ?>-type hidden">
+            <div class="code-title">Resultado original:</div>
+            <?php echo call( '__export::export_html', $result['old'] ); ?>
+        </div>
+    <?php else: ?>
+        <div class="unit-result code <?php echo $type; ?>-type hidden">
+            <?php echo call( '__export::export_html', $result ); ?>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
