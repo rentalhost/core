@@ -10,8 +10,10 @@
             // Quando não existe a informação, faz um save rapidamente
             // Se não for necessário mesclar, faz um save rapidamente
             if( !isset( self::$_configs[$modular_path] )
+            ||  self::$_configs[$modular_path] === false
             ||  $merge_similar === false ) {
                 self::$_configs[$modular_path] = (array) $config_array;
+                self::_load_low_priorities($modular_path);
                 return true;
             }
 
@@ -53,11 +55,12 @@
         // Faz uma busca prioritária
         static private function _prioritary_get_config( $config_key ) {
             // Obtém o path atual de prioridade
-            $priority_path = explode( '/', core::get_path_clipped( core::get_caller_path( ), CORE_INDEX ) );
+            $priority_path = core::get_path_clipped( core::get_caller_path( ), CORE_INDEX );
+            $priority_path = explode( '/', $priority_path === 'index.php' ? '' : $priority_path );
 
             // Buscar enquanto puder
             while( true ) {
-                // Une a prioridade e conta os elementos
+                // Une a prioridade
                 $priority_unify = join( '/', $priority_path );
 
                 // Se os dados de configuração ainda não existe, carrega
@@ -81,6 +84,28 @@
 
             // Se não encontrar nenhuma informação, retorna null
             return null;
+        }
+
+        // Carrega as configurações das prioridades inferiores da requisitada
+        static private function _load_low_priorities( $start_dir ) {
+            $priority_path = array_slice( explode( '/', core::get_path_fixed( $start_dir ) ), 0, -1 );
+
+            // Enquanto puder...
+            while( true ) {
+                // Une a prioridade
+                $priority_unify = join( '/', $priority_path );
+
+                // Se os dados de configuração ainda não existe, carrega
+                // O processo só continuará se esta informação não existir
+                if( !isset( self::$_configs[$priority_unify] ) ) {
+                    self::$_configs[$priority_unify] = false;
+                    core::do_require( CORE_MODULES . "/{$priority_unify}/configs.php" );
+                    array_pop( $priority_path );
+                    continue;
+                }
+
+                break;
+            }
         }
 
         // Retorna se uma configuração foi registrada

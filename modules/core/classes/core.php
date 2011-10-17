@@ -300,6 +300,7 @@
             $__is_file = false;
 
             // Inclui o arquivo especificado
+            $__required_file = realpath( $__required_file );
             if( is_file( $__required_file ) ) {
                 $__is_file = true;
                 require $__required_file;
