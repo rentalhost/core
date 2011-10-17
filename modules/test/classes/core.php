@@ -21,7 +21,7 @@
             $this->test( 1, null, 'Null' );
             $this->test( 2, opendir('.'), 'Resource' );
 
-            $this->set_prefix( 'test_if' );
+            $this->set_prefix( 'case_test' );
             $this->case_test( false, null, 'Unavailable, on moment' );
             $this->case_test( true, 'special_test' );
         }

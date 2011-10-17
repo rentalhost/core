@@ -5,7 +5,7 @@
     <span>::</span>
     <span class="result"><?php echo $type; ?></span>
     <span class="message">
-        <?php echo $message ? " - {$message}" : null; ?>
+        <?php echo @$message ? " - {$message}" : null; ?>
     </span>
 
     <ul class="actions">
