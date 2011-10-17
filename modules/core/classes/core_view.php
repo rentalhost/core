@@ -94,7 +94,7 @@
         private function _load_view( $__args ) {
             // Se args for um array, exporta seus dados dentro da view
             if( is_array( $__args ) ) {
-                extract( $__args );
+                extract( $__args, EXTR_REFS );
             }
 
             // Nesta etapa, todos os dados importantes deverão estar disponíveis
