@@ -1,67 +1,122 @@
 <?php
 
-    // Prepara uma variável para exportação
+    // Exporta um resultado
     class test_export_library extends core_library {
-        // Exporta uma variável para ser lida pelo sistema de testes
-        static public function export( $data ) {
-            // Tipos floats são tipados
-            if( is_float( $data ) ) {
-                return array(
-                    "type" => 'float',
-                    "value" => $data
-                );
+        // Exporta um resultado em HTML
+        static public function export_html( $data, $exclude_header = false ) {
+            $type = self::_get_type($data);
+            switch($type) {
+                case 'boolean':
+                    return self::_typefy_html($type, $data ? 'true' : 'false', null, null, $exclude_header);
+                    break;
+                case 'string':
+                    return self::_typefy_html($type, $data, '"', 'htmlspecialchars', $exclude_header);
+                    break;
+                case 'object':
+                    return self::_typefy_html_object($data[1], $data[2]);
+                    break;
+                case 'resource':
+                    return self::_typefy_html($type, $data[1], null, null, $exclude_header);
+                    break;
+                default:
+                    return self::_typefy_html($type, $data, null, null, $exclude_header);
             }
-            else
-            // Tipos string são encapsuladas
-            if( is_string( $data ) ) {
-                return '"' . $data . '"';
-            }
-            else
-            // Tipos numéricos e booleans são impressos normalmente
-            if( is_scalar( $data ) ) {
-                return $data;
-            }
-            else
-            // Valor nulo
-            if( is_null( $data ) ) {
-                return array( 'type' => 'null' );
-            }
-            else
-            // Arrays e stdClass devem ser informadas
+        }
+
+        // Prepara um resultado para o JSON
+        static public function prepare_result( $data ) {
+            return self::_prepare_result_walker($data);
+        }
+
+        // Prepara um resultado
+        static private function _prepare_result_walker( $data ) {
             if( is_array( $data )
-            ||  is_a( $data, 'stdclass' ) ) {
-                $result = array();
-                $result['type'] = gettype( $data );
+            ||  is_a( $data, 'stdClass' ) ) {
+                $data_values = (array) $data;
+                $object_type = is_array($data) ? 'array' : 'stdClass';
 
-                $data = (array) $data;
-                foreach( $data as $key => $item )
-                    $data[$key] = self::export( $item );
+                foreach($data_values as &$item)
+                    $item = self::prepare_result($item);
 
-                $result['value'] = $data;
-                return $result;
+                return array('object', $data_values, $object_type);
             }
             else
-            // Se for uma classe
             if( is_object( $data ) ) {
-                $result = array();
-                $result['type'] = get_class( $data );
+                $data_values = get_object_vars($data);
+                $object_type = get_class($data);
 
-                $data = (array) $data;
-                foreach( $data as $key => $item ) {
-                    $key = array_slice( explode( "\0", $key ), 1, -1 );
-                    $data[$key] = self::export( $item );
-                }
+                foreach($data_values as &$item)
+                    $item = self::prepare_result($item);
 
-                $result['value'] = $data;
-                return $result;
+                return array('object', $data_values, $object_type);
             }
             else
-            // Resources devem ser tipado
             if( is_resource( $data ) ) {
-                return array(
-                    "type" => gettype( $data ),
-                    "value" => get_resource_type( $data )
-                );
+                return array('resource', get_resource_type($data));
             }
+
+            return $data;
+        }
+
+        // Obtém o tipo básico da informação
+        static private function _get_type( $value ) {
+            if( is_bool( $value ) ) { return 'boolean'; }
+            else if( is_string( $value ) ) { return 'string'; }
+            else if( is_int( $value ) ) { return 'number'; }
+            else if( is_float( $value ) ) { return 'float'; }
+            else if( is_null( $value ) ) { return 'null'; }
+
+            // Para array, object, resource, retorna a informação #0
+            return $value[0];
+        }
+
+        // Tipa uma informação para impressão em HTML
+        static private function _typefy_html( $type, $data, $enclosure, $additional_method, $exclude_header ) {
+            $result = null;
+            if( $exclude_header === false ) {
+                $result = '<div class="type-' . $type . '">';
+            }
+
+            $result.= '<span class="code-type">' . $type . '</span>';
+
+            if( $additional_method !== null ) {
+                $data = call_user_func( $additional_method, $data );
+            }
+
+            if( $enclosure !== null ) {
+                $data = "{$enclosure}{$data}{$enclosure}";
+            }
+
+            $result.= '<span class="code-value">' . $data . '</span>';
+
+            if( $exclude_header === false ) {
+                $result.= '</div>';
+            }
+
+            return $result;
+        }
+
+        // Tipa uma informação de objeto (array, stdClass ou object genérico)
+        static private function _typefy_html_object( $data, $object_type ) {
+            $max_key_length = 1;
+            foreach( $data as $key => $value ) {
+                $max_key_length = max( $max_key_length, strlen($key) );
+            }
+
+            $result = '<div class="code-header special">'
+                        . '<span class="code-type">object</span>'
+                        . '<span class="code-value object-type">' . $object_type . '</span>'
+                    . '</div>'
+                    . '<div class="code-body">';
+
+            foreach( $data as $key => $value ) {
+                $result.= '<div class="code-header type-' . self::_get_type($value) . '">'
+                            . '<span class="code-key">' . str_pad($key, $max_key_length, ' ', STR_PAD_RIGHT) . '</span><span>: </span>'
+                            . self::export_html($value, true)
+                        . '</div>';
+            }
+
+            $result.= '</div>';
+            return $result;
         }
     }

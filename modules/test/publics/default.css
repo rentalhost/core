@@ -36,17 +36,13 @@ div#header > div.content > span.labs-platform {
 }
 
 div#header > div.content > span.labs-title,
-div#header > div.content > span.labs-dcolon,
-div#header > div.content > span.labs-status {
+div#header > div.content > span.labs-dcolon {
     font-size: 10pt;
     height: 30px;
     padding-top: 20px;
     display: inline-block;
     vertical-align: top;
     color: #999999;
-}
-div#header > div.content > span.labs-status > span.class {
-    color: #004583;
 }
 div#header > div.content > span.labs-title {
     color: #4D4D4D;
@@ -65,10 +61,6 @@ div#content > div.content {
     margin-left: -510px;
 }
 
-div.model-type {
-    display: none;
-}
-
 /** BARRA DE FERRAMENTAS */
 ul#toolbar {
     margin: 0;
@@ -79,23 +71,6 @@ ul#toolbar {
     list-style: none;
     border-radius: 0 0 5px 5px;
 }
-ul#toolbar > li {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    font-size: 8pt;
-    color: #004583;
-    cursor: pointer;
-    margin-right: 15px;
-    transition: color 0.075s ease-in-out;
-}
-ul#toolbar > li:hover {
-    color: #ff0000;
-}
-ul#toolbar > li.disabled {
-    cursor: default;
-    color: #c6c6c6;
-}
 
 /** CLASSE */
 div.unit-class {
@@ -104,21 +79,9 @@ div.unit-class {
     padding: 8px 20px 9px;
     width: 949px;
     color: #777777;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     border-radius: 3px 3px 0 0;
     transition: background-color 0.15s ease-in-out;
-}
-
-div.unit-class.stopped-type,
-div.unit-test.stopped-type,
-div.unit-tests.stopped-type,
-div.unit-result.stopped-type,
-div.unit-footer.stopped-type {
-    border-left-color: #E4E0F2;
-}
-div.unit-class.stopped-type > span.result,
-div.unit-test.stopped-type > span.result {
-    color: #9D9BA2;
 }
 
 div.unit-class.success-type,
@@ -181,18 +144,6 @@ div.unit-test.waiting-type > span.result {
     color: #999999;
 }
 
-div.unit-class.running-type,
-div.unit-test.running-type,
-div.unit-tests.running-type,
-div.unit-result.running-type,
-div.unit-footer.running-type {
-    border-left-color: #333333;
-}
-div.unit-class.running-type > span.result,
-div.unit-test.running-type > span.result {
-    color: #333333;
-}
-
 div.unit-class.unavailable-type,
 div.unit-test.unavailable-type,
 div.unit-tests.unavailable-type,
@@ -203,18 +154,6 @@ div.unit-footer.unavailable-type {
 div.unit-class.unavailable-type > span.result,
 div.unit-test.unavailable-type > span.result {
     color: #999999;
-}
-
-div.unit-class.empty-type,
-div.unit-test.empty-type,
-div.unit-tests.empty-type,
-div.unit-result.empty-type,
-div.unit-footer.empty-type {
-    border-left-color: #f0f0f0;
-}
-div.unit-class.empty-type > span.result,
-div.unit-test.empty-type > span.result {
-    color: #cccccc;
 }
 
 div.unit-class:hover {
@@ -230,67 +169,18 @@ div.unit-class > span.message {
     color: #b5b5b5;
 }
 
-div.unit-class > ul.actions {
-    margin: 0;
-    list-style: none;
-    float: right;
-}
-div.unit-class > ul.actions > li {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-    font-size: 8pt;
-    color: #004583;
-    margin-left: 15px;
-    transition: 0.075s ease-in-out;
-    transition-property: color, opacity;
-    opacity: 0.8;
-}
-div.unit-class > ul.actions > li:hover {
-    color: #ff0000;
-    opacity: 1;
-}
-div.unit-class > ul.actions > li.disabled {
-    cursor: default;
-    color: #c6c6c6;
-    opacity: 1;
-}
-
 div.unit-footer {
     border-top: 3px #f3f3f3 solid;
     border-bottom-left-radius: 3px;
     border-left: 3px solid;
     margin-bottom: 2px;
-    margin-top: 6px;
+    margin-top: 1px;
+
 }
 
 /** UNIDADES */
 div.unit-tests {
     border-left: 1px solid;
-    overflow: hidden;
-    margin-top: -1px;
-    margin-bottom: -5px;
-}
-div.unit-tests > div {
-    opacity: 1.00;
-    transition: opacity 0.25s ease-in-out;
-}
-div.unit-tests.hidden {
-    margin-top: -7px;
-    margin-bottom: 2px;
-    height: 0;
-}
-div.unit-tests.hidden > div {
-    opacity: 0;
-}
-
-div.unit-tests.waiting-type,
-div.unit-tests.unavailable-type,
-div.unit-tests.stopped-type,
-div.unit-tests.empty-type {
-    margin-top: -5px;
-    margin-bottom: 2px;
-    height: 0;
 }
 
 /** UNIDADE */
@@ -298,7 +188,7 @@ div.unit-test {
     background: #FCFCFC url(images/operation-arrow.png) 16px 11px no-repeat;
     padding: 5px 19px 6px 30px;
     width: 936px;
-    color: #777;
+    color: #ccc;
     margin-left: 2px;
     border-left: 2px #EEE solid;
     transition: background-color 0.15s ease-in-out;
@@ -306,14 +196,6 @@ div.unit-test {
 }
 div.unit-test:first-child {
     margin-top: 0px;
-}
-div.unit-test.main {
-    padding: 5px 19px 6px 15px;
-    width: 951px;
-    background: #f7f7f7;
-}
-div.unit-test.active {
-    margin-bottom: 0px;
 }
 div.unit-test:hover {
     background-color: #f0f0f0;
@@ -354,6 +236,9 @@ div.unit-test > ul.actions > li.disabled {
 div.unit-result {
     margin-top: 1px;
 }
+div.unit-result.hidden {
+    display: none;
+}
 div.unit-result.code {
     font: 8pt "Consolas";
     color: #333;
@@ -363,27 +248,17 @@ div.unit-result.code {
     margin: 1px 0 1px 2px;
     border-left: 2px whiteSmoke solid;
 }
-div.unit-result.valid-code {
-    padding-top: 0;
-}
-div.unit-result.hidden {
-    display: none;
-}
 
 /** CÓDIGO */
 div.code-header {
-    height: 16px;
-    padding: 6px 15px 2px 25px;
+    min-height: 16px;
 }
 div.code-header.special {
     display: inline-block;
-    background: url(images/variable-closed.png) 9px 5px no-repeat;
 }
-div.code-header.special.opened {
-    background-image: url(images/variable-opened.png);
-}
-div.code-header.special:hover {
-    background-color: #FAFAFA;
+div.type-object div.code-header.special {
+    vertical-align: middle;
+    line-height: 16px;
 }
 
 div.code-title {
@@ -394,10 +269,16 @@ div.code-title {
 }
 div.code-body {
     margin-left: 20px;
+    white-space: pre-wrap;
 }
+
 span.code-key {
     display: inline-block;
     color: #844;
+    z-index: 2;
+}
+span.code-type {
+    margin-right: 6px;
 }
 
 div.type-string > span.code-value {
@@ -414,4 +295,7 @@ div.type-float > span.code-value {
 }
 div.type-resource > span.code-value {
     color: #808;
+}
+span.object-type {
+    color: #008;
 }

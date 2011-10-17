@@ -1,89 +1,50 @@
 
-var LOCALE = {
-    'stopped-type': 'pausado',
-    'waiting-type': 'esperando...',
-    'empty-type': 'sem unidades para teste',
-    'running-type': 'executando...',
-    'success-type': 'sucesso',
-    'failed-type': 'falhou',
-    'exception-type': 'excessão',
-    'new-type': 'novo',
-    'unavailable-type': 'não disponível',
-    'idle-status': 'tomando um ar...',
-    'running-status': 'em operação...'
-};
-
 $(function(){
 
     var win = $(window);
     var div_content = $('div#content > div.content');
-
-    // Cria o PageObject
-    PageObject = new PageObject();
+    var div_units = $('div.unit-test');
 
     // Ao redimensionar a janela, esticar o conteúdo, se necessário
     win.resize(function(){
         div_content.css('min-height', win.height() - 60);
     }).resize();
 
-    // Ao clicar, executa todos os testes
-    $('li.button-all.run-button').click(function(){
-        ClassObject.sRun(true);
-    });
-
-    // Ao clicar em um item de classe, exibe seu conteúdo
-    $('div.unit-class').click(function() {
-        $(this).toggleClass('active');
-
-        var tests_elem = $(this).next();
-        tests_elem.toggleClass('hidden');
-
-        var object = $('div.unit-class').data('object');
-        if(object._type === 'stopped-type')
-            object.doRun(true, true);
-    })
-    .find('li.cancel-button').click(function(){
-        $(this).closest('div.unit-class').data('object').doCancel();
-    }).end()
-    .find('li.run-button').click(function(){
-        $(this).closest('div.unit-class').data('object').doRun(true, true);
-    });
-
-    // Ao clicar em um item de resultado, exibe seu código(s)
-    $('div.unit-test').click(function() {
-        $(this).toggleClass('active');
+    // Exibe ou esconde um resultado
+    div_units.click(function(){
         $(this).nextUntil('div.unit-test').toggleClass('hidden');
-
-        var object = $(this).data('result');
-        if(object) {
-            var elem = $(this).data('object')._elemContent;
-
-            elem.html(PageObject.logObject(elem, object, true, null, 'Resultado obtido:'));
-            $(this).removeData('result');
-        }
-    })
-    .find('li.cancel-button').click(function(){
-        $(this).closest('div.unit-test').data('object').doCancel();
-    }).end()
-    .find('li.run-button').click(function(){
-        $(this).closest('div.unit-test').data('object').run();
-    }).end()
-    .find('li.accept-button').click(function(){
-        $(this).closest('div.unit-test').data('object').acceptResult();
-    }).end()
-    .find('li.reject-button').click(function(){
-        $(this).closest('div.unit-test').data('object').rejectResult();
     });
 
-    // Evita que o elemento da classe/item seja afetado pelo clique no botão
-    $('li.button').click(function(){
-        return false;
+    // Dá um auto-click em alguns tipos de resultados
+    div_units.filter('.new-type, .failed-type, .exception-type, removed-type').click();
+
+    // Ativa o botão "Aceitar" para um novos ou falhados, e "Rejeitar" para tipo sucesso
+    div_units.filter('.new-type, .failed-type').find('li.button.accept-button').removeClass('disabled');
+    div_units.filter('.success-type').find('li.button.reject-button').removeClass('disabled');
+
+    // Ativa o botão "Aceitar"
+    div_units.find('li.button.accept-button').click(function(){
+        $(this).addClass('disabled');
+        $.ajax({
+            url: 'classes/accept_result',
+            type: 'POST',
+            dataType: 'json',
+            data: { id: $(this).closest('.unit-test').data('unit-id') }
+        });
     });
 
-    // Armazena o modelo de classes e itens
-    ModelObject._classModel = $('div.class-model').children().detach();
-    ModelObject._itemModel = $('div.item-model').children().detach();
-    ModelObject._resultModel = $('div.result-model').children().detach();
-    ModelObject._logModel = $('div.log-model').children().detach();
+    // Ativa o botão "Rejeitar"
+    div_units.find('li.button.reject-button').click(function(){
+        $(this).addClass('disabled');
+        $.ajax({
+            url: 'classes/reject_result',
+            type: 'POST',
+            dataType: 'json',
+            data: { id: $(this).closest('.unit-test').data('unit-id') }
+        });
+    });
+
+    // Cancela o default behavior em clicks
+    div_units.find('li.button').click(false);
 
 });
