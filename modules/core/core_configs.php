@@ -11,4 +11,5 @@
     // Salva as configurações na raiz
     core_config::save_configs( '', $configs );
 
-    //TODO: carregar as configurações modular (modules/configs.php)
+    // Carrega as configurações modular
+    core::do_require( CORE_MODULES . '/configs.php' );
