@@ -43,8 +43,13 @@
                         }
 
                         if( isset($_GET['coverage']) ) {
-                            foreach( xdebug_get_code_coverage() as $file => $lines ) {
+                            $coverage = xdebug_get_code_coverage();
+                            ksort($coverage);
+
+                            foreach( $coverage as $file => $lines ) {
+                                $filename = core::get_path_fixed(core::get_path_clipped($file));
                                 load('coverage/class', array(
+                                    'name' => $filename,
                                     'file' => $file,
                                     'lines' => $lines
                                 ));

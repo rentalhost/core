@@ -4,6 +4,8 @@
     class core_caller {
         // Armazena as classes que já foram carregadas para evitar re-processamento
         static private $_loaded_classes = array();
+        // Armazena uma instância do caller
+        static private $_caller = null;
 
         // Inicia uma chamada estática de um helper ou library
         //DEBUG: informa um erro se a chamada for inválida
@@ -48,5 +50,15 @@
             // Salva em loaded classes e retorna
             self::$_loaded_classes[$library] = $library;
             return $library;
+        }
+
+        // Obtém uma instância do caller
+        static public function get_instance() {
+            // Se o caller não for definido, carrega
+            if( self::$_caller === null ) {
+                return self::$_caller = new self();
+            }
+
+            return self::$_caller;
         }
     }

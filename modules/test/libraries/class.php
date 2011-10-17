@@ -53,6 +53,7 @@
             }
 
             $classname = substr($item, 5, -8);
+            if(isset(self::$_files[$classname]))
             foreach(self::$_files[$classname] as $key => $value) {
                 if(array_key_exists($value[0], $data)) {
                     unset(self::$_files[$classname][$key]);

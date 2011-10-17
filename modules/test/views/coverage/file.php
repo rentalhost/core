@@ -2,7 +2,6 @@
 
     // Carrega o arquivo e quebra por linhas
     $file_content = preg_split('/\r?\n/', file_get_contents($file));
-    $percentage = 1;
 
 ?>
 <ul class="file-lines">
@@ -13,6 +12,7 @@
             $class = null;
 
             if(isset( $lines[$line] )) {
+                $total_lines++;
                 switch($lines[$line]) {
                     case 1:
                         $class = 'coverage-on';

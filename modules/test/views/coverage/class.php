@@ -1,20 +1,22 @@
 <?php
 
-    $accepted_lines = 0;
+    $accepted_lines = 1;
+    $total_lines = 1;
     $result = load('coverage/file', array(
         'file' => $file,
         'lines' => $lines,
-        'accepted_lines' => &$accepted_lines
+        'accepted_lines' => &$accepted_lines,
+        'total_lines' => &$total_lines
     ), true);
 
-    $percentage = number_format(100 / count($lines) * $accepted_lines, 2, '.', '');
+    $percentage = number_format(100 / $total_lines * $accepted_lines, 2, '.', '');
     $type = $percentage === '100.00' ? 'success' : 'failed';
 
 ?>
 
 <div class="unit-class <?php echo $type; ?>-type" data-percentage="<?php echo $percentage; ?>">
     <span class="strong">arquivo</span>
-    <span class="name"><?php echo core::get_path_fixed(core::get_path_clipped($file)); ?></span>
+    <span class="name"><?php echo $name; ?></span>
     <span>::</span>
     <span class="result"><?php echo $type; ?></span>
     <span class="message">(<?php echo $percentage; ?>%)</span>
