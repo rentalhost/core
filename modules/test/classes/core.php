@@ -36,4 +36,16 @@
             $this->test( 2, substr( core::get_baseurl( false ), -6 ), 'Path are clipped' );
             $this->test( 3, substr( get_baseurl(), -6 ), 'Only for coverage' );
         }
+
+        public function test_get_modular_parts() {
+            $this->test( 1, core::get_modular_parts( 'test' ) );
+            $this->test( 2, core::get_modular_parts( 'untest' ) );
+            $this->test( 3, core::get_modular_parts( 'test_useful_folder__underlined' ) );
+            $this->test( 4, core::get_modular_parts( 'test_useful_file__underlined' ) );
+        }
+
+        public function test_get_joined_class() {
+            $modular = core::get_modular_parts( 'test_useful_fake' );
+            $this->test( 1, core::get_joined_class( $modular, 'object' ) );
+        }
     }
