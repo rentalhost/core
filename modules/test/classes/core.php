@@ -31,7 +31,6 @@
             $this->test( 1, 'Fine!' );
         }
 
-        // Testes para o método core::get_baseurl / get_baseurl();
         public function test_get_baseurl() {
             $this->test( 1, substr( core::get_baseurl(), -11 ), 'Path are clipped' );
             $this->test( 2, substr( core::get_baseurl( false ), -6 ), 'Path are clipped' );

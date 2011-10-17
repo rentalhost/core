@@ -16,10 +16,10 @@ $(function(){
     });
 
     // Dá um auto-click em alguns tipos de resultados
-    div_units.filter('.new-type, .failed-type, .exception-type, removed-type').click();
+    div_units.filter('.new-type, .removed-type, .failed-type, .exception-type').click();
 
-    // Ativa o botão "Aceitar" para um novos ou falhados, e "Rejeitar" para tipo sucesso
-    div_units.filter('.new-type, .failed-type').find('li.button.accept-button').removeClass('disabled');
+    // Ativa o botão "Aceitar" para um novos, falhados e removidos, e "Rejeitar" para tipo sucesso
+    div_units.filter('.new-type, .failed-type, .removed-type').find('li.button.accept-button').removeClass('disabled');
     div_units.filter('.success-type').find('li.button.reject-button').removeClass('disabled');
 
     // Ativa o botão "Aceitar"

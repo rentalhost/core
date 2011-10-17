@@ -132,16 +132,16 @@ div.unit-test.new-type > span.result {
     color: #00b3b3;
 }
 
-div.unit-class.waiting-type,
-div.unit-test.waiting-type,
-div.unit-tests.waiting-type,
-div.unit-result.waiting-type,
-div.unit-footer.waiting-type {
-    border-left-color: #c5c5c5;
+div.unit-class.removed-type,
+div.unit-test.removed-type,
+div.unit-tests.removed-type,
+div.unit-result.removed-type,
+div.unit-footer.removed-type {
+    border-left-color: #ff2929;
 }
-div.unit-class.waiting-type > span.result,
-div.unit-test.waiting-type > span.result {
-    color: #999999;
+div.unit-class.removed-type > span.result,
+div.unit-test.removed-type > span.result {
+    color: #ff2929;
 }
 
 div.unit-class.unavailable-type,

@@ -2,13 +2,17 @@
 
     // Controla as informações das classes
     class test_class_library extends core_library {
+        // Armazena os arquivos de resultado
+        static private $_files = array();
+
         // Tipo numerico / prioridade
         static private $_priority = array(
             'unavailable' => 0,
             'success' => 1,
             'new' => 2,
-            'failed' => 3,
-            'exception' => 4
+            'removed' => 3,
+            'failed' => 4,
+            'exception' => 5
         );
 
         // Obtém informações sobre as classes existentes
@@ -18,12 +22,19 @@
             $results = array();
             $loaded_classes = get_declared_classes();
 
+            $files = call('atom_dir::get_files', core::get_current_path() . '/results', false, '/\.valid$/');
+            foreach( $files as $file ) {
+                $file_id = substr(array_pop(array_slice(explode('/', $file), -1)), 0, -6);
+                $file_data = explode('.', $file_id);
+                self::$_files[$file_data[0]][] = array($file_id, $file_data, $file);
+            }
+
             foreach( call('atom_dir::get_files', core::get_current_path() . '/classes') as $file )
                 require_once $file;
 
             $loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
             foreach( $loaded_classes as $item ) {
-                $results[] = self::_get_class_data($item);
+                $results[substr($item, 5, -8)] = self::_get_class_data($item);
             }
 
             return $results;
@@ -39,6 +50,23 @@
                 if( substr( $value->getName(), 0, 5 ) === 'test_' ) {
                     self::_run_tests($data, new $item, $value->getName());
                 }
+            }
+
+            $classname = substr($item, 5, -8);
+            foreach(self::$_files[$classname] as $key => $value) {
+                if(array_key_exists($value[0], $data)) {
+                    unset(self::$_files[$classname][$key]);
+                    continue;
+                }
+
+                $data[$value[0]] = array(
+                    'id' => $value[0],
+                    'method' => $value[1][1],
+                    'prefix' => $value[1][2],
+                    'index' => $value[1][3],
+                    'type' => 'removed',
+                    'result' => json_decode(file_get_contents($value[2]), true)
+                );
             }
 
             $max_priority = 0;
@@ -58,7 +86,7 @@
                             $data);
 
             return array(
-                'classname' => substr($item, 5, -8),
+                'classname' => $classname,
                 'type' => array_search($max_priority, self::$_priority),
                 'methods' => $data
             );
