@@ -55,7 +55,14 @@
         // Faz uma busca prioritária
         static private function _prioritary_get_config( $config_key ) {
             // Obtém o path atual de prioridade
-            $priority_path = core::get_path_clipped( core::get_caller_path( ), CORE_INDEX );
+            $priority_path = core::get_caller_path();
+
+            // Se o final for /configs.php, deixa apenas uma /
+            if( substr( $priority_path, -12 ) === '/configs.php' ) {
+                $priority_path = substr( $priority_path, 0, -11 );
+            }
+
+            $priority_path = core::get_path_clipped( $priority_path, CORE_INDEX );
             $priority_path = explode( '/', $priority_path === 'index.php' ? '' : $priority_path );
 
             // Buscar enquanto puder

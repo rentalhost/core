@@ -53,16 +53,8 @@
 
         // Retorna o path limpo (útil para operações com as configurações)
         static public function get_path_clipped( $path, $using_base = CORE_MODULES ) {
-            // Armazena o path
-            $path = substr( $path, strlen( $using_base ) + 1 );
-
-            // Se o final for /configs.php, deixa apenas uma /
-            if( substr( $path, -12 ) === '/configs.php' ) {
-                $path = substr( $path, 0, -11 );
-            }
-
             // Retorna o resultado gerado
-            return $path;
+            return substr( $path, strlen( $using_base ) + 1 );
         }
 
         // Separa um modular path em pedaços
