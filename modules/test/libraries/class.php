@@ -4,11 +4,11 @@
     class test_class_library extends core_library {
         // Tipo numerico / prioridade
         static private $_priority = array(
+            'unavailable' => 0,
             'success' => 1,
             'new' => 2,
             'failed' => 3,
-            'exception' => 4,
-            'unavailable' => 5
+            'exception' => 4
         );
 
         // Obtém informações sobre as classes existentes
@@ -155,5 +155,24 @@
                 'result' => $result,
                 'message' => $comment
             );
+        }
+
+        // Executa um grupo de testes somente se houver suporte
+        public function case_test( $expression, $callback, $message = null ) {
+            $id = "{$this->_id_class}.{$this->_id_method}.{$this->_id_prefix}.{$callback}";
+
+            if( $expression === false ) {
+                $this->_results[$id] = array(
+                    'id' => $id,
+                    'method' => $this->_id_method,
+                    'prefix' => $this->_id_prefix,
+                    'index' => 0,
+                    'type' => 'unavailable',
+                    'message' => $message
+                );
+                return;
+            }
+
+            call_user_func( array( $this, $callback ) );
         }
     }
