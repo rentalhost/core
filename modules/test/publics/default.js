@@ -3,6 +3,7 @@ $(function(){
 
     var win = $(window);
     var div_content = $('div#content > div.content');
+    var div_classes = $('div.unit-class');
     var div_units = $('div.unit-test');
 
     // Ao redimensionar a janela, esticar o conteúdo, se necessário
@@ -10,10 +11,18 @@ $(function(){
         div_content.css('min-height', win.height() - 60);
     }).resize();
 
+    // Exibe ou esconde as unidades de uma classe
+    div_classes.click(function(){
+        $(this).next().toggle();
+    });
+
     // Exibe ou esconde um resultado
     div_units.click(function(){
         $(this).nextUntil('div.unit-test').toggleClass('hidden');
     });
+
+    // Dá um auto-click em alguns tipos de classes
+    div_classes.filter('.unavailable-type, .success-type').click();
 
     // Dá um auto-click em alguns tipos de resultados
     div_units.filter('.new-type, .removed-type, .failed-type, .exception-type').click();
