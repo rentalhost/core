@@ -14,7 +14,7 @@
     </ul>
 </div>
 
-<?php if($result): ?>
+<?php if(@$result): ?>
     <?php if(isset($result['new'])): ?>
         <div class="unit-result code <?php echo $type; ?>-type hidden">
             <div class="code-title">Resultado obtido:</div>

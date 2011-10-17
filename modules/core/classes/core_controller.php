@@ -208,7 +208,8 @@
                 $modular_path->modular = $modular_path_data->modular;
 
                 // Se o remains[0] for igual a publics faz um redirecionamento de informação (HTTP 301)
-                if( $modular_path_data->remains[0] === 'publics' ) {
+                if( isset( $modular_path_data->remains )
+                &&  $modular_path_data->remains[0] === 'publics' ) {
                     core::do_publish( core::get_baseurl( false ) . 'modules/'
                         . join( '/_', $modular_path->modular ) . '/'
                         . join( '/', $modular_path_data->remains ) );
@@ -217,7 +218,7 @@
 
                 // Depois é necessário buscar pelo controller do endereço solicitado
                 // Ex: http://127.0.0.1/site/master ou simplesmente http://127.0.0.1/master
-                $modular_path_data = core::get_modular_parts( $modular_path_data->remains, array(
+                $modular_path_data = core::get_modular_parts( @$modular_path_data->remains, array(
                     'start_dir' => $modular_path_data->fullpath . '/controllers',
                     'search_modular' => false
                 ) );
@@ -259,7 +260,7 @@
             }
 
             // Por fim, cria o controller com as definições passadas
-            return new $modular_path->class( $modular_path, $modular_path_data->remains, $cancel_print,
+            return new $modular_path->class( $modular_path, @$modular_path_data->remains, $cancel_print,
                 self::STATUS_SUCCESS, self::RETURN_TYPE_DEFAULT, $auto_execute );
         }
 

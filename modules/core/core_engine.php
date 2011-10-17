@@ -1,5 +1,8 @@
 <?php
 
+    // Ativa o registro de erros
+    error_reporting(E_ALL);
+
     // Inclui as classes principais
     require_once 'classes/core.php';
     require_once 'classes/core_config.php';
