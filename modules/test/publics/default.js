@@ -5,6 +5,7 @@ $(function(){
     var div_content = $('div#content > div.content');
     var div_classes = $('div.unit-class');
     var div_units = $('div.unit-test');
+    var div_lines = $('ul.file-lines li');
 
     // Ao redimensionar a janela, esticar o conteúdo, se necessário
     win.resize(function(){
@@ -51,6 +52,54 @@ $(function(){
             dataType: 'json',
             data: { id: $(this).closest('.unit-test').data('unit-id') }
         });
+    });
+
+    // Ao clicar em ignorar, deixa a linha cinza
+    div_lines.find('span.button.ignore-button').click(function(){
+        var parent = $(this).closest('li');
+        parent.removeClass('coverage-off')
+            .addClass('coverage-dead')
+            .find('span.button').hide()
+            .filter('span.recovery-button').show();
+
+        $.ajax({
+            url: 'coverage/ignore_line',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                file: parent.parent().data('file'),
+                line: parent.data('line'),
+                content: parent.data('content')
+            }
+        });
+    });
+
+    // Ao clicar em recuperar, deixa a linha em off
+    div_lines.find('span.button.recovery-button').click(function(){
+        var parent = $(this).closest('li');
+        parent.addClass('coverage-off')
+            .removeClass('coverage-dead')
+            .find('span.button').hide()
+            .filter('span.ignore-button').show();
+
+        $.ajax({
+            url: 'coverage/recovery_line',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                file: parent.parent().data('file'),
+                line: parent.data('line'),
+                content: parent.data('content')
+            }
+        });
+    });
+
+    // Para os coverage ignorados, muda o status do botão
+    div_lines.filter('.coverage-ignored').each(function(){
+        $(this).removeClass('coverage-off')
+            .addClass('coverage-dead')
+            .find('span.button').hide()
+            .filter('span.recovery-button').show();
     });
 
     // Cancela o default behavior em clicks

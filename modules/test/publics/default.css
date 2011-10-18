@@ -321,15 +321,12 @@ ul.file-lines {
     font: 8pt "Consolas";
     padding: 15px 25px 0px 60px;
     color: silver;
-    white-space: pre-wrap;
-}
-ul.file-lines li {
-    margin-top: -20px;
 }
 ul.file-lines li > span {
     color: gray;
     display: block;
     padding: 2px 0;
+    white-space: pre-wrap;
 }
 
 ul.file-lines li.coverage-on > span {
@@ -343,4 +340,16 @@ ul.file-lines li.coverage-off > span {
 ul.file-lines li.coverage-dead > span {
     background-color: #f9f9f9;
     color: #222;
+}
+
+ul.file-lines li > span.button {
+    float: right;
+    width: auto;
+    margin-top: -17px;
+    padding: 0px 16px;
+    font: 7pt "Trebuchet MS";
+    cursor: pointer;
+}
+ul.file-lines li > span.button:hover {
+    color: black;
 }

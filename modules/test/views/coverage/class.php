@@ -3,6 +3,7 @@
     $accepted_lines = 1;
     $total_lines = 1;
     $result = load('coverage/file', array(
+        'name' => $name,
         'file' => $file,
         'lines' => $lines,
         'accepted_lines' => &$accepted_lines,

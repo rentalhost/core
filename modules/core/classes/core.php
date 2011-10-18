@@ -243,9 +243,7 @@
                 }
             }
 
-            // Retorna null se nada for encontrado
-            //DEBUG: deve acontecer um erro do tipo Exception
-            return null;
+            //DEBUG: deve acontecer um erro do tipo Exception, caso chegue até aqui
         }
 
         // Obtém o caminho do módulo de onde a última chamada foi feita
