@@ -277,7 +277,7 @@
         // Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)
         static public function do_publish( $publish_http ) {
             header('Cache-Control: max-age=290304000, public');
-			header('Location: ' . $publish_http, true, 301);
+            header('Location: ' . $publish_http, true, 301);
 			exit;
         }
 

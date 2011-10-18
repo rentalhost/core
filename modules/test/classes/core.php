@@ -48,4 +48,8 @@
             $modular = core::get_modular_parts( 'test_useful_fake' );
             $this->test( 1, core::get_joined_class( $modular, 'object' ) );
         }
+
+        public function test_get_caller_module_path() {
+            $this->test( 1, call( '__useful_test::get_caller_module_path' ) );
+        }
     }
