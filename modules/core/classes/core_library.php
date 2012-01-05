@@ -1,5 +1,5 @@
 <?php
 
-    // Classe para libraries
-    class core_library {
-    }
+	// Classe para libraries
+	class core_library {
+	}
