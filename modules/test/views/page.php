@@ -34,8 +34,11 @@
 				<div id="classes-realm">
 					<?php
 
+						$xdebug_enabled = function_exists('xdebug_start_code_coverage');
+
 						// Se necessário, inicia o sistema de depuração
-						if(isset($_GET['coverage']))
+						if($xdebug_enabled === true
+						&& isset($_GET['coverage']))
 							xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 
 						// Obtém e imprime as classes diretamente no modelo
@@ -44,7 +47,8 @@
 							$result.= load('models/class', $value, true);
 						}
 
-						if(isset($_GET['coverage'])) {
+						if($xdebug_enabled === true
+						&& isset($_GET['coverage'])) {
 							$coverage = xdebug_get_code_coverage();
 							ksort($coverage);
 
