@@ -105,6 +105,11 @@
 				break;
 			}
 
+			// Tenta buscar na raíz, como última tentativa
+			if(isset(self::$_configs[''][$config_key])) {
+				return self::$_configs[''][$config_key];
+			}
+
 			// Se não encontrar nenhuma informação, retorna null
 			return null;
 		}
