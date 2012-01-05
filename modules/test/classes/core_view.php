@@ -26,5 +26,13 @@
 
 			$this->test(9, $view_contents);
 			$this->test(10, $view->has_printed());
+
+			$this->set_prefix('read_based');
+			$view = load('useful/test', null, true);
+
+			$this->test(1, $view->exists());
+			$this->test(2, $view->has_failed());
+			$this->test(3, $view->get_contents());
+			$this->test(4, $view->get_return());
 		}
 	}

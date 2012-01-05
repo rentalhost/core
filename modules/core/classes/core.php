@@ -79,6 +79,7 @@
 
 			// Após ter a array, é necessário fazer a busca pelos arquivos
 			!isset( $configs['start_dir'] )			&& $configs['start_dir']		= CORE_MODULES;
+			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']		= false;
 			!isset( $configs['search_modules'] )	&& $configs['search_modules']	= true;
 			!isset( $configs['search_paths'] )		&& $configs['search_paths']		= true;
 			!isset( $configs['path_clip'] )			&& $configs['path_clip']		= false;
@@ -107,7 +108,8 @@
 				$last_key = count( $modular_path ) - 1;
 				foreach( $modular_path as $key => $value ) {
 					// Propõe um diretório, a partir do segundo é usado um underline submodular
-					$proposed_path = $current_path . ( $key === 0 ? "/{$value}" : "/_{$value}" );
+					$proposed_path = $current_path .
+						( $key === 0 && $configs['deep_modules'] === false ? "/{$value}" : "/_{$value}" );
 
 					// Se o diretório for aceito, adiciona aos módulos, aceita a proposta e continua a busca
 					if( is_dir( $proposed_path ) ) {

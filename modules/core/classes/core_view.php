@@ -61,7 +61,7 @@
 					? CORE_MODULES
 					: CORE_MODULES . '/' . join( '/_', core::get_caller_module_path() ),
 				'path_complement' => '/views',
-				'search_modules' => $deep_search === true,
+				'deep_modules' => $deep_search === false,
 				'make_fullpath' => true
 			) );
 
