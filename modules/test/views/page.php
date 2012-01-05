@@ -5,7 +5,7 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <base href="<?php echo get_baseurl(); ?>" />
         <link href="publics/default.css" rel="stylesheet" type="text/css" />
-        <script src="publics/jquery-1.6.js"></script>
+        <script src="publics/jquery-1.7.js"></script>
         <script src="publics/jquery.css-1.45.js"></script>
         <script src="publics/default.js"></script>
     </head>
@@ -33,20 +33,20 @@
                     <?php
 
                         // Se necessário, inicia o sistema de depuração
-                        if( isset($_GET['coverage']) )
+                        if(isset($_GET['coverage']))
                             xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
 
                         // Obtém e imprime as classes diretamente no modelo
                         $result = '';
-                        foreach( call('__class::get_all') as $value ) {
+                        foreach(call('__class::get_all') as $value) {
                             $result.= load('models/class', $value, true);
                         }
 
-                        if( isset($_GET['coverage']) ) {
+                        if(isset($_GET['coverage'])) {
                             $coverage = xdebug_get_code_coverage();
                             ksort($coverage);
 
-                            foreach( $coverage as $file => $lines ) {
+                            foreach($coverage as $file => $lines) {
                                 $filename = core::get_path_fixed(core::get_path_clipped($file));
                                 load('coverage/class', array(
                                     'name' => $filename,
