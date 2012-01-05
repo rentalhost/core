@@ -17,19 +17,19 @@
 
         // Obtém informações sobre as classes existentes
         static public function get_all() {
-            library( 'test_dir' );
+            library( '__dir' );
 
             $results = array();
             $loaded_classes = get_declared_classes();
 
-            $files = call('test_dir::get_files', core::get_current_path() . '/results', false, '/\.valid$/');
+            $files = call('__dir::get_files', core::get_current_path() . '/results', false, '/\.valid$/');
             foreach( $files as $file ) {
                 $file_id = substr(array_pop(array_slice(explode('/', $file), -1)), 0, -6);
                 $file_data = explode('.', $file_id);
                 self::$_files[$file_data[0]][] = array($file_id, $file_data, $file);
             }
 
-            foreach( call('test_dir::get_files', core::get_current_path() . '/classes') as $file )
+            foreach( call('__dir::get_files', core::get_current_path() . '/classes') as $file )
                 require_once $file;
 
             $loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
@@ -87,7 +87,7 @@
                             $data);
 
             return array(
-                'classname' => $classname,
+                'classname' => str_replace('__', '_', $classname),
                 'type' => array_search($max_priority, self::$_priority),
                 'methods' => $data
             );
