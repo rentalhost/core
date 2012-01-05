@@ -255,6 +255,7 @@ div.unit-test > ul.actions > li.disabled {
 /** RESULTADO */
 div.unit-result {
 	margin-top: 1px;
+	user-select: initial;
 }
 div.unit-result.hidden {
 	display: none;
@@ -327,6 +328,7 @@ ul.file-lines {
 	font: 8pt "Consolas";
 	padding: 15px 25px 0px 60px;
 	color: silver;
+	user-select: initial;
 }
 ul.file-lines li > span {
 	color: gray;
