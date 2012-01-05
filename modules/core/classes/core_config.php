@@ -37,14 +37,14 @@
 
 		// Obtém uma configuração
 		//TODO: $default_value = null -- usa um valor padrão, se a configuração não existir
-		static public function get_config( $modular_path, $config_key ) {
+		static public function get_config($modular_path, $config_key) {
 			// Se a modular path for null, a busca será prioritária
-			if( $modular_path === null ) {
-				return self::_prioritary_get_config( $config_key );
+			if($modular_path === null) {
+				return self::_prioritary_get_config($config_key);
 			}
 			else
 			// Se a informação existir, ela será retornada
-			if( isset( self::$_configs[$modular_path][$config_key] ) ) {
+			if(isset(self::$_configs[$modular_path][$config_key])) {
 				return self::$_configs[$modular_path][$config_key];
 			}
 
@@ -53,36 +53,52 @@
 		}
 
 		// Faz uma busca prioritária
-		static private function _prioritary_get_config( $config_key ) {
+		static private function _prioritary_get_config($config_key) {
 			// Obtém o path atual de prioridade
 			$priority_path = core::get_caller_path();
 
 			// Se o final for /configs.php, deixa apenas uma /
-			if( substr( $priority_path, -12 ) === '/configs.php' ) {
-				$priority_path = substr( $priority_path, 0, -11 );
+			if(substr($priority_path, -12) === '/configs.php') {
+				$priority_path = substr($priority_path, 0, -11);
 			}
 
-			$priority_path = core::get_path_clipped( $priority_path, CORE_INDEX );
-			$priority_path = explode( '/', $priority_path === 'index.php' ? '' : $priority_path );
+			// Define o path prioritário
+			if($priority_path === core::get_path_fixed(CORE_INDEX . '/index.php')) {
+				$priority_path = array('');
+			}
+			else {
+				$priority_path = core::get_path_clipped($priority_path, CORE_MODULES);
+				$priority_path = explode('/', $priority_path);
+			}
+
+			// Informa que a primeira busca é dentro do próprio arquivo de chamada
+			$primary_file = true;
 
 			// Buscar enquanto puder
-			while( true ) {
+			while(true) {
 				// Une a prioridade
-				$priority_unify = join( '/', $priority_path );
+				$priority_unify = join('/', $priority_path);
+
+				// Se não for a busca primária, anexa o /configs.php
+				if($primary_file === false)
+					$priority_unify.= '/configs.php';
+				$primary_file = false;
 
 				// Se os dados de configuração ainda não existe, carrega
-				if( !isset( self::$_configs[$priority_unify] ) ) {
-					core::do_require( CORE_INDEX . "/{$priority_unify}/configs.php" );
+				// Não executará quando estiver no arquivo primário
+				if(!isset(self::$_configs[$priority_unify])
+				&& $primary_file === false) {
+					core::do_require(CORE_INDEX . "/{$priority_unify}");
 				}
 
 				// Verifica se a configuração existe
-				if( isset( self::$_configs[$priority_unify][$config_key] ) ) {
+				if(isset(self::$_configs[$priority_unify][$config_key])) {
 					return self::$_configs[$priority_unify][$config_key];
 				}
 
 				// Se a prioridade for diferente de "vazio" (ou seja, a raiz) reduz a prioridade
-				if( !empty( $priority_unify ) ) {
-					array_pop( $priority_path );
+				if(!empty($priority_path)) {
+					array_pop($priority_path);
 					continue;
 				}
 
@@ -104,9 +120,8 @@
 
 				// Se os dados de configuração ainda não existe, carrega
 				// O processo só continuará se esta informação não existir
-				if( !isset( self::$_configs[$priority_unify] ) ) {
-					self::$_configs[$priority_unify] = false;
-					core::do_require( CORE_MODULES . "/{$priority_unify}/configs.php" );
+				if(!isset(self::$_configs[$priority_unify])) {
+					core::do_require(CORE_MODULES . "/{$priority_unify}/configs.php");
 					array_pop( $priority_path );
 					continue;
 				}
