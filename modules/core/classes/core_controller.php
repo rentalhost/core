@@ -39,24 +39,23 @@
 			$this->_result_type = $default_result_type;
 
 			// Se o status for de que o controller não existe, não há razão de dar continuidade
-			if( $default_status & self::STATUS_CONTROLLER_NOT_FOUND === self::STATUS_CONTROLLER_NOT_FOUND ) {
-				return;
+			if(($default_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
+				return; //TODO: apenas no futuro isto será possível
 			}
 
 			// Verifica se um dado método pode ser chamado
-			if( method_exists( $this, $modular_data->method ) === false ) {
+			if(method_exists($this, $modular_data->method) === false) {
 				$this->_status = self::STATUS_METHOD_NOT_EXISTS;
-				return;
+				return; //TODO: apenas no futuro isto será possível
 			}
 
 			// Auto-executa, se necessário
-			if( $auto_execute === true ) {
+			if($auto_execute === true) {
 				$this->_execute();
 
 				// Se a impressão não for cancelada, renderiza sua informação
-				if( $cancel_print === false ) {
+				if($cancel_print === false)
 					$this->render();
-				}
 			}
 		}
 
@@ -64,7 +63,7 @@
 		private function _execute() {
 			// Se houve algum erro, evita que seja executado
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-				return $this;
+				return $this; //TODO: apenas no futuro isto será possível
 			}
 
 			// Nesta etapa, é necessário receber os dados retornado pela função e gerado
@@ -92,17 +91,16 @@
 		}
 
 		// Se o arquivo for requerido, ele não poderá ter nenhum erro
-		//TODO: se houver erro, retorna a informação na tela
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-			}
+			} //TODO: se houver erro, retorna a informação na tela
 
 			return $this;
 		}
 
 		// Retorna true se o controller existir
 		public function exists() {
-			return ( $this->_status & self::STATUS_CONTROLLER_NOT_FOUND !== self::STATUS_CONTROLLER_NOT_FOUND );
+			return ($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) !== self::STATUS_CONTROLLER_NOT_FOUND;
 		}
 
 		// Retorna true se um erro ocorreu
@@ -165,7 +163,8 @@
 		//DEBUG: verificar por ambiguidade no conteúdo
 		//DEBUG: só deve haver uma classe de controller definida no arquivo incluído
 		//DEBUG: se o método não existir, exibe um erro
-		static public function _create_controller( $modular_path_data, $cancel_print = false, $auto_execute = true ) {
+		static public function _create_controller( $modular_path_data, $cancel_print = false, $auto_execute = true,
+				$can_detect_caller_path = false ) {
 			// Armazena o método padrão, ele será usado em vários momentos
 			$default_method = core_config::get_config( null, 'route.default.method' );
 
@@ -176,13 +175,25 @@
 
 			// Se o path modular for false, então usa totalmente o padrão
 			// Ex: http://127.0.0.1/
-			if( $modular_path_data === false ) {
+			if($modular_path_data === null) {
 				$modular_path->modular = (array) core_config::get_config( null, 'route.default.modular' );
 				$modular_path->path = (array) core_config::get_config( null, 'route.default.controller' );
 				$modular_path->method = $default_method;
 				$modular_path->class = core::get_joined_class( $modular_path, 'controller' );
 			}
 			else {
+				// Se puder detectar o path do caller (somente execute())
+				if($can_detect_caller_path === true) {
+					// Se o modular começar por / apenas remove a informação
+					// Caso contrário, deverá preencher com o path do módulo de chamada
+					if($modular_path_data[0] === '/') {
+						$modular_path_data = substr($modular_path_data, 1);
+					}
+					else {
+						$modular_path_data = join('/', core::get_caller_module_path()) . '/' . $modular_path_data;
+					}
+				}
+
 				// Extende a informação da URL
 				$modular_path->url .= $modular_path_data;
 
@@ -200,8 +211,9 @@
 				// Se a modular não for definida, retorna um controller neutro
 				// Modulares são obrigatórias
 				if( isset( $modular_path_data->modular ) === false ) {
+					//TODO: apenas no futuro isto será possível
 					return new self( $modular_path, null, $cancel_print,
-						self::STATUS_CONTROLLER_NOT_FOUND );
+						self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
 				}
 
 				// Senão, armazena a informação
@@ -244,13 +256,15 @@
 
 			// Se o arquivo de controller não existir, usará o controler neutro
 			if( is_file( $modular_path->fullpath ) === false ) {
+				//TODO: apenas no futuro isto será possível
 				return new self( $modular_path, null, $cancel_print,
 					self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
 			}
 
 			// Senão, faz um require da classe solicitada
 			//DEBUG: o arquivo precisa existir
-			core::do_require( $modular_path->fullpath );
+			if(class_exists($modular_path->class, false) === false)
+				core::do_require($modular_path->fullpath);
 
 			// Se for chamado um método diferente do padrão, mas este não existir, usa o método padrão
 			if( $modular_path->method !== $default_method
