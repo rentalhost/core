@@ -21,25 +21,20 @@
 
 		// Prepara um resultado para o JSON
 		static public function prepare_result( $data ) {
-			return self::_prepare_result_walker($data);
-		}
-
-		// Prepara um resultado
-		static private function _prepare_result_walker( $data ) {
 			if( is_string( $data ) ) {
-				return array( 'string', $data );
+				return array('string', $data);
 			}
 			else
 			if( is_bool( $data ) ) {
-				return array( 'boolean', $data );
+				return array('boolean', $data);
 			}
 			else
 			if( is_int( $data ) ) {
-				return array( 'number', $data );
+				return array('number', $data);
 			}
 			else
 			if( is_float( $data ) ) {
-				return array( 'float', $data );
+				return array('float', $data);
 			}
 			else
 			if( is_array( $data )
@@ -54,17 +49,27 @@
 			}
 			else
 			if( is_object( $data ) ) {
-				$data_values = get_object_vars($data);
-				$object_type = get_class($data);
+				$obj_reflection = new ReflectionClass($data);
 
-				foreach($data_values as &$item)
-					$item = self::prepare_result($item);
+				$data_values = array();
+				if(is_callable(array($data, '__toString')))
+					$data_values['__toString()'] = array('string', $data->__toString());
 
-				return array('object', $data_values, $object_type);
+				foreach($obj_reflection->getProperties() as $prop) {
+					if($prop->isStatic() === true)
+						continue;
+
+					$prop->setAccessible(true);
+					$data_values[$prop->getName()] = $data === $prop->getValue($data)
+						? array('recursive', '$this')
+						: self::prepare_result($prop->getValue($data));
+				}
+
+				return array('object', $data_values, $obj_reflection->getName());
 			}
 			else
 			if( is_null( $data ) ) {
-				return array( 'null', $data );
+				return array('null', $data);
 			}
 			else
 			if( is_resource( $data ) ) {
@@ -74,11 +79,11 @@
 
 		// Obtém o tipo básico da informação
 		static private function _get_type( $value ) {
-			if( is_bool( $value ) ) { return 'boolean'; }
-			else if( is_string( $value ) ) { return 'string'; }
-			else if( is_int( $value ) ) { return 'number'; }
-			else if( is_float( $value ) ) { return 'float'; }
-			else if( is_null( $value ) ) { return 'null'; }
+			if( is_bool( $value ) )			{ return 'boolean'; }
+			else if( is_string( $value ) )	{ return 'string'; }
+			else if( is_int( $value ) )		{ return 'number'; }
+			else if( is_float( $value ) )	{ return 'float'; }
+			else if( is_null( $value ) )	{ return 'null'; }
 
 			// Para array, object, resource, retorna a informação #0
 			return $value[0];

@@ -310,6 +310,9 @@ div.type-float > span.code-value {
 div.type-resource > span.code-value {
 	color: #808;
 }
+div.type-recursive > span.code-value {
+	color: #888;
+}
 span.object-type {
 	color: #008;
 }
