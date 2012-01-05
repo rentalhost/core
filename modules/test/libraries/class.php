@@ -8,11 +8,11 @@
         // Tipo numerico / prioridade
         static private $_priority = array(
             'unavailable' => 0,
-            'success' => 1,
-            'new' => 2,
-            'removed' => 3,
-            'failed' => 4,
-            'exception' => 5
+            'success'	=> 1,
+            'new'		=> 2,
+            'removed'	=> 3,
+            'failed'	=> 4,
+            'exception'	=> 5
         );
 
         // Obtém informações sobre as classes existentes
@@ -22,20 +22,45 @@
             $results = array();
             $loaded_classes = get_declared_classes();
 
-            $files = call('__dir::get_files', core::get_current_path() . '/results', false, '/\.valid$/');
+            $current_path = core::get_current_path();
+
+            $files = call('__dir::get_files', $current_path . '/results', false, '/\.valid$/');
             foreach( $files as $file ) {
                 $file_id = substr(array_pop(array_slice(explode('/', $file), -1)), 0, -6);
                 $file_data = explode('.', $file_id);
                 self::$_files[$file_data[0]][] = array($file_id, $file_data, $file);
             }
 
-            foreach( call('__dir::get_files', core::get_current_path() . '/classes') as $file )
+            $old_classes = array_flip(array_keys(self::$_files));
+
+            foreach( call('__dir::get_files', $current_path . '/classes') as $file )
                 require_once $file;
 
             $loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
             foreach( $loaded_classes as $item ) {
-                $results[substr($item, 5, -8)] = self::_get_class_data($item);
+            	$classname = substr($item, 5, -8);
+                $results[$classname] = self::_get_class_data($item);
+                unset($old_classes[$classname]);
             }
+
+			foreach($old_classes as $old_class => $NIL) {
+				$old_cases = array();
+				foreach(self::$_files[$old_class] as $old_case)
+					$old_cases[$old_case[0]] = array(
+						'id' => $old_case[0],
+						'method' => $old_case[1][1],
+						'prefix' => $old_case[1][2],
+						'index' => (int) $old_case[1][3],
+						'type' => 'removed',
+						'result' => json_decode(file_get_contents($old_case[2]))
+					);
+
+				$results[$old_class] = array(
+					'classname' => str_replace('__', '_', $old_class),
+					'type' => 'removed',
+					'methods' => $old_cases
+				);
+			}
 
             return $results;
         }
