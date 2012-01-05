@@ -58,6 +58,7 @@
             }
 
             // Retorna os arquivos encontrados
+            sort($file_list);
             return $file_list;
         }
     }
