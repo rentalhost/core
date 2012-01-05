@@ -1,7 +1,7 @@
 <?php
 
     // Gerencia diretórios
-    class atom_dir_library extends core_library {
+    class test_dir_library extends core_library {
         // Obtém os arquivos de um diretório
         static public function get_files( $dir, $deep_search = true, $regex_filter = null ) {
             // Se o diretório não existir
