@@ -81,6 +81,9 @@ ul#toolbar > li {
 	margin-right: 15px;
 	transition: color 0.075s ease-in-out;
 }
+ul#toolbar > li.no-margin {
+	margin-left: -15px;
+}
 ul#toolbar > li:hover {
 	color: #ff0000;
 }

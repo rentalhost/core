@@ -13,6 +13,10 @@
 	$percentage = number_format(100 / $total_lines * $accepted_lines, 2, '.', '');
 	$type = $percentage === '100.00' ? 'success' : 'failed';
 
+	if($type === 'success'
+	&& isset($_GET['hidden-success']) === true)
+		return true;
+
 ?>
 
 <div class="unit-class <?php echo $type; ?>-type" data-percentage="<?php echo $percentage; ?>">

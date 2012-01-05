@@ -24,8 +24,10 @@
 					<li data-href="?default">Executar</li>
 					<?php if(extension_loaded('xdebug')): ?>
 					<li data-href="?coverage">Code Coverage</li>
+					<li data-href="?coverage&hidden-success" class="no-margin">[H]</li>
 					<?php else: ?>
 					<li class="disabled">Code Coverage</li>
+					<li class="disabled no-margin">[H]</li>
 					<?php endif; ?>
 				</ul>
 
