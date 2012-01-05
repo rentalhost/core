@@ -244,9 +244,7 @@
 					return core::get_path_fixed($backtrace['file']);
 				}
 			}
-
-			//DEBUG: deve acontecer um erro do tipo Exception, caso chegue até aqui
-		}
+		} //DEBUG: deve acontecer um erro do tipo Exception, caso chegue até aqui
 
 		// Obtém o caminho do módulo de onde a última chamada foi feita
 		static public function get_caller_module_path() {
