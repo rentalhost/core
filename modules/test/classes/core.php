@@ -52,4 +52,8 @@
 		public function test_get_caller_module_path() {
 			$this->test( 1, call( '__useful_test::get_caller_module_path' ) );
 		}
+
+		public function test_get_caller() {
+			$this->test(1, core::get_path_clipped(core::get_caller_path()));
+		}
 	}
