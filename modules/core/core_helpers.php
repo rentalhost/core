@@ -24,7 +24,8 @@
         }
 
         // Caso contrário, faz a chamada, passando seus parãmetros
-        return core_caller::do_call( $command, array_slice( func_get_args(), 1 ) );
+        $args = func_get_args();
+        return core_caller::do_call( $command, array_slice( $args, 1 ) );
     }
 
     /** HELPERS DE LIBRARY */
