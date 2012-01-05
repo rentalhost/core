@@ -26,7 +26,7 @@
 		// Armazena o resultado retornado pela execução
 		private $_result_data;
 		// Armazena o conteúdo gerado pela função
-		private $_result_contents;
+		private $_result_contents	= "";
 
 		// Cria uma nova view
 		//TODO: penser em uma forma de proteger views estrangeiras (site//hello_world)
@@ -36,13 +36,13 @@
 
 			// Se o path estiver vazio é invalidado
 			if( empty( $this->_proposed_view ) ) {
-				$this->_status = STATUS_VIEW_IS_INVALID | STATUS_VIEW_IS_EMPTY | STATUS_VIEW_NOT_FOUND;
+				$this->_status = self::STATUS_VIEW_IS_INVALID | self::STATUS_VIEW_IS_EMPTY | self::STATUS_VIEW_NOT_FOUND;
 				return;
 			}
 
 			// Se o path for inseguro ou mesmo inválido
 			if( preg_match( CORE_VALID_PATH, $this->_proposed_view ) === 0 ) {
-				$this->_status = STATUS_VIEW_IS_INVALID | STATUS_VIEW_IS_INSECURE | STATUS_VIEW_NOT_FOUND;
+				$this->_status = self::STATUS_VIEW_IS_INVALID | self::STATUS_VIEW_IS_INSECURE | self::STATUS_VIEW_NOT_FOUND;
 				return;
 			}
 
@@ -68,7 +68,7 @@
 
 			// Se a busca retornar restos invalida
 			if( isset( $view_path_data->remains ) ) {
-				$this->_status = STATUS_VIEW_IS_INVALID | STATUS_VIEW_HAS_REMAINS | STATUS_VIEW_NOT_FOUND;
+				$this->_status = self::STATUS_VIEW_IS_INVALID | self::STATUS_VIEW_HAS_REMAINS | self::STATUS_VIEW_NOT_FOUND;
 				return;
 			}
 
@@ -77,7 +77,7 @@
 
 			// Se o arquivo proposto não existir é inválido
 			if( is_file( $this->_path ) === false ) {
-				$this->_status = STATUS_VIEW_IS_INVALID | STATUS_VIEW_NOT_FOUND;
+				$this->_status = self::STATUS_VIEW_IS_INVALID | self::STATUS_VIEW_NOT_FOUND;
 				return;
 			}
 
@@ -111,17 +111,16 @@
 		}
 
 		// Se o arquivo for requerido, ele não poderá ter nenhum erro
-		//TODO: se houver erro, retorna a informação na tela
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-			}
+			} //TODO: se houver erro, retorna a informação na tela
 
 			return $this;
 		}
 
 		// Retorna true se a view existir
 		public function exists() {
-			return ( $this->_status & self::STATUS_VIEW_NOT_FOUND !== self::STATUS_VIEW_NOT_FOUND );
+			return ($this->_status & self::STATUS_VIEW_NOT_FOUND) !== self::STATUS_VIEW_NOT_FOUND;
 		}
 
 		// Retorna true se um erro ocorreu
