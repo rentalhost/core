@@ -166,7 +166,7 @@
 		static public function _create_controller( $modular_path_data, $cancel_print = false, $auto_execute = true,
 				$can_detect_caller_path = false ) {
 			// Armazena o método padrão, ele será usado em vários momentos
-			$default_method = core_config::get_config( null, 'route.default.method' );
+			$default_method = core_config::get_config( null, 'route_default_method' );
 
 			// Define algumas informações principais
 			$modular_path = new stdclass;
@@ -176,8 +176,8 @@
 			// Se o path modular for false, então usa totalmente o padrão
 			// Ex: http://127.0.0.1/
 			if($modular_path_data === null) {
-				$modular_path->modular = (array) core_config::get_config( null, 'route.default.modular' );
-				$modular_path->path = (array) core_config::get_config( null, 'route.default.controller' );
+				$modular_path->modular = (array) core_config::get_config( null, 'route_default_modular' );
+				$modular_path->path = (array) core_config::get_config( null, 'route_default_controller' );
 				$modular_path->method = $default_method;
 				$modular_path->class = core::get_joined_class( $modular_path, 'controller' );
 			}
@@ -238,7 +238,7 @@
 				// Se o controller não for definido, define com o valor padrão
 				$modular_path->path = isset( $modular_path_data->path )
 					? $modular_path_data->path
-					: (array) core_config::get_config( null, 'route.default.controller' );
+					: (array) core_config::get_config( null, 'route_default_controller' );
 
 				// Gera o nome completo da chamada
 				$modular_path->class = core::get_joined_class( $modular_path, 'controller' );

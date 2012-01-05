@@ -1,3 +1,3 @@
 <?php
 
-	$config['test'] = true;
+	$config->test = true;

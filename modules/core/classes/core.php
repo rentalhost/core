@@ -284,7 +284,7 @@
 		// Inclui um arquivo específico e passa os dados para um arquivo de configuração
 		static public function do_require( $__required_file ) {
 			// As configurações deverão ser salvas nesta variável
-			$config = array();
+			$config = new stdclass;
 
 			// Armazena a informação se o arquivo existe
 			$__is_file = false;
