@@ -27,10 +27,12 @@
 		private $_result_data;
 		// Armazena o conteúdo gerado pela função
 		private $_result_contents	= "";
+		// Armazena a informação se o conteúdo foi impresso automaticamente
+		private $_result_printed	= false;
 
 		// Cria uma nova view
 		//TODO: penser em uma forma de proteger views estrangeiras (site//hello_world)
-		public function __construct( $view_path, $view_args, $cancel_print ) {
+		public function __construct($view_path, $view_args, $cancel_print) {
 			// Corrige o path solicitado
 			$this->_proposed_view = core::get_path_fixed( $view_path );
 
@@ -82,10 +84,11 @@
 			}
 
 			// Se nenhuma invalidação ocorreu, o arquivo é finalmente chamado
-			$this->_load_view( $view_args );
+			$this->_load_view($view_args);
 
 			// Por fim, imprime o conteúdo, se for necessário
-			if( $cancel_print === false ) {
+			$this->_result_printed = !$cancel_print;
+			if($cancel_print === false) {
 				echo $this->_result_contents;
 			}
 		}
@@ -106,6 +109,8 @@
 
 		// Imprime o conteúdo gerado
 		public function render() {
+			$this->_result_printed = true;
+
 			echo $this->_result_contents;
 			return $this;
 		}
@@ -126,6 +131,11 @@
 		// Retorna true se um erro ocorreu
 		public function has_failed() {
 			return $this->_status !== self::STATUS_SUCCESS;
+		}
+
+		// Retorna true se o conteúdo já foi impresso
+		public function has_printed() {
+			return $this->_result_printed;
 		}
 
 		// Retorna o status da operação

@@ -9,7 +9,7 @@
 			$this->test(4, load('/test/useful/sub_test'), 'File not exists');
 
 			$this->set_prefix('read');
-			$view = load('/test/useful/test');
+			$view = load('/test/useful/test', null, true);
 
 			$this->test(1, $view->required() === $view);
 			$this->test(2, $view->exists());
@@ -25,5 +25,6 @@
 			ob_end_clean();
 
 			$this->test(9, $view_contents);
+			$this->test(10, $view->has_printed());
 		}
 	}
