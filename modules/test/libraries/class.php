@@ -192,7 +192,12 @@
 			$result_type = 'new';
 
 			$file = core::get_current_path() . "/results/{$id}";
-			file_put_contents("{$file}.last", json_encode($result));
+			$json_result = json_encode($result);
+
+			if(is_file("{$file}.valid") === false
+			|| file_get_contents("{$file}.valid") !== $json_result) {
+				file_put_contents("{$file}.last", $json_result);
+			}
 
 			if( is_file("{$file}.valid") ) {
 				$old_result = json_decode( file_get_contents("{$file}.valid"), true );
