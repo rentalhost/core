@@ -50,22 +50,30 @@
 			else
 			if( is_object( $data ) ) {
 				$obj_reflection = new ReflectionClass($data);
+				$obj_reflection_name = $obj_reflection->getName();
 
 				$data_values = array();
 				if(is_callable(array($data, '__toString')))
 					$data_values['__toString()'] = array('string', $data->__toString());
 
-				foreach($obj_reflection->getProperties() as $prop) {
-					if($prop->isStatic() === true)
-						continue;
+				while(true) {
+					foreach($obj_reflection->getProperties() as $prop) {
+						if($prop->isStatic() === true)
+							continue;
 
-					$prop->setAccessible(true);
-					$data_values[$prop->getName()] = $data === $prop->getValue($data)
-						? array('recursive', '$this')
-						: self::prepare_result($prop->getValue($data));
+						$prop->setAccessible(true);
+						$data_values[$prop->getName()] = $data === $prop->getValue($data)
+							? array('recursive', '$this')
+							: self::prepare_result($prop->getValue($data));
+					}
+
+					$obj_reflection = $obj_reflection->getParentClass();
+					if($obj_reflection === false)
+						break;
 				}
 
-				return array('object', $data_values, $obj_reflection->getName());
+				ksort($data_values);
+				return array('object', $data_values, $obj_reflection_name);
 			}
 			else
 			if( is_null( $data ) ) {
