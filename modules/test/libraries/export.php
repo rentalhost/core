@@ -22,6 +22,14 @@
 		// Prepara um resultado para o JSON
 		static public function prepare_result( $data ) {
 			if( is_string( $data ) ) {
+				// Remover informações sobre o URL e o path local
+				// Isto permite validar melhor o servidor e o localhost
+				$data = str_replace(
+					array(core::get_baseurl(false),	core::get_path_fixed(CORE_INDEX)),
+					array('http://.../core/',		'/.../core'),
+					$data
+				);
+
 				return array('string', $data);
 			}
 			else
