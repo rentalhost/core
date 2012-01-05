@@ -52,9 +52,9 @@
 		}
 
 		// Retorna o path limpo (útil para operações com as configurações)
-		static public function get_path_clipped( $path, $using_base = CORE_MODULES ) {
+		static public function get_path_clipped($path, $using_base = CORE_MODULES) {
 			// Retorna o resultado gerado
-			return substr( $path, strlen( $using_base ) + 1 );
+			return core::get_path_fixed(substr($path, strlen($using_base) + 1));
 		}
 
 		// Separa um modular path em pedaços
@@ -233,13 +233,13 @@
 		static public function get_caller_path() {
 			// Calcula a parte croppável da informação
 			$core_root = CORE_ROOT . DIRECTORY_SEPARATOR;
-			$crop_length = strlen( $core_root );
+			$crop_length = strlen($core_root);
 
 			// Busca pela melhor primeira opção
-			foreach( debug_backtrace() as $backtrace ) {
+			foreach(debug_backtrace() as $backtrace) {
 				// Se a informação cropada for diferente do CORE_ROOT, é uma informação válida
-				if( substr( $backtrace['file'], 0, $crop_length ) !== $core_root ) {
-					return core::get_path_fixed( $backtrace['file'] );
+				if(substr($backtrace['file'], 0, $crop_length) !== $core_root) {
+					return core::get_path_fixed($backtrace['file']);
 				}
 			}
 
@@ -290,14 +290,14 @@
 			$__is_file = false;
 
 			// Inclui o arquivo especificado
-			$__required_file = realpath( $__required_file );
-			if( is_file( $__required_file ) ) {
+			$__required_file = realpath($__required_file);
+			if(is_file($__required_file)) {
 				$__is_file = true;
 				require $__required_file;
 			}
 
 			// Salva as configurações, se necessário
-			core_config::save_configs( self::get_path_clipped( $__required_file ), $config );
+			core_config::save_configs(self::get_path_clipped($__required_file), (array) $config);
 			return $__is_file;
 		}
 
