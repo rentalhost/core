@@ -2,7 +2,7 @@
 
 	// Gerencia operações de coverage
 	class test_coverage_controller extends core_controller {
-		const   VALID_MD5 = '/^[a-fA-F0-9]{32}$/';
+		const   VALID_MD5 = '/^[a-fA-F0-9]{8}$/';
 
 		// Ignora uma linha
 		public function ignore_line() {
@@ -19,7 +19,7 @@
 				  : array();
 
 			// Adiciona a informação no arquivo
-			$data["{$_POST['line']}.{$_POST['content']}"] = true;
+			$data[$_POST['content']] = true;
 
 			// Salva o arquivo
 			file_put_contents($file, json_encode($data));
@@ -41,7 +41,7 @@
 				  : array();
 
 			// Adiciona a informação no arquivo
-			unset($data["{$_POST['line']}.{$_POST['content']}"]);
+			unset($data[$_POST['content']]);
 
 			// Salva o arquivo
 			file_put_contents($file, json_encode($data));

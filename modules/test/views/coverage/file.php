@@ -2,13 +2,13 @@
 
 	// Carrega o arquivo e quebra por linhas
 	$file_content = preg_split('/\r?\n/', file_get_contents($file));
-	$file_md5 = md5($name);
+	$file_hex = str_pad(dechex(crc32($name)), 8, '0', STR_PAD_LEFT);
 
 ?>
-<ul class="file-lines" data-file="<?php echo $file_md5; ?>">
+<ul class="file-lines" data-file="<?php echo $file_hex; ?>">
 	<?php
 
-		$ignored_lines = core::get_current_path() . "/files/{$file_md5}.lines";
+		$ignored_lines = core::get_current_path() . "/files/{$file_hex}.lines";
 		$ignored_lines = is_file($ignored_lines)
 					   ? json_decode(file_get_contents($ignored_lines), true)
 					   : array();
@@ -31,11 +31,10 @@
 						$class = 'coverage-off';
 						$ignorable = true;
 
-						$data_md5 = md5($content);
+						$data_md5 = md5(join("\n", array_slice($file_content, $line - 2, 5)));
 						$data = ' data-line="' . $line . '" data-content="' . $data_md5 . '"';
 
-						$data_line = "{$line}.{$data_md5}";
-						if(isset($ignored_lines[$data_line])) {
+						if(isset($ignored_lines[$data_md5])) {
 							$class.= ' coverage-ignored';
 							$accepted_lines++;
 						}

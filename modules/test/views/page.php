@@ -54,6 +54,10 @@
 
 							foreach($coverage as $file => $lines) {
 								$filename = core::get_path_fixed(core::get_path_clipped($file));
+
+								if(substr($filename, 0, 5) !== 'core/')
+									continue;
+
 								load('coverage/class', array(
 									'name' => $filename,
 									'file' => $file,
