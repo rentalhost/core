@@ -23,7 +23,6 @@
 		}
 
 		// Re/define uma configuração
-		//TODO: $overwrite_old = true -- sobrescrever valor anterior, se existir
 		static public function set_config( $modular_path, $config_key, $new_value ) {
 			// Se necessário, cria a configuração do modular
 			if( !isset( self::$_configs[$modular_path] ) ) {
@@ -37,19 +36,25 @@
 
 		// Obtém uma configuração
 		//TODO: $default_value = null -- usa um valor padrão, se a configuração não existir
-		static public function get_config($modular_path, $config_key) {
+		static public function get_config($modular_path, $config_key, $default_value = null) {
+			$final_value = null;
+
 			// Se a modular path for null, a busca será prioritária
 			if($modular_path === null) {
-				return self::_prioritary_get_config($config_key);
+				$final_value = self::_prioritary_get_config($config_key);
 			}
 			else
 			// Se a informação existir, ela será retornada
 			if(isset(self::$_configs[$modular_path][$config_key])) {
-				return self::$_configs[$modular_path][$config_key];
+				$final_value = self::$_configs[$modular_path][$config_key];
 			}
 
+			// Se o valor final for null, usa o valor padrão
+			if($final_value === null)
+				$final_value = $default_value;
+
 			// Caso contrário, undefined será retornado
-			return null;
+			return $final_value;
 		}
 
 		// Faz uma busca prioritária

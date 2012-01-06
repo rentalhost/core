@@ -47,3 +47,11 @@
 	function setlist($data) {
 		return core::parse_setlist($data);
 	}
+
+
+	/** HELPERS DE CONFIGURAÇÃO */
+
+	// Obtém uma configuração rapidamente, usando a modular atual
+	function config($key, $default_value = null) {
+		return core_config::get_config(null, $key, $default_value);
+	}

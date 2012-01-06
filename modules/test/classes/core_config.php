@@ -9,5 +9,11 @@
 			$this->test(5, core_config::has_config('test$only', 'test'));
 			$this->test(4, core_config::get_config(null, 'test'));
 			$this->test(6, core_config::get_config(null, 'none'));
+			$this->test(7, core_config::get_config(null, 'none', 'default value'));
+
+			$this->set_prefix('helper');
+			$this->test(1, config('test'));
+			$this->test(2, config('none'));
+			$this->test(3, config('none', 'default value'));
 		}
 	}

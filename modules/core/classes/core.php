@@ -202,10 +202,7 @@
 				}
 
 				// Se nenhum path for cadastro, apaga a variável
-				// Também é necessário eliminar a primeira chave
 				if( empty( $result->path ) ) {
-					//TODO: fazer uma checagem avançada para entender o porque se ativar dá erro
-					// array_shift( $modular_path );
 					unset( $result->path );
 				}
 			}
