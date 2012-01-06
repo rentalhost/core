@@ -18,6 +18,7 @@
 			$this->test(1, $execute->required() === $execute);
 			$this->test(2, $execute->exists());
 			$this->test(3, $execute->has_failed());
+			$this->test(15, $execute->has_printed());
 			$this->test(4, $execute->get_status());
 			$this->test(5, $execute->get_contents());
 			$this->test(6, $execute->get_return());
@@ -28,6 +29,7 @@
 			ob_start();
 			$this->test(10, $execute->render() === $execute);
 			$this->test(11, ob_get_contents());
+			$this->test(16, $execute->has_printed());
 			ob_end_clean();
 
 			ob_start();

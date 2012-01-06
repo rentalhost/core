@@ -22,12 +22,12 @@
 		// Armazena a informação modular, se disponível
 		private $_modular_data;
 		// Armazena o status da operação
-		private $_status = self::STATUS_SUCCESS;
+		private $_status 			= self::STATUS_SUCCESS;
 		// Armazena o resultado retornado pela execução
 		private $_result_data;
 		// Armazena o conteúdo gerado pela função
 		private $_result_contents	= "";
-		// Armazena a informação se o conteúdo foi impresso automaticamente
+		// Armazena a informação se o conteúdo foi impresso
 		private $_result_printed	= false;
 
 		// Cria uma nova view

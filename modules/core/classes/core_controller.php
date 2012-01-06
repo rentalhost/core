@@ -24,7 +24,9 @@
 		// Armazena o resultado retornado pela execução
 		private $_result_data;
 		// Armazena o conteúdo gerado pela função
-		private $_result_contents;
+		private $_result_contents	= "";
+		// Armazena a informação se o conteúdo foi impresso
+		private $_result_printed	= false;
 
 		// Cria uma nova instância
 		//DEBUG: verificar se o método chamado entra em conflito com os métodos do core_controller
@@ -77,6 +79,8 @@
 
 		// Imprime o conteúdo gerado
 		public function render() {
+			$this->_result_printed = true;
+
 			// Se o tipo de resultado não for 'json', usa o método padrão de impressão
 			if( $this->_result_type === self::RETURN_TYPE_DEFAULT ) {
 				echo $this->_result_contents;
@@ -106,6 +110,11 @@
 		// Retorna true se um erro ocorreu
 		public function has_failed() {
 			return $this->_status !== self::STATUS_SUCCESS;
+		}
+
+		// Retorna true se o conteúdo já foi impresso
+		public function has_printed() {
+			return $this->_result_printed;
 		}
 
 		// Retorna o status da operação
