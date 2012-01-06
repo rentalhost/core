@@ -10,6 +10,14 @@
 			return call( '__class::accept_result', $_POST['id'] );
 		}
 
+		// Aceita múltiplos resultados
+		public function accept_multi_results() {
+			$this->set_return_type( 'json' );
+
+			// Retorna os units encontrados
+			return call( '__class::accept_multi_results', $_POST['ids'] );
+		}
+
 		// Rejeita um resultado
 		public function reject_result() {
 			$this->set_return_type( 'json' );

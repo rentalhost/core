@@ -91,6 +91,9 @@ ul#toolbar > li.disabled {
 	cursor: default;
 	color: #c6c6c6;
 }
+ul#toolbar > li.float-right {
+	float: right;
+}
 
 /** CLASSE */
 div.unit-class {

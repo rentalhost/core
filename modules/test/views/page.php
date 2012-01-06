@@ -29,6 +29,7 @@
 					<li class="disabled">Code Coverage</li>
 					<li class="disabled no-margin">[H]</li>
 					<?php endif; ?>
+					<li class="float-right accept-all disabled">Aceitar Todos</li>
 				</ul>
 
 				<div id="classes-realm">

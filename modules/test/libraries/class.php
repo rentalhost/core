@@ -38,12 +38,12 @@
 
 			$loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
 			foreach( $loaded_classes as $item ) {
-				$classname = substr($item, 5, -8);
+				$classname = str_replace('__', '_', substr($item, 5, -8));
 				$results[$classname] = self::_get_class_data($item);
 				unset($old_classes[$classname]);
 			}
 
-			foreach($old_classes as $old_class => $NIL) {
+			foreach($old_classes as $old_class => $null) {
 				$old_cases = array();
 				foreach(self::$_files[$old_class] as $old_case)
 					$old_cases[$old_case[0]] = array(
@@ -120,7 +120,7 @@
 
 		// Executa os métodos de um unit
 		static private function _run_tests( &$results, $class, $method ) {
-			$class->_id_class = substr( get_class( $class ), 5, -8 );
+			$class->_id_class = str_replace( '__', '_', substr( get_class( $class ), 5, -8 ) );
 			$class->_id_method = substr( $method, 5 );
 
 			call_user_func( array( $class, $method ) );
@@ -129,15 +129,24 @@
 		}
 
 		// Aceita um resultado
-		static public function accept_result( $id ) {
-			// Primeiro testa se o ID é válido
-			if( preg_match( '/^(?:' . CORE_VALID_ID . '\.?)*$/' ) === 0 )
-				return false;
+		static public function accept_result($id) {
+			return self::accept_multi_results(array($id));
+		}
 
-			// Se for, remove o resultado atual, se existir, e move o novo resultado sobre este
-			$file = core::get_current_path() . "/results/{$id}";
-		   @unlink("{$file}.valid");
-			rename("{$file}.last", "{$file}.valid");
+		// Aceita múltiplos resultados
+		static public function accept_multi_results( $ids ) {
+			$current_path = core::get_current_path();
+
+			foreach($ids as $id) {
+				// Primeiro testa se o ID é válido
+				if( preg_match( '/^(?:' . CORE_VALID_ID . '\.?){3}\.([0-9]+)$/', $id ) === 0 )
+					return false;
+
+				// Se for, remove o resultado atual, se existir, e move o novo resultado sobre este
+				$file =  "{$current_path}/results/{$id}";
+			   @unlink("{$file}.valid");
+				rename("{$file}.last", "{$file}.valid");
+			}
 
 			return true;
 		}
@@ -145,7 +154,7 @@
 		// Rejeita um resultado
 		static public function reject_result( $id ) {
 			// Primeiro testa se o ID é válido
-			if( preg_match( '/^(?:' . CORE_VALID_ID . '\.?)*$/' ) === 0 )
+			if( preg_match( '/^(?:' . CORE_VALID_ID . '\.?){3}\.([0-9]+)$/', $id ) === 0 )
 				return false;
 
 			// A rejeição é apenas a remoção do arquivo .valid do ID referente
