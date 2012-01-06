@@ -35,9 +35,10 @@
 	/** HELPERS DE LIBRARY */
 
 	// Carrega uma biblioteca
-	//TODO: usar setlist para carregar mais de uma library
 	function library($libraries) {
-		return core_caller::load_library($libraries);
+		foreach(setlist($libraries) as $library)
+			core_caller::load_library($library);
+		return true;
 	}
 
 	/** HELPERS DE DADOS */

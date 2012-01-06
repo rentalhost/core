@@ -361,3 +361,7 @@ ul.file-lines li > span.button {
 ul.file-lines li > span.button:hover {
 	color: black;
 }
+
+table.xdebug-error {
+	font: 11pt "Segoe UI";
+}
