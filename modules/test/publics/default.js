@@ -68,7 +68,6 @@ $(function(){
 			dataType: 'json',
 			data: {
 				file: parent.parent().data('file'),
-				line: parent.data('line'),
 				content: parent.data('content')
 			}
 		});
@@ -88,7 +87,6 @@ $(function(){
 			dataType: 'json',
 			data: {
 				file: parent.parent().data('file'),
-				line: parent.data('line'),
 				content: parent.data('content')
 			}
 		});
