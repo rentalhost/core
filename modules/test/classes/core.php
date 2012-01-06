@@ -56,4 +56,15 @@
 		public function test_get_caller() {
 			$this->test(1, core::get_path_clipped(core::get_caller_path()));
 		}
+
+		public function test_setlist() {
+			$this->test(1, setlist(null));
+			$this->test(2, setlist(''));
+			$this->test(3, setlist('a'));
+			$this->test(4, setlist('a, b, c, d'));
+			$this->test(5, setlist('a, b, c\, d'));
+			$this->test(6, setlist(' a,  b,c  '));
+			$this->test(7, setlist(array('key' => 'value')));
+			$this->test(8, setlist(array('a, b, c')));
+		}
 	}

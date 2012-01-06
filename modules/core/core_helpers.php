@@ -39,3 +39,10 @@
 	function library($libraries) {
 		return core_caller::load_library($libraries);
 	}
+
+	/** HELPERS DE DADOS */
+
+	// Converte uma string separada por vírgula em um array
+	function setlist($data) {
+		return core::parse_setlist($data);
+	}

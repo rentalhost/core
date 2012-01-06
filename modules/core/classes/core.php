@@ -274,6 +274,27 @@
 			return core::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
 		}
 
+		// Cria uma setlist baseado na informação recebida (array)
+		static public function parse_setlist($data){
+			// Quando está em branco, retorna um array vazio
+			if($data == null)
+				return array();
+
+			// Se for um array ou objeto, retorna apenas os valores existentes (sem chaves)
+			if(is_array($data)
+			|| is_object($data))
+				return array_values((array) $data);
+
+			// Se for uma string simples (sem virgula), retorna apenas um trim da informação
+			if(strpos($data, ',') === false)
+				return array(trim($data));
+
+			// Em último caso, separa usando a expressão seguinte, que divide por virgula
+			// Quando usado \, a informação é usada literalmente no objeto anterior
+			// http://stackoverflow.com/a/6243797/755393 @NikiC
+			return preg_split('~\\\\.(*SKIP)(*FAIL)|\,\s*~s', trim($data));
+		}
+
 		// Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)
 		static public function do_publish( $publish_http ) {
 			header('Cache-Control: max-age=290304000, public');
