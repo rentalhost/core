@@ -3,14 +3,21 @@
 	// Núcleo geral
 	class core {
 		// Todas as chamadas de classes passarão por aqui
-		//DEBUG: se a classe não for encontrada, retorna um erro
 		//DEBUG: para user class, verificar se elas concordam com a pattern
 		static public function __autoload( $classname ) {
 			// Se for uma classe do core...
-			if( substr( $classname, 0, 5 ) === 'core_' ) {
-				//DEBUG: verificar se o arquivo existe, senão, gerar um erro
-				require_once "{$classname}.php";
-				return;
+			if(substr($classname, 0, 5) === 'core_') {
+				$classpath = CORE_ROOT . "/classes/{$classname}.php";
+
+				// Após obter o caminho, inclui o arquivo
+				if(!is_file($classpath)) {
+					$classpath = self::get_path_fixed($classpath);
+					throw new core_exception("Core class \"{$classname}\" at \"{$classpath}\" not found.");
+					return false;
+				}
+
+				require_once $classpath;
+				return true;
 			}
 
 			// Localiza uma user class
@@ -25,17 +32,24 @@
 			switch( $classpath->clipped ) {
 				case 'model': $classpath->fullpath .= '/models'; break;
 				case 'library': $classpath->fullpath .= '/libraries'; break;
+				case 'exception': $classpath->fullpath .= '/exceptions'; break;
 			}
 
 			// O próximo passo é localizar o arquivo que será incluido
-			$classpath = core::get_modular_parts( $classpath->remains, array(
+			$classpath_subdata = core::get_modular_parts( $classpath->remains, array(
 				'start_dir' => $classpath->fullpath,
 				'search_modules' => false,
 				'make_fullpath' => true
 			) );
 
 			// Após obter o caminho, inclui o arquivo
-			core::do_require( $classpath->fullpath );
+			if(!is_file($classpath_subdata->fullpath)) {
+				throw new core_exception("Class \"{$classname}\" at \"{$classpath->fullpath}\" not found.");
+				return false;
+			}
+
+			// Inclui o arquivo
+			core::do_require($classpath_subdata->fullpath);
 		}
 
 		// Retorna a URL base com sua modular (por padrão)

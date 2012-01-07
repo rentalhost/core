@@ -69,10 +69,20 @@
 		}
 
 		public function test_exception() {
-			$this->exception_test(1, 'exception_fake', 'Just a fake exception!');
+			$this->exception_test(1, 'exception_fake');
+			$this->exception_test(2, 'exception_autoloaded');
+			$this->exception_test(3, 'exception_unexistent');
 		}
 
 		public function exception_fake() {
 			new core_fake;
+		}
+
+		public function exception_autoloaded() {
+			throw new test_useful_test_exception('It works!', 123);
+		}
+
+		public function exception_unexistent() {
+			throw new test_unexistent_exception();
 		}
 	}
