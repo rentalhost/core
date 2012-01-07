@@ -245,6 +245,18 @@
 				return;
 			}
 
-			call_user_func( array( $this, $callback ) );
+			call_user_func(array($this, $callback));
+		}
+
+		// Executa um teste de exceção
+		public function exception_test($index, $callback, $message = null) {
+			$exception_data = null;
+
+			try
+			{ call_user_func(array($this, $callback)); }
+			catch(Exception $e)
+			{ $exception_data = $e; }
+
+			$this->test($index, $exception_data, $message);
 		}
 	}

@@ -67,4 +67,12 @@
 			$this->test(7, setlist(array('key' => 'value')));
 			$this->test(8, setlist(array('a, b, c')));
 		}
+
+		public function test_exception() {
+			$this->exception_test(1, 'exception_fake', 'Just a fake exception!');
+		}
+
+		public function exception_fake() {
+			new core_fake;
+		}
 	}

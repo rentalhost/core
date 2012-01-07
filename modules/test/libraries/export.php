@@ -24,12 +24,12 @@
 			if( is_string( $data ) ) {
 				// Remover informações sobre o URL e o path local
 				// Isto permite validar melhor o servidor e o localhost
-				$data = str_replace(
-					array(core::get_baseurl(false),	core::get_path_fixed(CORE_INDEX)),
-					array('http://.../core/',		'/.../core'),
-					$data
+				$replace_data = array(
+					core::get_baseurl(false)			=> 'http://.../core/',
+					core::get_path_fixed(CORE_INDEX)	=> '/.../core'
 				);
 
+				$data = str_replace(array_keys($replace_data), array_values($replace_data), $data);
 				return array('string', $data);
 			}
 			else
@@ -58,10 +58,21 @@
 			else
 			if( is_object( $data ) ) {
 				$data_values = array();
-				if(is_callable(array($data, '__toString')))
+
+				if(is_callable(array($data, '__toString'))
+				&& !$data instanceof Exception)
 					$data_values['__toString()'] = array('string', $data->__toString());
 
 				$object_data = (array) $data;
+
+				if($data instanceof Exception) {
+					$object_data["\0*\0file"] = core::get_path_fixed($object_data["\0*\0file"]);
+					$object_data["\0Exception\0string"] = null;
+					$object_data["\0Exception\0trace"] = null;
+					unset($object_data['xdebug_message']);
+					unset($object_data["\0Exception\0previous"]); // PHP 5.3
+				}
+
 				foreach($object_data as $key => $value) {
 					$key = explode("\0", $key);
 					$key = isset($key[2]) ? $key[2] : $key[0];
