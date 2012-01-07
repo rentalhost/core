@@ -1,1 +1,1 @@
-["object",{"code":["number",0],"file":["string","\/...\/core\/modules\/core\/classes\/core.php"],"line":["number",15],"message":["string","Core class \"core_fake\" at \"\/...\/core\/modules\/core\/classes\/core_fake.php\" not found."],"string":["null",null],"trace":["null",null]},"core_internal_exception"]
+["object",{"code":["number",0],"file":["string","\/...\/core\/modules\/core\/classes\/core.php"],"message":["string","Core class \"core_fake\" at \"\/...\/core\/modules\/core\/classes\/core_fake.php\" not found."]},"core_internal_exception"]

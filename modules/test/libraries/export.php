@@ -67,9 +67,10 @@
 
 				if($data instanceof Exception) {
 					$object_data["\0*\0file"] = core::get_path_fixed($object_data["\0*\0file"]);
-					$object_data["\0Exception\0string"] = null;
-					$object_data["\0Exception\0trace"] = null;
 					unset($object_data['xdebug_message']);
+					unset($object_data["\0Exception\0string"]);
+					unset($object_data["\0*\0line"]);
+					unset($object_data["\0Exception\0trace"]);
 					unset($object_data["\0Exception\0previous"]); // PHP 5.3
 				}
 
