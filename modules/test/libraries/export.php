@@ -26,7 +26,7 @@
 				// Isto permite validar melhor o servidor e o localhost
 				$replace_data = array(
 					core::get_baseurl(false)			=> 'http://.../core/',
-					core::get_path_fixed(CORE_INDEX)	=> '/.../core'
+					core::get_path_fixed(CORE_INDEX)	=> './core'
 				);
 
 				$data = str_replace(array_keys($replace_data), array_values($replace_data), $data);
