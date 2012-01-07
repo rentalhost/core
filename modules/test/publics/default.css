@@ -193,9 +193,9 @@ div.unit-class > span.message {
 }
 
 div.unit-footer {
-	border-top: 3px #f3f3f3 solid;
+	border-top: 2px #f3f3f3 solid;
 	border-bottom-left-radius: 3px;
-	border-left: 3px solid;
+	border-left: 1px solid;
 	margin-bottom: 2px;
 	margin-top: 1px;
 
