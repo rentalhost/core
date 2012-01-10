@@ -13,6 +13,9 @@
 			$this->test(2, execute('useful/one_arg/123/456', true)->get_return(), 'drop info');
 			$this->test(3, execute('useful/two_args/123/456', true)->get_return());
 			$this->test(4, execute('useful/default_method', true)->get_return());
+			$this->test(5, execute('useful/extra', true)->get_return());
+			$this->test(6, execute('useful/extra/1', true)->get_return());
+			$this->test(7, execute('useful/extra/1/2', true)->get_return());
 
 			$this->set_prefix('methods');
 			$execute = execute('useful/the_array', true);
