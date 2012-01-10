@@ -298,7 +298,7 @@
 			// Se for chamado um método diferente do padrão, mas este não existir, usa o método padrão
 			try {
 				if( $modular_path->method !== $default_method
-				&&  is_callable( array( $modular_path->class, $modular_path->method ) ) === false ) {
+				&&  method_exists($modular_path->class, $modular_path->method) === false ) {
 					if($strict_route === true) {
 						return new self( $modular_path, null, $cancel_print,
 							self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );

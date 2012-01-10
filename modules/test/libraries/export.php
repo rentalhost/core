@@ -59,7 +59,7 @@
 			if( is_object( $data ) ) {
 				$data_values = array();
 
-				if(is_callable(array($data, '__toString'))
+				if(method_exists($data, '__toString')
 				&& !$data instanceof Exception)
 					$data_values['__toString()'] = array('string', $data->__toString());
 
