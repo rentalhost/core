@@ -44,5 +44,27 @@
 			$this->test(6, (load('[abc]', null, true)->get_status() & $insegure_flag) !== $insegure_flag);
 			$this->test(7, (load('[]', null, true)->get_status() & $insegure_flag) !== $insegure_flag);
 			$this->test(8, (load('[/]', null, true)->get_status() & $insegure_flag) !== $insegure_flag);
+
+			$this->set_prefix('exception');
+			$this->exception_test(1, 'exception_not_found');
+			$this->exception_test(2, 'exception_remains');
+			$this->exception_test(3, 'exception_insecure');
+			$this->exception_test(4, 'exception_empty');
+		}
+
+		public function exception_not_found() {
+			load('useful/sub_test', null, true)->required();
+		}
+
+		public function exception_remains() {
+			load('useful/fail', null, true)->required();
+		}
+
+		public function exception_insecure() {
+			load('useful/[sub_test/test]', null, true)->required();
+		}
+
+		public function exception_empty() {
+			load('', null, true)->required();
 		}
 	}
