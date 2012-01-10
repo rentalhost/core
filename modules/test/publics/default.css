@@ -338,6 +338,7 @@ ul.file-lines li > span {
 	display: block;
 	padding: 2px 0;
 	white-space: pre-wrap;
+	tab-size: 4;
 }
 
 ul.file-lines li.coverage-on > span {
