@@ -329,9 +329,12 @@ ul.file-lines {
 	margin: 0;
 	list-style-type: decimal;
 	font: 8pt "Consolas";
-	padding: 15px 25px 0px 60px;
+	padding: 15px 25px 15px 60px;
 	color: silver;
 	user-select: initial;
+}
+ul.file-lines li {
+	height: 14px;
 }
 ul.file-lines li > span {
 	color: gray;
