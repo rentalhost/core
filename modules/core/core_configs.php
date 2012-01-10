@@ -2,6 +2,14 @@
 
 	// Define as configurações padrões e salva
 	$config = new stdclass;
+
+	/** CONFIGURAÇÕES DA ROTA */
+	// Configuração de rota estrita (boolean)
+	// Quanto ativado, a rota deverá ser definida por completo, com classe, path e método
+	$config->route_strict_mode			= false;
+
+	// Configuração da rota padrão, quando não definida
+	// Exemplo: .../site/master/index
 	$config->route_default_modular		= 'site';	// string, array
 	$config->route_default_controller	= 'master';	// string, array
 	$config->route_default_method		= 'index';	// string

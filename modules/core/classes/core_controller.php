@@ -40,15 +40,10 @@
 			// Armazena o tipo de retorno padrão
 			$this->_result_type = $default_result_type;
 
-			// Se o status for de que o controller não existe, não há razão de dar continuidade
-			if(($default_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
-				return; //TODO: apenas no futuro isto será possível
-			}
-
 			// Verifica se um dado método pode ser chamado
-			if(method_exists($this, $modular_data->method) === false) {
-				$this->_status = self::STATUS_METHOD_NOT_EXISTS;
-				return; //TODO: apenas no futuro isto será possível
+			if(isset($modular_data->method) === true
+			&& method_exists($this, $modular_data->method) === false) {
+				$this->_status|= self::STATUS_METHOD_NOT_EXISTS;
 			}
 
 			// Auto-executa, se necessário
@@ -61,11 +56,16 @@
 			}
 		}
 
+		// Lança uma exceção baseada no status
+		private function _throw_exception() {
+			throw new core_exception("Controller not found to \"{$this->_modular_data->url}\".");
+		}
+
 		// Executa o controller
 		private function _execute() {
 			// Se houve algum erro, evita que seja executado
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-				return $this; //TODO: apenas no futuro isto será possível
+				$this->_throw_exception();
 			}
 
 			// Nesta etapa, é necessário receber os dados retornado pela função e gerado
@@ -97,7 +97,8 @@
 		// Se o arquivo for requerido, ele não poderá ter nenhum erro
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-			} //TODO: se houver erro, retorna a informação na tela
+				$this->_throw_exception();
+			}
 
 			return $this;
 		}
@@ -192,7 +193,14 @@
 			}
 			else {
 				// Se puder detectar o path do caller (somente execute())
-				if($can_detect_caller_path === true) {
+				if($can_detect_caller_path === true
+				&& isset($modular_path_data[0]) === true) {
+					// Se o primeiro caractere for um $, indica rota estrita inline
+					if($modular_path_data[0] === '$') {
+						$strict_route = true;
+						$modular_path_data = substr($modular_path_data, 1);
+					}
+
 					// Se o modular começar por / apenas remove a informação
 					// Caso contrário, deverá preencher com o path do módulo de chamada
 					if($modular_path_data[0] === '/') {
@@ -201,6 +209,11 @@
 					else {
 						$modular_path_data = join('/', core::get_caller_module_path()) . '/' . $modular_path_data;
 					}
+				}
+
+				// Se não definir o modo estrito de rota, obtém a informação
+				if(!isset($strict_route)) {
+					$strict_route = config('route_strict_mode');
 				}
 
 				// Extende a informação da URL
@@ -220,7 +233,6 @@
 				// Se a modular não for definida, retorna um controller neutro
 				// Modulares são obrigatórias
 				if( isset( $modular_path_data->modular ) === false ) {
-					//TODO: apenas no futuro isto será possível
 					return new self( $modular_path, null, $cancel_print,
 						self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
 				}
@@ -245,9 +257,18 @@
 				) );
 
 				// Se o controller não for definido, define com o valor padrão
-				$modular_path->path = isset( $modular_path_data->path )
-					? $modular_path_data->path
-					: (array) core_config::get_config( null, 'route_default_controller' );
+				if(isset($modular_path_data->path)) {
+					$modular_path->path = $modular_path_data->path;
+				}
+				// Se a rota estrita estiver desativada, preenche com a configuração padrão
+				else if($strict_route === false) {
+					$modular_path->path = (array) core_config::get_config(null, 'route_default_controller');
+				}
+				// Em último caso, cria um erro
+				else {
+					return new self( $modular_path, null, $cancel_print,
+						self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+				}
 
 				// Gera o nome completo da chamada
 				$modular_path->class = core::get_joined_class( $modular_path, 'controller' );
@@ -265,7 +286,6 @@
 
 			// Se o arquivo de controller não existir, usará o controler neutro
 			if( is_file( $modular_path->fullpath ) === false ) {
-				//TODO: apenas no futuro isto será possível
 				return new self( $modular_path, null, $cancel_print,
 					self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
 			}
@@ -279,6 +299,11 @@
 			try {
 				if( $modular_path->method !== $default_method
 				&&  is_callable( array( $modular_path->class, $modular_path->method ) ) === false ) {
+					if($strict_route === true) {
+						return new self( $modular_path, null, $cancel_print,
+							self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+					}
+
 					array_unshift( $modular_path_data->remains, $modular_path->method );
 					$modular_path->method = $default_method;
 				}

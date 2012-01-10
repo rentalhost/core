@@ -6,6 +6,7 @@
 			$this->test(1, execute('useful', true));
 			$this->test(2, execute('/test/useful', true));
 			$this->test(3, execute(null, true));
+			$this->test(4, execute('', true));
 
 			$this->set_prefix('args');
 			$this->test(1, execute('useful/one_arg/123', true)->get_return());
@@ -37,5 +38,25 @@
 			$this->test(13, $execute->render() === $execute);
 			$this->test(14, ob_get_contents());
 			ob_end_clean();
+
+			$this->set_prefix('strict_route');
+			$this->test(1, execute('$useful/master/index', true));
+			$this->test(2, execute('$/fake', true));
+			$this->test(3, execute('$useful/fake_path', true));
+			$this->test(4, execute('$useful/master/fake', true));
+
+			$this->set_prefix('exception');
+			$this->exception_test(1, 'exception_required');
+			$this->exception_test(3, 'exception_method', 'thrown because not exists compatible method, like index');
+		}
+
+		public function exception_required() {
+			$exception = execute('$/unknow', true);
+			$this->test(2, $exception);
+			$exception->required();
+		}
+
+		public function exception_method() {
+			execute('useful/fail', true);
 		}
 	}
