@@ -5,9 +5,17 @@
 		// Indica que tudo ocorreu perfeitamente
 		const   STATUS_SUCCESS				= 0;
 		// Indica que o controller solicitado não foi encontrado
-		const   STATUS_CONTROLLER_NOT_FOUND	= 1;
+		const   STATUS_CONTROLLER_INVALID	= 1;
 		// Indica que o método solicitado não foi definido
 		const   STATUS_METHOD_NOT_EXISTS	= 2;
+		// Indica que a modular é necessária
+		const	STATUS_MODULAR_REQUIRED		= 4;
+		// Indica que o path é necessário
+		const	STATUS_PATH_REQUIRED		= 8;
+		// Indica que o método é necessário
+		const	STATUS_METHOD_REQUIRED		= 16;
+		// Indica que o arquivo não foi encontrado
+		const	STATUS_CONTROLLER_NOT_FOUND	= 32;
 
 		// Indica que o tipo de retorno é padrão
 		const   RETURN_TYPE_DEFAULT			= 'default';
@@ -58,7 +66,25 @@
 
 		// Lança uma exceção baseada no status
 		private function _throw_exception() {
-			throw new core_exception("Controller not found to \"{$this->_modular_data->url}\".");
+			if(($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
+				//TODO: será concluido em breve
+			}
+			else
+			if(($this->_status & self::STATUS_METHOD_REQUIRED) === self::STATUS_METHOD_REQUIRED) {
+				//TODO: será concluido em breve
+			}
+			else
+			if(($this->_status & self::STATUS_PATH_REQUIRED) === self::STATUS_PATH_REQUIRED) {
+				throw new core_exception("Controller path not found to \"{$this->_modular_data->url}\".");
+			}
+			else
+			if(($this->_status & self::STATUS_MODULAR_REQUIRED) === self::STATUS_MODULAR_REQUIRED) {
+				throw new core_exception("Controller modular not found in \"{$this->_modular_data->url}\".");
+			}
+			else
+			if(($this->_status & self::STATUS_METHOD_NOT_EXISTS) === self::STATUS_METHOD_NOT_EXISTS) {
+				throw new core_exception("Controller method \"{$this->_modular_data->class}::{$this->_modular_data->method}\" not found.");
+			}
 		}
 
 		// Executa o controller
@@ -105,7 +131,7 @@
 
 		// Retorna true se o controller existir
 		public function exists() {
-			return ($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) !== self::STATUS_CONTROLLER_NOT_FOUND;
+			return ($this->_status & self::STATUS_CONTROLLER_INVALID) !== self::STATUS_CONTROLLER_INVALID;
 		}
 
 		// Retorna true se um erro ocorreu
@@ -231,10 +257,9 @@
 				) );
 
 				// Se a modular não for definida, retorna um controller neutro
-				// Modulares são obrigatórias
 				if( isset( $modular_path_data->modular ) === false ) {
 					return new self( $modular_path, null, $cancel_print,
-						self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+						self::STATUS_CONTROLLER_INVALID | self::STATUS_MODULAR_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
 				}
 
 				// Senão, armazena a informação
@@ -267,7 +292,7 @@
 				// Em último caso, cria um erro
 				else {
 					return new self( $modular_path, null, $cancel_print,
-						self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+						self::STATUS_CONTROLLER_INVALID | self::STATUS_PATH_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
 				}
 
 				// Gera o nome completo da chamada
@@ -287,7 +312,7 @@
 			// Se o arquivo de controller não existir, usará o controler neutro
 			if( is_file( $modular_path->fullpath ) === false ) {
 				return new self( $modular_path, null, $cancel_print,
-					self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+					self::STATUS_CONTROLLER_INVALID | self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
 			}
 
 			// Senão, faz um require da classe solicitada
@@ -301,13 +326,13 @@
 				&&  method_exists($modular_path->class, $modular_path->method) === false ) {
 					if($strict_route === true) {
 						return new self( $modular_path, null, $cancel_print,
-							self::STATUS_CONTROLLER_NOT_FOUND, self::RETURN_TYPE_DEFAULT, false );
+							self::STATUS_CONTROLLER_INVALID | self::STATUS_METHOD_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
 					}
 
 					array_unshift( $modular_path_data->remains, $modular_path->method );
 					$modular_path->method = $default_method;
 				}
-			}
+ 			}
 			catch(core_exception $e) {
 				$modular_path->method = $default_method;
 			}

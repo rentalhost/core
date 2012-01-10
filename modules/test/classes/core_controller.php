@@ -51,6 +51,7 @@
 			$this->set_prefix('exception');
 			$this->exception_test(1, 'exception_required');
 			$this->exception_test(3, 'exception_method', 'thrown because not exists compatible method, like index');
+			$this->exception_test(4, 'exception_controller_required');
 		}
 
 		public function exception_required() {
@@ -61,5 +62,9 @@
 
 		public function exception_method() {
 			execute('useful/fail', true);
+		}
+
+		public function exception_controller_required() {
+			execute('$useful/fake/index', true)->required();
 		}
 	}
