@@ -276,9 +276,14 @@
 				core::do_require($modular_path->fullpath);
 
 			// Se for chamado um método diferente do padrão, mas este não existir, usa o método padrão
-			if( $modular_path->method !== $default_method
-			&&  is_callable( array( $modular_path->class, $modular_path->method ) ) === false ) {
-				array_unshift( $modular_path_data->remains, $modular_path->method );
+			try {
+				if( $modular_path->method !== $default_method
+				&&  is_callable( array( $modular_path->class, $modular_path->method ) ) === false ) {
+					array_unshift( $modular_path_data->remains, $modular_path->method );
+					$modular_path->method = $default_method;
+				}
+			}
+			catch(core_exception $e) {
 				$modular_path->method = $default_method;
 			}
 
