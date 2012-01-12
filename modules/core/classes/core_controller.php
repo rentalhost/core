@@ -67,15 +67,15 @@
 		// Lança uma exceção baseada no status
 		private function _throw_exception() {
 			if(($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
-				//TODO: será concluido em breve
+				throw new core_exception("Controller file is not found at \"{$this->_modular_data->fullpath}\".");
 			}
 			else
 			if(($this->_status & self::STATUS_METHOD_REQUIRED) === self::STATUS_METHOD_REQUIRED) {
-				//TODO: será concluido em breve
+				throw new core_exception("Controller method is required in \"{$this->_modular_data->url}\".");
 			}
 			else
 			if(($this->_status & self::STATUS_PATH_REQUIRED) === self::STATUS_PATH_REQUIRED) {
-				throw new core_exception("Controller path not found to \"{$this->_modular_data->url}\".");
+				throw new core_exception("Controller path not found in \"{$this->_modular_data->url}\".");
 			}
 			else
 			if(($this->_status & self::STATUS_MODULAR_REQUIRED) === self::STATUS_MODULAR_REQUIRED) {
@@ -195,7 +195,7 @@
 
 			// Gera o controler, ele é obrigatório pois é quem inicia a chamada
 			self::$_main_controller = self::_create_controller( $modular_path, false, false );
-			self::$_main_controller ->_execute() ->required() ->render();
+			self::$_main_controller->_execute()->required()->render();
 		}
 
 		// Carrega uma URL
@@ -304,9 +304,17 @@
 				$modular_path->class = core::get_joined_class( $modular_path, 'controller' );
 
 				// Se não existir mais informações para o method, usa o valor padrão
-				$modular_path->method = empty( $modular_path_data->remains ) === false
-					? array_shift($modular_path_data->remains)
-					: $default_method;
+				if(empty($modular_path_data->remains) === false) {
+					$modular_path->method = array_shift($modular_path_data->remains);
+				}
+				else
+				if($strict_route === false) {
+					$modular_path->method = $default_method;
+				}
+				else {
+					return new self( $modular_path, null, $cancel_print,
+						self::STATUS_CONTROLLER_INVALID | self::STATUS_METHOD_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
+				}
 			}
 
 			// Gera o caminho completo do arquivo

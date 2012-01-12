@@ -53,6 +53,8 @@
 			$this->exception_test(1, 'exception_required');
 			$this->exception_test(3, 'exception_method', 'thrown because not exists compatible method, like index');
 			$this->exception_test(4, 'exception_controller_required');
+			$this->exception_test(5, 'exception_method_required');
+			$this->exception_test(6, 'exception_controller_not_found');
 		}
 
 		public function exception_required() {
@@ -67,5 +69,13 @@
 
 		public function exception_controller_required() {
 			execute('$useful/fake/index', true)->required();
+		}
+
+		public function exception_method_required() {
+			execute('$useful/fail', true)->required();
+		}
+
+		public function exception_controller_not_found() {
+			execute('', true)->required();
 		}
 	}
