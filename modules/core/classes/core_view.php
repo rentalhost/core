@@ -118,7 +118,23 @@
 		// Se o arquivo for requerido, ele não poderá ter nenhum erro
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
-			} //TODO: se houver erro, retorna a informação na tela
+				if(($this->_status & self::STATUS_VIEW_IS_INSECURE) === self::STATUS_VIEW_IS_INSECURE) {
+					throw new core_exception("View is not valid because it is insecure: \"{$this->_proposed_view}\".");
+				}
+				else
+				if(($this->_status & self::STATUS_VIEW_HAS_REMAINS) === self::STATUS_VIEW_HAS_REMAINS) {
+					$remains = join('/', $this->_modular_data->remains);
+					throw new core_exception("View is not valid because it have remains on path definition: \"{$remains}\".");
+				}
+				else
+				if(($this->_status & self::STATUS_VIEW_IS_EMPTY) === self::STATUS_VIEW_IS_EMPTY) {
+					throw new core_exception("View is not valid because it is empty.");
+				}
+				else
+				if(($this->_status & self::STATUS_VIEW_NOT_FOUND) === self::STATUS_VIEW_NOT_FOUND) {
+					throw new core_exception("View is not valid because it is a dir: \"{$this->_path}\".");
+				}
+			}
 
 			return $this;
 		}
@@ -141,6 +157,11 @@
 		// Retorna o status da operação
 		public function get_status() {
 			return $this->_status;
+		}
+
+		// Retorna true se o status for compatível
+		public function has_status($status) {
+			return ($this->_status & $status) === $status;
 		}
 
 		// Obtém a informação gerada pela função

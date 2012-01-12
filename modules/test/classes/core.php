@@ -83,6 +83,6 @@
 		}
 
 		public function exception_unexistent() {
-			throw new test_unexistent_exception();
+			new test_unexistent_exception();
 		}
 	}

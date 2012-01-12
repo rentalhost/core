@@ -1,0 +1,1 @@
+["object",{"code":["number",0],"file":["string",".\/core\/modules\/core\/classes\/core_view.php"],"message":["string","View is not valid because it is a dir: \".\/core\/modules\/test\/_useful\/views\/sub_test\"."]},"core_exception"]
