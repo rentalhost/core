@@ -47,6 +47,7 @@
 			$this->test(2, execute('$/fake', true));
 			$this->test(3, execute('$useful/fake_path', true));
 			$this->test(4, execute('$useful/master/fake', true));
+			$this->test(5, execute('$useful/fake/index', true)->has_status(core_controller::STATUS_PATH_REQUIRED));
 
 			$this->set_prefix('exception');
 			$this->exception_test(1, 'exception_required');

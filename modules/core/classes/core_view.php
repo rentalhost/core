@@ -159,6 +159,11 @@
 			return $this->_status;
 		}
 
+		// Retorna true se o status for compatível
+		public function has_status($status) {
+			return ($this->_status & $status) === $status;
+		}
+
 		// Obtém a informação gerada pela função
 		public function get_contents() {
 			return $this->_result_contents;
