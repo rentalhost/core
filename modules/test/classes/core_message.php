@@ -58,5 +58,21 @@
 				$this->test(++$count, $key);
 				$this->test(++$count, $value);
 			}
+
+			$this->set_prefix('setlist');
+			$this->test(1, $msg3->count('ok'));
+			$this->test(2, $msg3->count('ok, error'));
+			$this->test(4, $msg3->count('error'));
+			$this->test(5, $msg3->count('ok, error, info'));
+			$this->test(6, $msg2->count('warning'));
+			$this->test(7, $msg2->count('ok'));
+			$this->test(8, $msg2->count('ok, warning'));
+			$this->test(9, $msg2->count('exception'));
+			$this->test(10, $msg2->count('all'));
+			$this->exception_test(11, 'exception_type');
+		}
+
+		public function exception_type() {
+			message()->count('fake');
 		}
 	}
