@@ -48,6 +48,16 @@
 		return core::parse_setlist($data);
 	}
 
+	// Cria uma mensagem rápida, retornando um objeto core_message
+	function message($message = null, $type = null, $code = null) {
+		$obj = new core_message($type);
+
+		if($message !== null) {
+			$obj->push($message, null, $code);
+		}
+
+		return $obj;
+	}
 
 	/** HELPERS DE CONFIGURAÇÃO */
 
