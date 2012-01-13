@@ -294,9 +294,8 @@
 				return array();
 
 			// Se for um array ou objeto, retorna apenas os valores existentes (sem chaves)
-			if(is_array($data)
-			|| is_object($data))
-				return array_values((array) $data);
+			if(is_array($data))
+				return array_values($data);
 
 			// Se for uma string simples (sem virgula), retorna apenas um trim da informação
 			if(strpos($data, ',') === false)
