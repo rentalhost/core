@@ -65,3 +65,10 @@
 	function config($key, $default_value = null) {
 		return core_config::get_config(null, $key, $default_value);
 	}
+
+	/** HELPERS DE IDIOMA */
+
+	// Obtém um controlador de idiomas
+	function language($path, $lang_order = null) {
+		return new core_language($path, $lang_order);
+	}

@@ -14,6 +14,10 @@
 	$config->route_default_controller	= 'master';	// string, array
 	$config->route_default_method		= 'index';	// string
 
+	// Configuração do idioma padrão
+	// Por padrão, irá utilizar como base o idioma do accept-language
+	$config->language_default_order		= 'auto, en';	// setlist, array
+
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);
 
