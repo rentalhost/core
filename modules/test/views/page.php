@@ -34,15 +34,22 @@
 			</div>
 		</div>
 
+		<?php
+
+			$xdebug_enabled = extension_loaded('xdebug')
+						   && xdebug_is_enabled();
+
+		?>
+
 		<div id="content">
 			<div class="content">
 				<ul id="toolbar">
 					<li data-href="?default"><?php echo $lang->button_run; ?></li>
-					<?php if(extension_loaded('xdebug')): ?>
+					<?php if($xdebug_enabled): ?>
 					<li data-href="?coverage"><?php echo $lang->button_coverage; ?></li>
 					<li data-href="?coverage&hidden-success" class="no-margin">[H]</li>
 					<?php else: ?>
-					<li class="disabled"><?php echo $lang->button_coverage; ?></li>
+					<li class="disabled" title="<?php echo $lang->require_xdebug; ?>"><?php echo $lang->button_coverage; ?></li>
 					<li class="disabled no-margin">[H]</li>
 					<?php endif; ?>
 					<li class="float-right accept-all disabled"><?php echo $lang->button_accept_all; ?></li>
@@ -50,8 +57,6 @@
 
 				<div id="classes-realm">
 					<?php
-
-						$xdebug_enabled = function_exists('xdebug_start_code_coverage');
 
 						// Se necessário, inicia o sistema de depuração
 						if($xdebug_enabled === true
