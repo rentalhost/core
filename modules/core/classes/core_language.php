@@ -256,6 +256,7 @@
 				}
 			}
 
+			ksort($dir_list);
 			return $dir_list;
 		}
 
