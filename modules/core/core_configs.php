@@ -17,11 +17,16 @@
 	// Configuração do idioma padrão
 	//NOTE: use "auto" para obter a configuração de accept-languages
 	//NOTE: use "request" para obter a configuração da variável $_REQUEST (como $_GET e $_POST)
-	$config->language_default_order		= 'request, auto, en';	// setlist, array
+	//NOTE: use "session" para obter a configuração da sessão do usuário
+	$config->language_default_order		= 'request, session, auto, en';	// setlist, array
 
 	// Alterar a linguagem através de $_REQUEST
 	//NOTE: altere a informação para false para desabilitar a função
 	$config->language_request_key		= 'language-id'; // string, false
+
+	// Chave de armazenamento da linguagem na sessão
+	//NOTE: altere a informação para false para desabilitar a função
+	$config->language_session_key		= 'language-id'; // string, false
 
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);

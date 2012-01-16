@@ -154,6 +154,24 @@
 					continue;
 				}
 				else
+				// Obtém a definição em $_SESSION, se disponível
+				if($item === 'session') {
+					$session_key = config('language_session_key');
+
+					if($session_key === false)
+						continue;
+
+					if(!isset($_SESSION))
+						session_start();
+
+					if(isset($_SESSION[$session_key])
+					&& preg_match('/^' . self::MATCH_LANGUAGE . '$/', $_SESSION[$session_key])) {
+						$reorder[] = $_SESSION[$session_key];
+					}
+
+					continue;
+				}
+				else
 				// Obtém a definição do navegador
 				if($item === 'auto') {
 					if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
