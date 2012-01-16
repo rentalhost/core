@@ -148,6 +148,16 @@
 					if($request_key !== false
 					&& isset($_REQUEST[$request_key])
 					&& preg_match('/^' . self::MATCH_LANGUAGE . '$/', $_REQUEST[$request_key])) {
+						// Se o autosync estiver ligado, armazena a informação em uma sessão
+						$session_key = config('language_session_key');
+						if($session_key !== false
+						&& config('language_session_autosync') === true) {
+							if(!isset($_SESSION))
+								session_start();
+
+							$_SESSION[$session_key] = $_REQUEST[$request_key];
+						}
+
 						$reorder[] = $_REQUEST[$request_key];
 					}
 

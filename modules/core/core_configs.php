@@ -28,6 +28,10 @@
 	//NOTE: altere a informação para false para desabilitar a função
 	$config->language_session_key		= 'language-id'; // string, false
 
+	// Alterar sessão automaticamente quando usar a request key
+	//NOTE: altere a informação para false para desabilitar a função
+	$config->language_session_autosync	= true;
+
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);
 
