@@ -191,7 +191,8 @@
 		// Inicia o controlador da URL
 		static public function _init_url() {
 			// Gera o modular path a partir dos dados recebidos do cliente
-			$modular_path = substr( $_SERVER['REDIRECT_URL'], strlen( dirname( $_SERVER['PHP_SELF'] ) ) + 1 );
+			$request_url = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : $_SERVER['REQUEST_URI'];
+			$modular_path = substr($request_url, strlen(dirname($_SERVER['PHP_SELF'])) + 1);
 
 			// Gera o controler, ele é obrigatório pois é quem inicia a chamada
 			self::$_main_controller = self::_create_controller( $modular_path, false, false );
@@ -216,7 +217,8 @@
 
 			// Se o path modular for false, então usa totalmente o padrão
 			// Ex: http://127.0.0.1/
-			if($modular_path_data === null) {
+			if($modular_path_data === null
+			|| $modular_path_data === false) {
 				$modular_path->modular = (array) core_config::get_config( null, 'route_default_modular' );
 				$modular_path->path = (array) core_config::get_config( null, 'route_default_controller' );
 				$modular_path->method = $default_method;
