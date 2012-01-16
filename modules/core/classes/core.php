@@ -253,7 +253,8 @@
 			// Busca pela melhor primeira opção
 			foreach(debug_backtrace() as $backtrace) {
 				// Se a informação cropada for diferente do CORE_ROOT, é uma informação válida
-				if(substr($backtrace['file'], 0, $crop_length) !== $core_root) {
+				if(isset($backtrace['file'])
+				&& substr($backtrace['file'], 0, $crop_length) !== $core_root) {
 					return core::get_path_fixed($backtrace['file']);
 				}
 			}
