@@ -5,6 +5,7 @@
 		<meta http-equiv="Content-type" content="text/html; charset=<?php echo $lang->head_charset; ?>" />
 		<base href="<?php echo get_baseurl(); ?>" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
+		<link href="publics/images/labs-icon.png" rel="shortcut icon" type="image/png" />
 		<script src="publics/jquery-1.7.js"></script>
 		<script src="publics/jquery.css.js"></script>
 		<script src="publics/default.js"></script>
