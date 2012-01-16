@@ -166,4 +166,4 @@
 		}
 	}
 
-	test_export_library::$_lang = language('export');
+	test_export_library::$_lang = lang('export');

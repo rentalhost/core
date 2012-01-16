@@ -69,6 +69,6 @@
 	/** HELPERS DE IDIOMA */
 
 	// Obtém um controlador de idiomas
-	function language($path, $lang_order = null) {
+	function lang($path, $lang_order = null) {
 		return new core_language($path, $lang_order);
 	}

@@ -19,7 +19,7 @@
 					<?php
 
 						$lang_order = $lang->get_language_order();
-						$core_lang = language('/core/languages', $lang_order);
+						$core_lang = lang('/core/languages', $lang_order);
 
 						echo "{$lang_order[0]}: ";
 
@@ -60,7 +60,7 @@
 						// Obtém e imprime as classes diretamente no modelo
 						$result = '';
 						$model_attrs = array(
-							'lang' => language('models')
+							'lang' => lang('models')
 						);
 						foreach(call('__class::get_all') as $value) {
 							$model_attrs['class'] = (object) $value;
@@ -72,7 +72,7 @@
 							$coverage = xdebug_get_code_coverage();
 							ksort($coverage);
 
-							$coverage_lang = language('coverage');
+							$coverage_lang = lang('coverage');
 
 							foreach($coverage as $file => $lines) {
 								$filename = core::get_path_fixed(core::get_path_clipped($file));

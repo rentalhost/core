@@ -239,7 +239,7 @@
 			$lang_order_data = $lang_order === true ? null : $lang_order;
 
 			// Obtém a tradução dos idiomas
-			$lang = language('/core/languages', $lang_order_data);
+			$lang = lang('/core/languages', $lang_order_data);
 
 			// Obtém as pastas
 			$dir_res = opendir($path);

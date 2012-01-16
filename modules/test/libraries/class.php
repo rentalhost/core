@@ -185,7 +185,7 @@
 					'prefix' => $this->_id_prefix,
 					'index' => $index,
 					'type' => 'exception',
-					'message' => language('class')->index_collision($index)
+					'message' => lang('class')->index_collision($index)
 				);
 				return;
 			}
