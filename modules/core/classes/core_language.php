@@ -2,7 +2,7 @@
 
 	// Classe de idioma
 	class core_language {
-		const	MATCH_LANGUAGE	= '[a-z]{2}(?:\-[A-Z]{2})?';
+		const	MATCH_LANGUAGE	= '[a-z]{2}(?:\-[a-zA-Z]{2})?';
 
 		// Armazena a ordem padrão de idioma
 		private $_lang_order;
@@ -198,6 +198,65 @@
 
 			$reorder = array_unique($reorder);
 			return $reorder;
+		}
+
+		// Obtém os idiomas disponíveis em um path
+		static public function get_available($path = null, $lang_order = null) {
+			// Se o path não for definido, usa o path atual
+			if($path === null) {
+				$path = core::get_path_fixed(CORE_MODULES) . '/' .
+					join('/_', core::get_caller_module_path()) . '/languages';
+			}
+			else {
+				// Armazena o caminho onde será feito a busca
+				// Se o primeiro caractere for uma /, o language será buscado desde o princípio
+				$deep_search = $path[0] === '/';
+
+				// Quebra o language por barras e remove os resultados vazios
+				// É necessário fazer um key reset para que o deep search funcione corretamente
+				$lang_path_data = array_values(array_filter(explode('/', $path), 'core::_not_empty'));
+
+				// Busca pelo caminho do language
+				$lang_path_data = core::get_modular_parts($lang_path_data, array(
+					'start_dir' => $deep_search === true
+						? CORE_MODULES
+						: CORE_MODULES . '/' . join('/_', core::get_caller_module_path()),
+					'path_complement' => '/languages',
+					'deep_modules' => $deep_search === false,
+					'make_fullpath' => true
+				));
+
+				// Reconfigura o path
+				$path = $lang_path_data->fullpath;
+			}
+
+			// Se a pasta não existir, retorna null
+			//DEBUG: lançar uma exceção
+			if(!is_dir($path))
+				return null;
+
+			// Define a ordem de linguagem
+			$lang_order_data = $lang_order === true ? null : $lang_order;
+
+			// Obtém a tradução dos idiomas
+			$lang = language('/core/languages', $lang_order_data);
+
+			// Obtém as pastas
+			$dir_res = opendir($path);
+			$dir_list = array();
+			while($dir = readdir($dir_res)) {
+				if($dir !== '.'
+				&& $dir !== '..'
+				&& is_dir("{$path}/{$dir}")) {
+					// Se a ordem de linguagem for true, usa a tradução local
+					if($lang_order === true)
+						$lang->set_language_order(array($dir, 'en'));
+
+					$dir_list[$dir] = $lang->get_value($dir);
+				}
+			}
+
+			return $dir_list;
 		}
 
 		// Localiza e substitui strings especiais

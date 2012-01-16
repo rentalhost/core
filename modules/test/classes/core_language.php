@@ -32,5 +32,12 @@
 			$this->test(1, $lang->text);
 			$this->test(2, $lang->set_language_order('en, pt-br'));
 			$this->test(3, $lang->text);
+
+			$this->set_prefix('static');
+			$this->test(1, array_keys(core_language::get_available()));
+			$this->test(2, array_keys(core_language::get_available('/core')));
+			$this->test(3, core_language::get_available(null, 'en'));
+			$this->test(4, core_language::get_available(null, 'pt-br'));
+			$this->test(5, core_language::get_available(null, true));
 		}
 	}
