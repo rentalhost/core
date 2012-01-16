@@ -53,8 +53,8 @@
 	<li<?php echo $class . $data; ?>>
 		<span><?php echo htmlspecialchars($content); ?></span>
 		<?php if($ignorable === true): ?>
-		<span class="button ignore-button">Ignorar</span>
-		<span class="button recovery-button" style="display: none;">Recuperar</span>
+		<span class="button ignore-button"><?php echo $lang->button_ignore; ?></span>
+		<span class="button recovery-button" style="display: none;"><?php echo $lang->button_recovery; ?></span>
 		<?php endif; ?>
 	</li>
 	<?php endforeach; ?>

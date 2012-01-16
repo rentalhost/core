@@ -3,6 +3,7 @@
 	$accepted_lines = 1;
 	$total_lines = 1;
 	$result = load('coverage/file', array(
+		'lang' => $lang,
 		'name' => $name,
 		'file' => $file,
 		'lines' => $lines,
@@ -20,10 +21,10 @@
 ?>
 
 <div class="unit-class <?php echo $type; ?>-type" data-percentage="<?php echo $percentage; ?>">
-	<span class="strong">arquivo</span>
+	<span class="strong"><?php echo $lang->strong_file; ?></span>
 	<span class="name"><?php echo $name; ?></span>
 	<span>::</span>
-	<span class="result"><?php echo $type; ?></span>
+	<span class="result"><?php echo $types->get_value("type_{$type}"); ?></span>
 	<span class="message">(<?php echo $percentage; ?>%)</span>
 </div>
 

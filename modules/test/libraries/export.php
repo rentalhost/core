@@ -2,6 +2,9 @@
 
 	// Exporta um resultado
 	class test_export_library extends core_library {
+		// Carrega o idioma da classe
+		static public $_lang;
+
 		// Exporta um resultado em HTML
 		static public function export_html( $data, $exclude_header = false ) {
 			switch(self::_get_type($data)) {
@@ -114,7 +117,7 @@
 				$result = '<div class="type-' . $type . '">';
 			}
 
-			$result.= '<span class="code-type">' . $type . '</span>';
+			$result.= '<span class="code-type">' . self::$_lang->get_value("type_{$type}") . '</span>';
 
 			if( $additional_method !== null ) {
 				$data = call_user_func( $additional_method, $data );
@@ -141,7 +144,7 @@
 			}
 
 			$result = '<div class="code-header special">'
-						. '<span class="code-type">object</span>'
+						. '<span class="code-type">' . self::$_lang->type_object . '</span>'
 						. '<span class="code-value object-type">' . $object_type . '</span>'
 					. '</div>'
 					. '<div class="code-body">';
@@ -157,3 +160,5 @@
 			return $result;
 		}
 	}
+
+	test_export_library::$_lang = language('export');

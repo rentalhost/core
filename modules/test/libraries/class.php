@@ -185,7 +185,7 @@
 					'prefix' => $this->_id_prefix,
 					'index' => $index,
 					'type' => 'exception',
-					'message' => 'O index #' . $index . ' já está sendo utilizado.'
+					'message' => language('class')->index_collision($index)
 				);
 				return;
 			}

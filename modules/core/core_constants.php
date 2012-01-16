@@ -1,6 +1,7 @@
 <?php
 
-	// Define a versão do core
+	// Define os dados do core
+	define( 'CORE_TITLE', 'core' );
 	define( 'CORE_VERSION', '0.1.0a' );
 
 	// Define algumas constantes de caminhos
