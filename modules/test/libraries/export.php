@@ -76,6 +76,11 @@
 					unset($object_data["\0Exception\0trace"]);
 					unset($object_data["\0Exception\0previous"]); // PHP 5.3
 				}
+				else
+				if($data instanceof core_language) {
+					unset($object_data["\0core_language\0_lang_dir"]);
+					unset($object_data["\0core_language\0_lang_order"]);
+				}
 
 				foreach($object_data as $key => $value) {
 					$key = explode("\0", $key);

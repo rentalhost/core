@@ -15,8 +15,13 @@
 	$config->route_default_method		= 'index';	// string
 
 	// Configuração do idioma padrão
-	// Por padrão, irá utilizar como base o idioma do accept-language
-	$config->language_default_order		= 'auto, en';	// setlist, array
+	//NOTE: use "auto" para obter a configuração de accept-languages
+	//NOTE: use "request" para obter a configuração da variável $_REQUEST (como $_GET e $_POST)
+	$config->language_default_order		= 'request, auto, en';	// setlist, array
+
+	// Alterar a linguagem através de $_REQUEST
+	//NOTE: altere a informação para false para desabilitar a função
+	$config->language_request_key		= 'language-id'; // string, false
 
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);

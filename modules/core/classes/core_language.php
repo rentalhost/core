@@ -2,6 +2,8 @@
 
 	// Classe de idioma
 	class core_language {
+		const	MATCH_LANGUAGE	= '[a-z]{2}(?:\-[A-Z]{2})?';
+
 		// Armazena a ordem padrão de idioma
 		private $_lang_order;
 		// Armazena o diretório de busca
@@ -139,10 +141,23 @@
 			$reorder = array();
 
 			foreach($order as $item) {
+				// Obtém a definição em $_REQUEST, se disponível
+				if($item === 'request') {
+					$request_key = config('language_request_key');
+
+					if($request_key !== false
+					&& isset($_REQUEST[$request_key])
+					&& preg_match('/^' . self::MATCH_LANGUAGE . '$/', $_REQUEST[$request_key])) {
+						$reorder[] = $_REQUEST[$request_key];
+					}
+
+					continue;
+				}
+				else
 				// Obtém a definição do navegador
 				if($item === 'auto') {
 					if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-						preg_match_all('/[a-z]{2}(?:\-[A-Z]{2})?/', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_matches);
+						preg_match_all('/' . self::MATCH_LANGUAGE . '/', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $lang_matches);
 						foreach($lang_matches[0] as $lang)
 							$reorder[] = strtolower($lang);
 					}
@@ -153,7 +168,7 @@
 				$reorder[] = $item;
 			}
 
-			array_unique($reorder);
+			$reorder = array_unique($reorder);
 			return $reorder;
 		}
 
