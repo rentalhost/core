@@ -12,11 +12,24 @@
 	<body>
 		<div id="header">
 			<div class="content">
-				<img src="publics/images/labs-icon.png" title="Icone por Oliver Scholtz" width="50" height="50" />
+				<img src="publics/images/labs-icon.png" title="Icon by Oliver Scholtz" width="50" height="50" />
 				<span class="labs-title"><?php echo $lang->head_title(CORE_TITLE); ?></span>
-				<span class="labs-platform">
-					<?php echo $lang->running_on(CORE_TITLE, CORE_VERSION, PHP_VERSION); ?>
+				<span class="labs-language">
+					&#40;
+					<?php
+
+						$lang_order = $lang->get_language_order();
+						$core_lang = language('/core/languages', $lang_order);
+
+						echo "{$lang_order[0]}: ";
+
+					?>
+					<div class="button lang-change" title="<?php echo htmlspecialchars($lang->language_tooltip); ?>">
+						<?php echo $core_lang->get_value($lang_order[0]); ?>
+					</div>
+					&#41;
 				</span>
+				<span class="labs-platform"><?php echo $lang->running_on(CORE_TITLE, CORE_VERSION, PHP_VERSION); ?></span>
 			</div>
 		</div>
 
@@ -84,6 +97,25 @@
 				</div>
 				<br />
 			</div>
+		</div>
+
+		<div id="black-background" class="black-background"></div>
+		<div id="modal-content" class="modal-content">
+			<h1><?php echo $lang->language_available; ?></h1>
+			<ul class="lang-list">
+				<?php
+					$lang_list = core_language::get_available(null, true);
+					asort($lang_list);
+
+					foreach($lang_list as $lang_id => $lang_name):
+						$current_class = $lang_order[0] === $lang_id ? ' lang-current' : null;
+				?>
+				<li class="change-language<?php echo $current_class; ?>" data-lang-id="<?php echo $lang_id; ?>">
+					<span><?php echo htmlspecialchars($lang_name); ?></span>
+					<em><?php echo "({$lang_id})"; ?></em>
+				</li>
+				<?php endforeach; ?>
+			</ul>
 		</div>
 	</body>
 </html>

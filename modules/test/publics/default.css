@@ -23,7 +23,8 @@ div#header > div.content {
 	left: 50%;
 	margin-left: -500px;
 }
-div#header > div.content > span.labs-platform {
+div#header > div.content > span.labs-platform,
+div#header > div.content > span.labs-language {
 	font-size: 8pt;
 	height: 27px;
 	padding-top: 23px;
@@ -367,6 +368,78 @@ ul.file-lines li > span.button {
 }
 ul.file-lines li > span.button:hover {
 	color: black;
+}
+
+/** MODAL */
+div.black-background {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.75);
+	display: none;
+}
+
+div.modal-content {
+	position: absolute;
+	top: 10%;
+	left: 50%;
+	width: 480px;
+	margin-left: -240px;
+	background-color: white;
+	border: 8px #fafafa solid;
+	border-radius: 12px;
+	display: none;
+}
+div.modal-content > h1 {
+	margin: 16px 0 0 24px;
+	font-size: 10pt;
+}
+
+ul.lang-list {
+	margin: 15px;
+	padding: 0;
+	list-style: none;
+	font-size: 11pt;
+}
+ul.lang-list > li {
+	padding: 8px 12px 8px 48px;
+	border-radius: 4px;
+	border: 4px transparent solid;
+	margin-bottom: 4px;
+	transition: 0.11s ease-in-out;
+	transition-property: background-color, border-color;
+}
+ul.lang-list > li.lang-current {
+	background-color: #f3f3ff;
+}
+ul.lang-list > li.lang-current > span {
+	font-weight: bold;
+}
+ul.lang-list > li:hover {
+	background-color: #D2DFFF;
+	border-color: #CBDAFF;
+	cursor: pointer;
+}
+ul.lang-list > li > em {
+	color: #ccc;
+}
+
+/** OUTROS */
+div.button  {
+	display: inline-block;
+	color: #004583;
+	transition: color 0.075s ease-in-out;
+	opacity: 0.8;
+}
+div.button:hover {
+	color: #ff0000;
+	opacity: 1;
+}
+div.button.disabled {
+	color: #c6c6c6;
+	opacity: 1;
 }
 
 table.xdebug-error {
