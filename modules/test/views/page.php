@@ -6,7 +6,7 @@
 		<base href="<?php echo get_baseurl(); ?>" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
 		<script src="publics/jquery-1.7.js"></script>
-		<script src="publics/jquery.css-1.45.js"></script>
+		<script src="publics/jquery.css.js"></script>
 		<script src="publics/default.js"></script>
 	</head>
 	<body>
