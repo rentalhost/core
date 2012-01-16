@@ -39,5 +39,14 @@
 			$this->test(3, core_language::get_available(null, 'en'));
 			$this->test(4, core_language::get_available(null, 'pt-br'));
 			$this->test(5, core_language::get_available(null, true));
+
+			$this->set_prefix('request');
+			$original_request = isset($_REQUEST['language-id']) ? $_REQUEST['language-id'] :
+				(isset($_SESSION['language-id']) ? $_SESSION['language-id'] : null);
+			$_REQUEST['language-id'] = 'en';
+			$lang = lang('useful/simple');
+			$this->test(1, $lang->text);
+			$_REQUEST['language-id'] = $original_request;
+			$_SESSION['language-id'] = $original_request;
 		}
 	}
