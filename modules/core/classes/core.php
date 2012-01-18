@@ -116,7 +116,7 @@
 			!isset( $configs['search_modules'] )	&& $configs['search_modules']	= true;
 			!isset( $configs['search_paths'] )		&& $configs['search_paths']		= true;
 			!isset( $configs['path_clip'] )			&& $configs['path_clip']		= false;
-			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']	= true;
+			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']	= false;
 			!isset( $configs['path_complement'] )	&& $configs['path_complement']	= null;
 			!isset( $configs['file_extension'] )	&& $configs['file_extension']	= 'php';
 			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']	= false;

@@ -255,6 +255,7 @@
 				// Ex: http://127.0.0.1/site
 				$modular_path_data = core::get_modular_parts( $modular_path_data, array(
 					'search_paths' => false,
+					'path_clip_empty' => true,
 					'make_fullpath' => true
 				) );
 
