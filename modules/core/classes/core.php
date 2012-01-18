@@ -344,6 +344,43 @@
 			return preg_split('~\\\\.(*SKIP)(*FAIL)|\,\s*~s', trim($data));
 		}
 
+		// Retorna true se o domínio for compatível
+		static public function is_domain($domains) {
+			foreach(setlist($domains) as $domain) {
+				$domain = parse_url($domain);
+
+				// Se o domain host não for definido, usa path
+				if(!isset($domain['host']))
+					$domain['host'] = $domain['path'];
+
+				// Verifica se o domínio é compatível
+				if($domain['host'] !== $_SERVER['SERVER_NAME'])
+					continue;
+
+				// Verifica se o scheme é compatível
+				if(isset($domain['scheme'])) {
+					$scheme_url = isset($_SERVER['HTTPS']) ? 'https' : 'http';
+					if($domain['scheme'] !== $scheme_url)
+						continue;
+				}
+
+				// Verifica se a porta é compatível
+				if(isset($domain['port'])
+				&& $domain['port'] != $_SERVER['SERVER_PORT'])
+					continue;
+
+				// Se tudo foi validado corretamente, retorna true
+				return true;
+			}
+
+			return false;
+		}
+
+		// Retorna se for localhost
+		static public function is_localhost() {
+			return self::is_domain(array('localhost', '127.0.0.1', '[::1]'));
+		}
+
 		// Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)
 		static public function do_publish( $publish_http ) {
 			header('Cache-Control: max-age=290304000, public');

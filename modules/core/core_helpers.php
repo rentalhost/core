@@ -1,9 +1,19 @@
 <?php
 
-	/** HELPERS DE URL */
+	/** HELPERS DE SERVIDOR */
 	// Obtém o URL base
 	function baseurl($include_modular = true) {
 		return core::get_baseurl($include_modular);
+	}
+
+	// Verifica se é o domínio informado
+	function is_domain($domains) {
+		return core::is_domain($domains);
+	}
+
+	// Verifica se é um domínio local
+	function is_localhost() {
+		return core::is_localhost();
 	}
 
 	/** HELPERS DE CONTEÚDO */
