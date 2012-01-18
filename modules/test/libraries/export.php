@@ -63,7 +63,7 @@
 				$data_values = array();
 
 				if(method_exists($data, '__toString')
-				&& !$data instanceof Exception)
+				&& !$data instanceof exception)
 					$data_values['__toString()'] = array('string', $data->__toString());
 
 				$object_data = (array) $data;
@@ -93,21 +93,25 @@
 				}
 				else
 				if($data instanceof mysqli) {
-					unset($object_data['client_info'], $object_data['client_version'], $object_data['host_info'],
-						$object_data['protocol_version'], $object_data['server_info'], $object_data['server_version'],
-						$object_data['thread_id']);
+					static $mysqli_keys = array('affected_rows', 'connect_errno', 'connect_error', 'errno',
+						'error', 'field_count', 'info', 'insert_id', 'sqlstate', 'warning_count');
 
-					foreach($object_data as $key => $item)
+					$object_data = array();
+					foreach($mysqli_keys as $key)
 						$object_data[$key] = $data->{$key};
 				}
 				else
 				if($data instanceof mysqli_result) {
-					foreach($object_data as $key => $item)
+					static $mysqli_result_keys = array('current_field', 'field_count', 'lengths', 'num_rows', 'type');
+
+					$object_data = array();
+					foreach($mysqli_result_keys as $key)
 						$object_data[$key] = $data->{$key};
 				}
 				else
 				if($data instanceof core_database) {
-					$object_data["\0core_database\0_connection_string"] = $data->get_connection_string();
+					unset($object_data["\0core_database\0_connection_string"],
+						$object_data["\0core_database\0_connection_array"]);
 				}
 
 				foreach($object_data as $key => $value) {
