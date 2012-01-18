@@ -23,36 +23,37 @@
 				$this->connect();
 		}
 
+		// Transforma uma connection string em array
+		private function _parse_connection_string() {
+			// Decodifica a URL enviada
+			$cs = parse_url($this->_connection_string);
+
+			// Preenche o scheme/driver, a porta, a senha e o path/database
+			$cs['scheme'] = isset($cs['scheme']) ? $cs['scheme'] : 'mysqli';
+			$cs['host'] = isset($cs['host']) ? $cs['host'] : $_SERVER['HTTP_HOST'];
+			$cs['port'] = isset($cs['port']) ? (int) $cs['port'] : 3306;
+			$cs['user'] = isset($cs['user']) ? $cs['user'] : null;
+			$cs['pass'] = isset($cs['pass']) ? $cs['pass'] : null;
+			$cs['path'] = (isset($cs['path']) && $cs['path'] !== '/') ? substr($cs['path'], 1) : null;
+
+			// Preenche a persistência de conexão e o charset que será usado
+			$qs = isset($cs['query']) ? parse_str($cs['query']) : array();
+			$qs['persistent'] = isset($qs['persistent']) ? core::get_state($qs['persistent']) : null;
+			$qs['charset'] = isset($qs['charset']) ? $qs['charset'] : null;
+			$cs['query'] = $qs;
+
+			// Remove os dados da conexão
+			$this->_connection_string = null;
+			$this->_connection_array = $cs;
+		}
+
 		// Abre a conexão com o banco
 		public function connect() {
 			// Somente se não houver conexão...
 			if($this->_connected === false) {
 				// Se o array de conexão ainda não foi definido, gera
-				if($this->_connection_array === null) {
-					// Decodifica a URL enviada
-					$_c = parse_url($this->_connection_string);
-
-					// Preenche o scheme/driver, a porta, a senha e o path/database
-					$_c['scheme'] = isset($_c['scheme']) ? $_c['scheme'] : 'mysqli';
-					$_c['host'] = isset($_c['host']) ? $_c['host'] : $_SERVER['HTTP_HOST'];
-					$_c['port'] = isset($_c['port']) ? (int) $_c['port'] : 3306;
-					$_c['user'] = isset($_c['user']) ? $_c['user'] : null;
-					$_c['pass'] = isset($_c['pass']) ? $_c['pass'] : null;
-					$_c['path'] = (isset($_c['path']) && $_c['path'] !== '/') ? substr($_c['path'], 1) : null;
-
-					// Preenche a persistência de conexão e o charset que será usado
-					$_q = isset($_c['query']) ? parse_str($_c['query']) : array();
-					$_q['persistent'] = isset($_q['persistent']) ? core::get_state($_q['persistent']) : null;
-					$_q['charset'] = isset($_q['charset']) ? $_q['charset'] : null;
-					$_c['query'] = $_q;
-
-					// Remove os dados da conexão
-					$this->_connection_string = null;
-					$this->_connection_array = $_c;
-
-					// Remove os dados de análise
-					unset($_c, $_q);
-				}
+				if($this->_connection_array === null)
+					$this->_parse_connection_string();
 
 				// Define o host
 				$hostname = $this->_connection_array['host'];
@@ -102,8 +103,12 @@
 
 		/** PROPRIEDADES */
 		// Obtém a string de conexão
-		//TODO: executar o parser antes de exibir, caso não tenha executado antes (para padronizar)
 		public function get_connection_string() {
+			// Se o array ainda não foi construído, o constrói
+			if($this->_connection_array === null)
+				$this->_parse_connection_string();
+			else
+			// Se já foi definido, apenas retorna
 			if($this->_connection_string !== null)
 				return $this->_connection_string;
 
