@@ -1,15 +1,8 @@
 $(function(){
 
-	var win = $(window);
-	var div_content = $('div#content > div.content');
 	var div_classes = $('div.unit-class');
 	var div_units = $('div.unit-test');
 	var div_lines = $('ul.file-lines li');
-
-	// Ao redimensionar a janela, esticar o conteúdo, se necessário
-	win.resize(function(){
-		div_content.css('min-height', win.height() - 60);
-	}).resize();
 
 	// Exibe ou esconde as unidades de uma classe
 	div_classes.click(function(){
@@ -102,11 +95,6 @@ $(function(){
 	// Cancela o default behavior em clicks
 	div_units.find('li.button').click(false);
 
-	// Ao clicar em um item do toolbar, utilizar seu href
-	$('ul#toolbar li[data-href]').click(function(){
-		location.search = $(this).data('href');
-	});
-
 	// Botão para aceitar todos os resultados
 	var div_units_accept_all = $('ul#toolbar li.accept-all');
 	var div_units_need_accept = div_units.find('li.button.accept-button').not('.disabled');
@@ -129,29 +117,6 @@ $(function(){
 			dataType: 'json',
 			data: { ids: ids }
 		});
-	});
-
-	// Ao clicar no idioma, abrir o modal de seleção
-	$('div.lang-change').click(function(){
-		$('div.black-background, div.modal-content').css({opacity: 0})
-			.show()
-			.animate({opacity: 1}, 300);
-	});
-
-	// Esconde o modal, se clicar diretamente sobre o black-background
-	$('div.black-background').click(function(ev){
-		if(ev.target !== this)
-			return false;
-
-		$('div.black-background, div.modal-content')
-			.animate({opacity: 0}, 200, null, function() {
-				$(this).hide();
-			});
-	});
-
-	// Ao clicar em uma opção de idioma, atualizar a página
-	$('ul.lang-list > li').click(function(){
-		location.search = '?language-id=' + encodeURIComponent($(this).data('lang-id'));
 	});
 
 });

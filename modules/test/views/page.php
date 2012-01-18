@@ -4,10 +4,13 @@
 		<title><?php echo $lang->head_title(CORE_TITLE); ?> :: <?php echo CORE_VERSION; ?></title>
 		<meta http-equiv="Content-type" content="text/html; charset=<?php echo $lang->head_charset; ?>" />
 		<base href="<?php echo get_baseurl(); ?>" />
+		<link href="../core/publics/default.css" rel="stylesheet" type="text/css" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
-		<link href="publics/images/labs-icon.png" rel="shortcut icon" type="image/png" />
-		<script src="publics/jquery-1.7.js"></script>
-		<script src="publics/jquery.css.js"></script>
+		<link href="../core/publics/default-extra.css" rel="stylesheet" type="text/css" />
+		<link href="publics/images/labs-icon-small.png" rel="shortcut icon" type="image/png" />
+		<script src="../core/publics/jquery.js"></script>
+		<script src="../core/publics/jquery.css.js"></script>
+		<script src="../core/publics/default.js"></script>
 		<script src="publics/default.js"></script>
 	</head>
 	<body>
@@ -110,11 +113,13 @@
 			<h1><?php echo $lang->language_available; ?></h1>
 			<ul class="lang-list">
 				<?php
+
 					$lang_list = core_language::get_available(null, true);
 					asort($lang_list);
 
 					foreach($lang_list as $lang_id => $lang_name):
 						$current_class = $lang_order[0] === $lang_id ? ' lang-current' : null;
+
 				?>
 				<li class="change-language<?php echo $current_class; ?>" data-lang-id="<?php echo $lang_id; ?>">
 					<span><?php echo htmlspecialchars($lang_name); ?></span>

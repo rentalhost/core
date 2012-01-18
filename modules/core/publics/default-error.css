@@ -1,0 +1,56 @@
+
+h1 {
+	font-size: 11pt;
+	color: darkred;
+	margin: 0;
+	padding: 30px 0 15px 30px;
+}
+h2 {
+	font-size: 9.5pt;
+	color: gray;
+	margin: 0;
+	padding: 0px 0 15px 30px;
+}
+
+p {
+	margin: 0;
+	padding: 0px 30px 15px 30px;
+}
+
+div.content {
+	user-select: initial;
+}
+
+form.nice {
+	user-select: none;
+	margin: 0;
+	padding: 15px 30px 15px 30px;
+	background-color: #fcfcfc;
+	border-radius: 10px;
+}
+form.nice input[type=text],
+form.nice textarea {
+	border: 1px silver solid;
+	border-radius: 4px;
+	padding: 4px;
+	vertical-align: middle;
+}
+form.nice textarea {
+	font-family: arial, sans-serif;
+}
+form.nice input[readonly] {
+	background-color: #fafafa;
+	color: gray;
+}
+form.nice input[type=submit] {
+	border: 1px silver solid;
+	border-radius: 4px;
+	padding: 4px 8px;
+	vertical-align: middle;
+}
+form.nice strong {
+	display: inline-block;
+	padding-left: 20px;
+	width: 180px;
+	vertical-align: middle;
+}
