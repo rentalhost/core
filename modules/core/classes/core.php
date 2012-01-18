@@ -11,9 +11,12 @@
 				// Após obter o caminho, inclui o arquivo
 				if(!is_file($classpath)) {
 					$classpath = self::get_path_fixed($classpath);
-					eval("class {$classname} extends core_exception {}");
-					throw new $classname("Core class \"{$classname}\" in {$classpath} not found.");
-					return false;
+
+					$error = new core_error(0xFFF0, null, array(
+						'classname' => $classname,
+						'classpath' => $classpath
+					));
+					$error->run_special_exception();
 				}
 
 				require_once $classpath;
@@ -44,9 +47,11 @@
 
 			// Após obter o caminho, inclui o arquivo
 			if(!is_file($classpath_subdata->fullpath)) {
-				eval("class {$classname} extends core_exception {}");
-				throw new $classname("Class \"{$classname}\" in {$classpath->fullpath} not found.");
-				return false;
+				$error = new core_error(0xFFF1, null, array(
+					'classname' => $classname,
+					'classpath' => $classpath->fullpath
+				));
+				$error->run_special_exception();
 			}
 
 			// Inclui o arquivo

@@ -19,9 +19,12 @@
 		// Armazena se é necessário um log individual
 		private $_enable_individual_log = false;
 
+		// Armazena se é um exception de autoloader
+		private $_special_exception = false;
+
 		// Cria um novo erro
 		public function __construct($error_code, $args = null, $cache_args = array()) {
-			$this->_error_code = str_pad(strtolower($error_code), 4, '0', STR_PAD_LEFT);
+			$this->_error_code = $error_code;
 			$this->_backtrace = debug_backtrace();
 			$this->_globals = $GLOBALS;
 			$this->_args = array_merge((array) $args, $cache_args);
@@ -44,13 +47,25 @@
 			return $this;
 		}
 
+		// Ativa a exceção especial (de autoloader)
+		public function run_special_exception() {
+			$this->_special_exception = true;
+			$this->run();
+		}
+
 		// Lança um erro
 		//TODO: registrar a ocorrência
 		public function run() {
 			// Se não for crítico, apenas lança o erro como exception
 			if($this->_is_fatal === false) {
-				throw new core_exception(null, $this->_error_code);
-				return;
+				// Se for uma exceção normal
+				if($this->_special_exception === false)
+					throw new core_exception(null, $this->_error_code);
+
+				// Senão, lança uma exceção de núcleo
+				$classname = $this->_args['classname'];
+				eval("class {$classname} extends core_exception {}");
+				throw new $classname(null, $this->_error_code);
 			}
 		}
 	}
