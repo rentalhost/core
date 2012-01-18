@@ -12,7 +12,7 @@
 				if(!is_file($classpath)) {
 					$classpath = self::get_path_fixed($classpath);
 
-					$error = new core_error(0xFFF0, null, array(
+					$error = new core_error('CxFFF0', null, array(
 						'classname' => $classname,
 						'classpath' => $classpath
 					));
@@ -47,7 +47,7 @@
 
 			// Após obter o caminho, inclui o arquivo
 			if(!is_file($classpath_subdata->fullpath)) {
-				$error = new core_error(0xFFF1, null, array(
+				$error = new core_error('CxFFF1', null, array(
 					'classname' => $classname,
 					'classpath' => $classpath->fullpath
 				));
@@ -130,7 +130,7 @@
 
 				$config_diff = array_diff(array_keys($configs), $config_keys);
 				if(!empty($config_diff)) {
-					$error = new core_error(0x2000, null, array('unknow_keys' => $config_diff));
+					$error = new core_error('Cx2000', null, array('unknow_keys' => $config_diff));
 					$error->run();
 				}
 			}

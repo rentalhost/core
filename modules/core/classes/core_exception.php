@@ -9,14 +9,21 @@
 		public function get_line()		{ return $this->line; }
 		public function get_trace()		{ return $this->getTrace(); }
 
+		// Constrói uma mensagem de erro
+		public function __construct($message, $code = 0) {
+			parent::__construct($message);
+			$this->code = $code;
+		}
+
 		// Obtém a mensagem com base em code
 		public function get_message() {
 			// Se a mensagem foi informada, apenas retorna
-			if(!empty($this->message))
+			if(!empty($this->message)
+			|| substr($this->code, 0, 2) !== 'Cx')
 				return $this->message;
 
 			// Caso contrário, retorna a informação do erro com base na tradução
-			$lang = lang('/core/errors/err' . str_pad(strtoupper(dechex($this->code)), 4, '0', STR_PAD_LEFT));
+			$lang = lang('/core/errors/err' . substr($this->code, 2));
 			return $lang->get_real_value('error_message');
 		}
 	}

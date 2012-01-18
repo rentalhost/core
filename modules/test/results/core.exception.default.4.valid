@@ -1,1 +1,1 @@
-["object",{"code":["number",8192],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","Uma ou mais configura\u00e7\u00f5es n\u00e3o foram reconhecidas em <code>core::get_modular_parts()<\/code>."]},"core_exception"]
+["object",{"code":["string","Cx2000"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","Uma ou mais configura\u00e7\u00f5es n\u00e3o foram reconhecidas em <code>core::get_modular_parts()<\/code>."]},"core_exception"]
