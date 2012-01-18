@@ -91,10 +91,30 @@
 		// Obtém uma instância do caller
 		static public function get_instance() {
 			// Se o caller não for definido, carrega
-			if( self::$_caller === null ) {
+			if( self::$_caller === null )
 				return self::$_caller = new self();
-			}
 
 			return self::$_caller;
+		}
+
+		/** CALLER */
+		// Armazena o nome de uma biblioteca
+		private $_library = null;
+
+		// Cria um novo objeto
+		public function __construct($library = null) {
+			$this->_library = $library;
+		}
+
+		// Faz uma chamada direta em helper
+		public function __call($func, $args) {
+			return $this->_library === null
+				? call_user_func_array(self::load_helper($func), $args)
+				: call_user_func_array(array($this->_library, $func), $args);
+		}
+
+		// Faz uma chamada estática em uma library
+		public function __get($lib) {
+			return new self(self::load_library($lib));
 		}
 	}

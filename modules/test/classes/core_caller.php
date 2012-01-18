@@ -24,6 +24,11 @@
 			$this->test(3, call('__useful_test_again'));
 			$this->test(4, call('__useful_sub_test_advanced'));
 
+			$this->set_prefix('direct');
+			$this->test(1, call()->__useful_test());
+			$this->test(2, call()->__useful_sub_test_advanced());
+			$this->test(3, call()->__useful_test->get_caller_module_path());
+
 			$this->set_prefix('exception');
 			$this->exception_test(1, 'exception_invalid_caller');
 		}
