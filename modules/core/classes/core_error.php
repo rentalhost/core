@@ -16,6 +16,8 @@
 		// Armazena se é um erro crítico
 		// Se não for crítico, lança uma exceção apenas
 		private $_is_fatal = false;
+		// Armazena se é necessário registrar a ocorrência
+		private $_enable_log = true;
 		// Armazena se é necessário um log individual
 		private $_enable_individual_log = false;
 
@@ -36,14 +38,24 @@
 			$this->_is_fatal = $is_fatal;
 
 			if($is_fatal === true)
-				$this->_enable_individual_log = true;
+				$this->set_individual_log();
 
+			return $this;
+		}
+
+		// Define se é necessário registrar a ocorrência
+		public function set_log($mode = true) {
+			$this->_enable_log = $mode;
 			return $this;
 		}
 
 		// Define se é necessário registrar ocorrência individual
 		public function set_individual_log($mode = true) {
 			$this->_enable_individual_log = $mode;
+
+			if($mode === true)
+				$this->set_log();
+
 			return $this;
 		}
 
@@ -54,7 +66,6 @@
 		}
 
 		// Lança um erro
-		//TODO: registrar a ocorrência
 		public function run() {
 			// Se não for crítico, apenas lança o erro como exception
 			if($this->_is_fatal === false) {
@@ -67,5 +78,8 @@
 				eval("class {$classname} extends core_exception {}");
 				throw new $classname(null, $this->_error_code);
 			}
+
+			//TODO: registrar a ocorrência e alterara a página
+			exit('ERROR');
 		}
 	}

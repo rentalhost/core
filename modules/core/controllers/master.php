@@ -5,8 +5,8 @@
 		// Verifica pelas permissões necessárias
 		private function _get_permissions() {
 			if(CORE_DEBUG === false) {
-				$err = new core_error('1000');
-				$err->render();
+				$err = new core_error('CxFFFF');
+				$err->set_fatal()->set_log(false)->run();
 				exit;
 			}
 		}

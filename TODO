@@ -17,5 +17,3 @@
 - database: adicionar suporte a transações;
 - database: adicionar diferentes propriedades na conexão;
 - geral: sistema de regras para as classes (rules);
-- exception: get_message, se null, retorna a tradução do code;
-- errors: codificar os erros como CXXXX para erros do Core.
