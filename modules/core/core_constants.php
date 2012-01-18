@@ -20,4 +20,4 @@
 	define( 'CORE_VALID_PATH', '~^(?:(?:' . CORE_VALID_PATH_ID . '*|\[' . CORE_VALID_PATH_ID . '+\])(?=/|$)/?)+$~' );
 
 	// Define o separador de chamada (usado para separar classe de método, como a::b)
-	define( 'CORE_VALID_CALLER', '~^(?:(?<object>' . CORE_VALID_ID . ')::)?(?<method>' . CORE_VALID_ID . ')$~' );
+	define( 'CORE_VALID_CALLER', '~^(?<modulated>__)?(?:(?<object>' . CORE_VALID_ID . ')::)?(?<method>' . CORE_VALID_ID . ')$~' );

@@ -17,3 +17,4 @@
 - database: adicionar suporte a transações;
 - database: adicionar diferentes propriedades na conexão;
 - geral: sistema de regras para as classes (rules);
+- test: verificar o porque os units removidos não são exibidos;

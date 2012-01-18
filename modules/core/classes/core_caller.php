@@ -8,13 +8,16 @@
 		static private $_caller = null;
 
 		// Inicia uma chamada estática de um helper ou library
-		//DEBUG: informa um erro se a chamada for inválida
-		//DEBUG: informa um erro se o método chamado na library não existir
 		static public function do_call( $command, $arguments ) {
 			// Separa o objeto do método
 			if( preg_match( CORE_VALID_CALLER, $command, $command_details ) === 1 ) {
 				// Se um objeto for definido, significa que é uma chamada a um método estático de uma library
 				if( !empty( $command_details['object'] ) ) {
+					// Se o objeto for modulado, obtém a estrutura do módulo atual
+					if($command_details['modulated'] === '__') {
+						$command_details['object'] = "__{$command_details['object']}";
+					}
+
 					// Carrega a biblioteca, se necessário
 					$command_details['object'] = self::load_library( $command_details['object'] );
 
@@ -23,10 +26,15 @@
 				}
 			}
 
-			return false;
+			// Se não for possível, lança uma exceção
+			$error = new core_error('Cx2001',
+				array('arguments' => $arguments, 'command_format' => CORE_VALID_CALLER),
+				array('command' => $command));
+			$error->run();
 		}
 
 		// Carrega uma library e retorna seu nome completo
+		//DEBUG: informa um erro se o método chamado na library não existir
 		static public function load_library( $library ) {
 			// Primeiramente é necessário identificar se é uma classe no próprio módulo
 			// Para isto, o objeto deve iniciar com duplo underline
