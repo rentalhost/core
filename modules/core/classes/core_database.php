@@ -62,7 +62,8 @@
 				if($this->_connection_array['query']['persistent'] === true
 				|| ($this->_connection_array['query']['persistent'] === null
 				 && config('database_persistent_mode') === true))
-					$hostname = "p:{$hostname}";
+				 	if(PHP_VERSION >= 503000)
+						$hostname = "p:{$hostname}";
 
 				// Abre a conexão
 				$this->_connection = new mysqli($hostname,
