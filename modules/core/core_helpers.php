@@ -2,7 +2,7 @@
 
 	/** HELPERS DE URL */
 	// Obtém o URL base
-	function get_baseurl($include_modular = true) {
+	function baseurl($include_modular = true) {
 		return core::get_baseurl($include_modular);
 	}
 

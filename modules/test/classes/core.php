@@ -44,7 +44,7 @@
 		public function test_get_baseurl() {
 			$this->test( 1, substr( core::get_baseurl(), -11 ), 'Path are clipped' );
 			$this->test( 2, substr( core::get_baseurl( false ), -6 ), 'Path are clipped' );
-			$this->test( 3, substr( get_baseurl(), -6 ), 'Only for coverage' );
+			$this->test( 3, substr( baseurl(), -6 ), 'Only for coverage' );
 		}
 
 		public function test_get_modular_parts() {

@@ -3,7 +3,7 @@
 	<head>
 		<title><?php echo $lang->head_title(CORE_TITLE); ?> :: <?php echo CORE_VERSION; ?></title>
 		<meta http-equiv="Content-type" content="text/html; charset=<?php echo $lang->head_charset; ?>" />
-		<base href="<?php echo get_baseurl(); ?>" />
+		<base href="<?php echo baseurl(); ?>" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
 		<link href="publics/default-extra.css" rel="stylesheet" type="text/css" />
 		<link href="publics/images/panel-icon-small.png" rel="shortcut icon" type="image/png" />
