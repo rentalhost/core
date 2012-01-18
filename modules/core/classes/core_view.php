@@ -31,7 +31,6 @@
 		private $_result_printed	= false;
 
 		// Cria uma nova view
-		//TODO: penser em uma forma de proteger views estrangeiras (site//hello_world)
 		public function __construct($view_path, $view_args, $cancel_print) {
 			// Corrige o path solicitado
 			$this->_proposed_view = core::get_path_fixed( $view_path );

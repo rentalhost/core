@@ -35,7 +35,6 @@
 		}
 
 		// Obtém uma configuração
-		//TODO: $default_value = null -- usa um valor padrão, se a configuração não existir
 		static public function get_config($modular_path, $config_key, $default_value = null) {
 			$final_value = null;
 

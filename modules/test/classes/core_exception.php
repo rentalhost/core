@@ -10,6 +10,6 @@
 			$this->test(2, $exception->get_message());
 			$this->test(3, $exception->get_code());
 			$this->test(4, core::get_path_fixed($exception->get_file()));
-			$this->test(5, $exception->get_line());
+			$this->test(5, $exception->get_line() > 0);
 		}
 	}

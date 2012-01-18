@@ -200,11 +200,6 @@
 		}
 
 		// Carrega uma URL
-		//TODO: suporte a route exchange. Ex: [any]
-		//TODO: quando o método chamado recebe .json no final, altera automaticamente o tipo de saída
-		//DEBUG: verificar por ambiguidade no conteúdo
-		//DEBUG: só deve haver uma classe de controller definida no arquivo incluído
-		//DEBUG: se o método não existir, exibe um erro
 		static public function _create_controller( $modular_path_data, $cancel_print = false, $auto_execute = true,
 				$can_detect_caller_path = false ) {
 			// Armazena o método padrão, ele será usado em vários momentos
@@ -331,7 +326,6 @@
 			}
 
 			// Senão, faz um require da classe solicitada
-			//DEBUG: o arquivo precisa existir
 			if(class_exists($modular_path->class, false) === false)
 				core::do_require($modular_path->fullpath);
 

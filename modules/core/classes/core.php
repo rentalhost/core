@@ -3,7 +3,6 @@
 	// Núcleo geral
 	class core {
 		// Todas as chamadas de classes passarão por aqui
-		//DEBUG: para user class, verificar se elas concordam com a pattern
 		static public function __autoload( $classname ) {
 			// Se for uma classe do core...
 			if(substr($classname, 0, 5) === 'core_') {
@@ -268,7 +267,7 @@
 					return core::get_path_fixed($backtrace['file']);
 				}
 			}
-		} //DEBUG: deve acontecer um erro do tipo Exception, caso chegue até aqui
+		}
 
 		// Obtém o caminho do módulo de onde a última chamada foi feita
 		static public function get_caller_module_path() {
