@@ -280,11 +280,11 @@
 				// Ex: http://127.0.0.1/site/master ou simplesmente http://127.0.0.1/master
 				$modular_path_data = core::get_modular_parts( @$modular_path_data->remains, array(
 					'start_dir' => $modular_path_data->fullpath . '/controllers',
-					'search_modular' => false
+					'search_modules' => false
 				) );
 
 				// Se o controller não for definido, define com o valor padrão
-				if(isset($modular_path_data->path)) {
+				if(!empty($modular_path_data->path)) {
 					$modular_path->path = $modular_path_data->path;
 				}
 				// Se a rota estrita estiver desativada, preenche com a configuração padrão

@@ -6,7 +6,6 @@
 			$this->test(1, execute('useful', true));
 			$this->test(2, execute('/test/useful', true));
 			$this->test(3, execute(null, true));
-			$this->test(4, execute('', true));
 
 			$this->set_prefix('args');
 			$this->test(1, execute('useful/one_arg/123', true)->get_return());
@@ -54,7 +53,7 @@
 			$this->exception_test(3, 'exception_method', 'thrown because not exists compatible method, like index');
 			$this->exception_test(4, 'exception_controller_required');
 			$this->exception_test(5, 'exception_method_required');
-			$this->exception_test(6, 'exception_controller_not_found');
+			$this->exception_test(6, 'exception_file_not_found');
 		}
 
 		public function exception_required() {
@@ -75,7 +74,7 @@
 			execute('$useful/fail', true)->required();
 		}
 
-		public function exception_controller_not_found() {
-			execute('', true)->required();
+		public function exception_file_not_found() {
+			execute('$useful/sub/fake', true)->required();
 		}
 	}

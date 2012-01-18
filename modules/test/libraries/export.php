@@ -82,6 +82,11 @@
 					unset($object_data["\0core_language\0_lang_order"]);
 				}
 				else
+				if($data instanceof core_error) {
+					unset($object_data["\0core_error\0_globals"]);
+					unset($object_data["\0core_error\0_backtrace"]);
+				}
+				else
 				if($data instanceof mysqli) {
 					unset($object_data['client_info'], $object_data['client_version'], $object_data['host_info'],
 						$object_data['protocol_version'], $object_data['server_info'], $object_data['server_version'],

@@ -12,4 +12,11 @@
 			$this->test(4, core::get_path_fixed($exception->get_file()));
 			$this->test(5, $exception->get_line() > 0);
 		}
+
+		public function test_error() {
+			$error = new core_error(0);
+			$this->test(1, $error);
+			$this->test(2, $error->set_individual_log());
+			$this->test(3, $error->set_fatal());
+		}
 	}

@@ -83,8 +83,6 @@
 		}
 
 		// Separa um modular path em pedaços
-		//DEBUG: verificar se uma parte colide com um arquivo ou pasta
-		//DEBUG: retorna um erro se uma configuração passada não for suportada
 		static public function get_modular_parts( $modular_path, $configs = null ) {
 			$configs = (array) $configs;
 
@@ -101,6 +99,11 @@
 				foreach( $modular_path as $key => $item )
 					$modular_path[$key] = str_replace( $configs['neutral_by'], $configs['split_by'], $item );
 			}
+			// Transforma o path em array
+			else
+			if($modular_path === null) {
+				$modular_path = array();
+			}
 
 			// Após ter a array, é necessário fazer a busca pelos arquivos
 			!isset( $configs['start_dir'] )			&& $configs['start_dir']		= CORE_MODULES;
@@ -108,10 +111,24 @@
 			!isset( $configs['search_modules'] )	&& $configs['search_modules']	= true;
 			!isset( $configs['search_paths'] )		&& $configs['search_paths']		= true;
 			!isset( $configs['path_clip'] )			&& $configs['path_clip']		= false;
+			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']	= true;
 			!isset( $configs['path_complement'] )	&& $configs['path_complement']	= null;
 			!isset( $configs['file_extension'] )	&& $configs['file_extension']	= 'php';
 			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']	= false;
 			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']	= false;
+
+			// Em modo depuração, verifica se alguma configuração não suportada foi definida
+			if(CORE_DEBUG === true) {
+				static $config_keys = array('split_by', 'group_by', 'neutral_by', 'make_underlined',
+					'start_dir', 'deep_modules', 'search_modules', 'search_paths', 'path_clip', 'path_clip_empty',
+					'path_complement', 'file_extension', 'make_fullpath');
+
+				$config_diff = array_diff(array_keys($configs), $config_keys);
+				if(!empty($config_diff)) {
+					$error = new core_error(0x2000, null, array('unknow_keys' => $config_diff));
+					$error->run();
+				}
+			}
 
 			// Define o diretório de partida
 			$current_path = $configs['start_dir'];
@@ -123,6 +140,11 @@
 			if( $configs['path_clip'] === true ) {
 				$result->clipped = array_pop( $modular_path );
 			}
+
+			// Se necessário, remove o último elemento do path se ele estiver vazio
+			if($configs['path_clip_empty'] === true
+			&& end($modular_path) === '')
+				array_pop($modular_path);
 
 			// Se for necessário buscar por módulos...
 			if( $configs['search_modules'] === true

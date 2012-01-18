@@ -1,4 +1,4 @@
-- Classe para o ATOM que permite fazer um Code Coverage no PHP bem mais robusto;
+- classe para o ATOM que permite fazer um Code Coverage no PHP bem mais robusto (infelizmente, deve ficar bem mais pesado também);
 - controllers começados por _ são considerados privados e só podem ser executados via execute()
 - mostrar diferença entre duas versões de resultados;
 - mover o sistema do file-coverage para uma library especializada;
@@ -9,6 +9,7 @@
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
 - controller: pensar também em como reescrever rotas, por exemplo '[*]/user' => 'master/[@1]/user'
 - test: aplicar sistema de path nas keys também!
+- test: é preciso testar quando um modular não for informado!
 - core: verificar se call() está completo
 - core: adicionar linguística nas exceções;
 - error: mostrar a opçao "enviar um email quando houver solução";
@@ -16,3 +17,5 @@
 - database: adicionar suporte a transações;
 - database: adicionar diferentes propriedades na conexão;
 - geral: sistema de regras para as classes (rules);
+- exception: get_message, se null, retorna a tradução do code;
+- autoloader: mudar gerenciador de erro;

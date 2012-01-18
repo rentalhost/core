@@ -82,6 +82,7 @@
 			$this->exception_test(1, 'exception_fake');
 			$this->exception_test(2, 'exception_autoloaded');
 			$this->exception_test(3, 'exception_unexistent');
+			$this->exception_test(4, 'exception_unknow_key');
 		}
 
 		public function exception_fake() {
@@ -94,5 +95,9 @@
 
 		public function exception_unexistent() {
 			new test_unexistent_exception();
+		}
+
+		public function exception_unknow_key() {
+			core::get_modular_parts(null, array('fake_config' => true));
 		}
 	}
