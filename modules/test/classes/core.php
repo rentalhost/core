@@ -12,6 +12,13 @@
 			$this->test(6, core::get_state(''));
 		}
 
+		public function test_session() {
+			session('/test')->test = true;
+			$this->test(1, session('/test')->test);
+			$this->test(2, isset(session()->test));
+			$this->test(3, $_SESSION['/test']->test);
+		}
+
 		// Teste para o sistema de testes (non-core)
 		public function test_export() {
 			$this->set_prefix( 'scalars' );

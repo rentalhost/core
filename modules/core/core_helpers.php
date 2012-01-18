@@ -83,3 +83,15 @@
 	function lang($path, $lang_order = null) {
 		return new core_language($path, $lang_order);
 	}
+
+	/** HELPERS DE SESSÃO */
+	// Obtém um objeto de sessão
+	function &session($index_name = '') {
+		if(!isset($_SESSION))
+			session_start();
+
+		if(!isset($_SESSION[$index_name]))
+			$_SESSION[$index_name] = null;
+
+		return $_SESSION[$index_name];
+	}
