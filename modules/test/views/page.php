@@ -47,7 +47,7 @@
 		<div id="content">
 			<div class="content">
 				<ul id="toolbar">
-					<li data-href="?default"><?php echo $lang->button_run; ?></li>
+					<li data-href=""><?php echo $lang->button_run; ?></li>
 					<?php if($xdebug_enabled): ?>
 					<li data-href="?coverage"><?php echo $lang->button_coverage; ?></li>
 					<li data-href="?coverage&hidden-success" class="no-margin">[H]</li>
