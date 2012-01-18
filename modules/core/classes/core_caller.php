@@ -60,6 +60,36 @@
 			return $library;
 		}
 
+		// Carrega um helper e retorna seu nome completo
+		static public function load_helper($helper) {
+			// Primeiramente é necessário identificar se é um helper do próprio módulo
+			// Para isto, o helper deve iniciar com duplo underline
+			// Exemplo: __exemplo passará a ser site_exemplo
+			if( substr( $helper, 0, 2 ) === '__' ) {
+				// Se for, a informação é substituida pelo módulo
+				$helper = join( '_', core::get_caller_module_path() ) . '_' . substr( $helper, 2 );
+			}
+
+			// Se o helper já tiver sido carregado, evita o processo
+			$helper_key = $helper . ":helper";
+			if( isset( self::$_loaded_classes[$helper_key] ) ) {
+				return self::$_loaded_classes[$helper_key];
+			}
+
+			// Agora é necessário localizar o helper e carregá-lo
+			$modular_path = core::get_modular_parts($helper, array(
+				'path_complement' => '/helpers',
+				'make_fullpath' => true
+			));
+
+			// Inclui o arquivo
+			core::do_require($modular_path->fullpath);
+
+			// Salva em loaded classes e retorna
+			self::$_loaded_classes[$helper_key] = $helper;
+			return $helper;
+		}
+
 		// Obtém uma instância do caller
 		static public function get_instance() {
 			// Se o caller não for definido, carrega

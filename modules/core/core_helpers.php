@@ -37,6 +37,13 @@
 		return true;
 	}
 
+	// Carrega um helper
+	function helper($helpers) {
+		foreach(setlist($helpers) as $helper)
+			core_caller::load_helper($helper);
+		return true;
+	}
+
 	/** HELPERS DE DADOS */
 	// Converte uma string separada por vírgula em um array
 	function setlist($data) {

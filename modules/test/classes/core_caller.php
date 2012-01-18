@@ -8,6 +8,16 @@
 			$this->test( 1, $caller, 'Instance create' );
 			$this->test( 2, call() === $caller, 'Instance retrieval' );
 
+			$this->set_prefix('helpers');
+			$this->test(1, function_exists('test_useful_test'));
+			helper('__useful_test');
+			$this->test(2, function_exists('test_useful_test'));
+			$this->test(3, test_useful_test());
+			$this->test(4, test_useful_test_again());
+			$this->test(5, function_exists('test_useful_sub_test_advanced'));
+			helper('__useful_sub_test');
+			$this->test(6, test_useful_sub_test_advanced());
+
 			$this->set_prefix('exception');
 			$this->exception_test(1, 'exception_invalid_caller');
 		}
