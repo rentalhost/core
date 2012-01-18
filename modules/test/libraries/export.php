@@ -68,13 +68,19 @@
 
 				$object_data = (array) $data;
 
-				if($data instanceof Exception) {
+				if($data instanceof exception) {
 					$object_data["\0*\0file"] = core::get_path_fixed($object_data["\0*\0file"]);
 					unset($object_data['xdebug_message']);
 					unset($object_data["\0Exception\0string"]);
 					unset($object_data["\0*\0line"]);
 					unset($object_data["\0Exception\0trace"]);
 					unset($object_data["\0Exception\0previous"]); // PHP 5.3
+
+					if(empty($object_data["\0*\0message"])) {
+						$message_lang = lang('/core/errors/err' . str_pad(strtoupper(dechex($data->getCode())), 4, '0',
+							STR_PAD_LEFT), array('en', 'pt-br'));
+						$object_data["\0*\0message"] = $message_lang->get_real_value('error_message');
+					}
 				}
 				else
 				if($data instanceof core_language) {
