@@ -13,22 +13,11 @@
 			if( preg_match( CORE_VALID_CALLER, $command, $command_details ) === 1 ) {
 				// Se um objeto for definido, significa que é uma chamada a um método estático de uma library
 				if( !empty( $command_details['object'] ) ) {
-					// Se o objeto for modulado, obtém a estrutura do módulo atual
-					if($command_details['modulated'] === '__') {
-						$command_details['object'] = "__{$command_details['object']}";
-					}
-
 					// Carrega a biblioteca, se necessário
 					$command_details['object'] = self::load_library( $command_details['object'] );
 
 					// Executa a chamada e retorna a informação obtida
 					return call_user_func_array( array( $command_details['object'], $command_details['method'] ), $arguments );
-				}
-
-				// Em outro caso, considera que é um helper
-				// Se o método for modulado, obtém a estrutura do módulo atual
-				if($command_details['modulated'] === '__') {
-					$command_details['method'] = "__{$command_details['method']}";
 				}
 
 				// Executa a chamada e retorna a informação obtida
