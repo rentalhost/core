@@ -81,6 +81,24 @@
 					unset($object_data["\0core_language\0_lang_dir"]);
 					unset($object_data["\0core_language\0_lang_order"]);
 				}
+				else
+				if($data instanceof mysqli) {
+					unset($object_data['client_info'], $object_data['client_version'], $object_data['host_info'],
+						$object_data['protocol_version'], $object_data['server_info'], $object_data['server_version'],
+						$object_data['thread_id']);
+
+					foreach($object_data as $key => $item)
+						$object_data[$key] = $data->{$key};
+				}
+				else
+				if($data instanceof mysqli_result) {
+					foreach($object_data as $key => $item)
+						$object_data[$key] = $data->{$key};
+				}
+				else
+				if($data instanceof core_database) {
+					$object_data["\0core_database\0_connection_string"] = $data->get_connection_string();
+				}
 
 				foreach($object_data as $key => $value) {
 					$key = explode("\0", $key);

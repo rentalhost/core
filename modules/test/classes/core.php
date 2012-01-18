@@ -2,6 +2,16 @@
 
 	// classe core
 	class unit_core_library extends test_class_library {
+		public function test_core() {
+			$this->set_prefix('get_state');
+			$this->test(1, core::get_state('on'));
+			$this->test(2, core::get_state('off'));
+			$this->test(3, core::get_state('true'));
+			$this->test(4, core::get_state(true));
+			$this->test(5, core::get_state(false));
+			$this->test(6, core::get_state(''));
+		}
+
 		// Teste para o sistema de testes (non-core)
 		public function test_export() {
 			$this->set_prefix( 'scalars' );

@@ -73,6 +73,16 @@
 			return core::get_path_fixed(substr($path, strlen($using_base) + 1));
 		}
 
+		// Obtém o estado booleano de uma informação
+		static public function get_state($info) {
+			//NOTE: esta é a verificação direta do PHP
+			if(!is_string($info))
+				return (bool) $info;
+
+			static $on_mode = array('true', 'on', 'yes');
+			return in_array($info, $on_mode);
+		}
+
 		// Separa um modular path em pedaços
 		//DEBUG: verificar se uma parte colide com um arquivo ou pasta
 		//DEBUG: retorna um erro se uma configuração passada não for suportada
