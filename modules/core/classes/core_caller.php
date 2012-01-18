@@ -24,6 +24,15 @@
 					// Executa a chamada e retorna a informação obtida
 					return call_user_func_array( array( $command_details['object'], $command_details['method'] ), $arguments );
 				}
+
+				// Em outro caso, considera que é um helper
+				// Se o método for modulado, obtém a estrutura do módulo atual
+				if($command_details['modulated'] === '__') {
+					$command_details['method'] = "__{$command_details['method']}";
+				}
+
+				// Executa a chamada e retorna a informação obtida
+				return call_user_func_array( self::load_helper( $command_details['method'] ), $arguments );
 			}
 
 			// Se não for possível, lança uma exceção
@@ -49,14 +58,14 @@
 
 			// Se a classe já tiver sido carregada, evita o processo
 			if( isset( self::$_loaded_classes[$library] ) ) {
-				return self::$_loaded_classes[$library];
+				return $library;
 			}
 
 			// Agora, é necessário carregar tal classe
 			spl_autoload_call( $library );
 
 			// Salva em loaded classes e retorna
-			self::$_loaded_classes[$library] = $library;
+			self::$_loaded_classes[$library] = true;
 			return $library;
 		}
 
@@ -70,23 +79,23 @@
 				$helper = join( '_', core::get_caller_module_path() ) . '_' . substr( $helper, 2 );
 			}
 
-			// Se o helper já tiver sido carregado, evita o processo
-			$helper_key = $helper . ":helper";
-			if( isset( self::$_loaded_classes[$helper_key] ) ) {
-				return self::$_loaded_classes[$helper_key];
-			}
-
 			// Agora é necessário localizar o helper e carregá-lo
 			$modular_path = core::get_modular_parts($helper, array(
 				'path_complement' => '/helpers',
 				'make_fullpath' => true
 			));
 
+			// Se o helper já tiver sido carregado, evita o processo
+			$helper_key = $modular_path->fullpath . ":helper";
+			if( isset( self::$_loaded_classes[$helper_key] ) ) {
+				return $helper;
+			}
+
 			// Inclui o arquivo
 			core::do_require($modular_path->fullpath);
 
 			// Salva em loaded classes e retorna
-			self::$_loaded_classes[$helper_key] = $helper;
+			self::$_loaded_classes[$helper_key] = true;
 			return $helper;
 		}
 

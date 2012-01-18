@@ -18,6 +18,12 @@
 			helper('__useful_sub_test');
 			$this->test(6, test_useful_sub_test_advanced());
 
+			$this->set_prefix('do_call');
+			$this->test(1, call('__useful_test::get_caller_module_path'));
+			$this->test(2, call('__useful_test'));
+			$this->test(3, call('__useful_test_again'));
+			$this->test(4, call('__useful_sub_test_advanced'));
+
 			$this->set_prefix('exception');
 			$this->exception_test(1, 'exception_invalid_caller');
 		}
