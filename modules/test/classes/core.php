@@ -12,6 +12,23 @@
 			$this->test(6, core::get_state(''));
 		}
 
+		public function test_server() {
+			$server = $_SERVER;
+
+			$_SERVER['SERVER_NAME'] = 'domain.com';
+
+			$this->set_prefix('is_domain');
+			$this->test(1, is_domain('domain.com'));
+			$this->test(2, is_domain('notdomain.com'));
+
+			$_SERVER['HTTPS'] = 'on';
+			$this->test(100, is_domain('domain.com'));
+			$this->test(101, is_domain('https://domain.com'));
+			unset($_SERVER['HTTPS']);
+
+			$_SERVER = $server;
+		}
+
 		public function test_session() {
 			session('/test')->test = true;
 			$this->test(1, session('/test')->test);

@@ -357,12 +357,14 @@
 				if($domain['host'] !== $_SERVER['SERVER_NAME'])
 					continue;
 
+				// Se o scheme não for definido, usa http
+				if(!isset($domain['scheme']))
+					$domain['scheme'] = 'http';
+
 				// Verifica se o scheme é compatível
-				if(isset($domain['scheme'])) {
-					$scheme_url = isset($_SERVER['HTTPS']) ? 'https' : 'http';
-					if($domain['scheme'] !== $scheme_url)
-						continue;
-				}
+				$scheme_url = isset($_SERVER['HTTPS']) ? 'https' : 'http';
+				if($domain['scheme'] !== $scheme_url)
+					continue;
 
 				// Verifica se a porta é compatível
 				if(isset($domain['port'])
@@ -378,7 +380,7 @@
 
 		// Retorna se for localhost
 		static public function is_localhost() {
-			return self::is_domain(array('localhost', '127.0.0.1', '[::1]'));
+			return self::is_domain(array('127.0.0.1', '[::1]', 'localhost'));
 		}
 
 		// Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)
