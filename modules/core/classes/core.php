@@ -88,7 +88,7 @@
 		}
 
 		// Separa um modular path em pedaços
-		static public function get_modular_parts( $modular_path, $configs = null ) {
+		static public function get_modular_parts($modular_path, $configs = null) {
 			$configs = (array) $configs;
 
 			// Se for uma string, é necessário quebrar a informação
@@ -381,6 +381,19 @@
 		// Retorna se for localhost
 		static public function is_localhost() {
 			return self::is_domain(array('127.0.0.1', '[::1]', 'localhost'));
+		}
+
+		// Retorna se um módulo existe
+		static public function has_module($module_path) {
+			$module_path = explode('/', $module_path);
+
+			if(!empty($module_path[0]))
+				$module_path = array_merge(core::get_caller_module_path(), $module_path);
+			else
+			array_shift($module_path);
+
+			$module_path = core::get_modular_parts($module_path, array('search_paths' => false));
+			return !isset($module_path->remains);
 		}
 
 		// Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)

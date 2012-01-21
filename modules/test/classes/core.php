@@ -10,6 +10,13 @@
 			$this->test(4, core::get_state(true));
 			$this->test(5, core::get_state(false));
 			$this->test(6, core::get_state(''));
+
+			$this->set_prefix('has_module');
+			$this->test(1, core::has_module('useful'));
+			$this->test(2, core::has_module('/test/useful'));
+			$this->test(3, core::has_module('fake'));
+			$this->test(4, core::has_module('useful/fake'));
+			$this->test(5, core::has_module('/fake'));
 		}
 
 		public function test_server() {
