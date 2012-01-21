@@ -23,6 +23,9 @@
 			$server = $_SERVER;
 
 			$_SERVER['SERVER_NAME'] = 'domain.com';
+			$_SERVER['SERVER_PORT'] = '80';
+			$_SERVER['REQUEST_URI'] = '/core/test?fake';
+			unset($_SERVER['REDIRECT_URL']);
 
 			$this->set_prefix('is_domain');
 			$this->test(1, is_domain('domain.com'));
@@ -32,6 +35,11 @@
 			$this->test(100, is_domain('domain.com'));
 			$this->test(101, is_domain('https://domain.com'));
 			unset($_SERVER['HTTPS']);
+
+			$this->test(3, is_domain('domain.com:80'));
+			$this->test(4, is_domain('domain.com:443'));
+			$this->test(5, is_domain('domain.com/core/test'));
+			$this->test(6, is_domain('domain.com/core/test/fake'));
 
 			$_SERVER = $server;
 		}

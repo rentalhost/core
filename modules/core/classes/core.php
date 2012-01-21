@@ -346,29 +346,40 @@
 
 		// Retorna true se o domínio for compatível
 		static public function is_domain($domains) {
+			$current_uri = null;
+
+			// Para cada domínio na lista...
 			foreach(setlist($domains) as $domain) {
-				$domain = parse_url($domain);
-
-				// Se o domain host não for definido, usa path
-				if(!isset($domain['host']))
-					$domain['host'] = $domain['path'];
-
-				// Verifica se o domínio é compatível
-				if($domain['host'] !== $_SERVER['SERVER_NAME'])
-					continue;
-
-				// Se o scheme não for definido, usa http
-				if(!isset($domain['scheme']))
-					$domain['scheme'] = 'http';
+				// Define o schema do dominio
+				$domain = explode('://', $domain, 2);
+				if(!isset($domain[1]))
+					array_unshift($domain, 'http');
 
 				// Verifica se o scheme é compatível
 				$scheme_url = isset($_SERVER['HTTPS']) ? 'https' : 'http';
-				if($domain['scheme'] !== $scheme_url)
+				if($domain[0] !== $scheme_url)
 					continue;
 
-				// Verifica se a porta é compatível
-				if(isset($domain['port'])
-				&& $domain['port'] != $_SERVER['SERVER_PORT'])
+				// Verifica a porta do domínio
+				$domain = explode(':', $domain[1], 2);
+				if(isset($domain[1])
+				&& $domain[1] !== $_SERVER['SERVER_PORT'])
+					continue;
+
+				// Verifica o path
+				$domain = explode('/', $domain[0], 2);
+				if(isset($domain[1])) {
+					// Armazena o URI de chamada
+					if($current_uri === null)
+					$current_uri = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL']
+						: array_shift(explode('?', $_SERVER['REQUEST_URI'], 2));
+
+					if($current_uri !== "/{$domain[1]}")
+						continue;
+				}
+
+				// Verifica o hostname
+				if($domain[0] !== $_SERVER['SERVER_NAME'])
 					continue;
 
 				// Se tudo foi validado corretamente, retorna true
