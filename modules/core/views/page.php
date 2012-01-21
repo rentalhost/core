@@ -39,6 +39,11 @@
 			<div class="content">
 				<ul id="toolbar">
 					<li data-href="./list_errors"><?php echo $lang->button_errors; ?></li>
+					<?php if(core::has_module('/test')): ?>
+					<li data-href="../test" class="float-right"><?php echo $lang->button_tests; ?></li>
+					<?php else: ?>
+					<li class="float-right disabled" title="<?php echo $lang->button_tests_un; ?>"><?php echo $lang->button_tests; ?></li>
+					<?php endif; ?>
 				</ul>
 
 				<br />
