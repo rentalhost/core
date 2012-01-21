@@ -411,7 +411,12 @@
 		}
 
 		// Helper interno para filtrar um array, removendo seus itens vazios
-		static public function _not_empty( $data ) {
+		static public function _not_empty($data) {
 			return !empty( $data );
+		}
+
+		// Helper interno para filtrar um array, removendo seus itens nulos
+		static public function _not_null($data) {
+			return !is_null($data);
 		}
 	}

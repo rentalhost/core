@@ -11,5 +11,10 @@
 			$this->test(3, $conn);
 			$this->test(4, $conn->query('SELECT 1'));
 			$this->test(5, $conn);
+
+			$this->set_prefix('fake');
+			$conn = connection('fake');
+			$this->test(1, $conn->get_connection_string());
+			$this->test(2, $conn->get_connection_string());
 		}
 	}

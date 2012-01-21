@@ -37,7 +37,10 @@
 			$cs['path'] = (isset($cs['path']) && $cs['path'] !== '/') ? substr($cs['path'], 1) : null;
 
 			// Preenche a persistência de conexão e o charset que será usado
-			$qs = isset($cs['query']) ? parse_str($cs['query']) : array();
+			if(isset($cs['query']))
+				parse_str($cs['query'], $qs);
+			else $qs = array();
+
 			$qs['persistent'] = isset($qs['persistent']) ? core::get_state($qs['persistent']) : null;
 			$qs['charset'] = isset($qs['charset']) ? $qs['charset'] : null;
 			$cs['query'] = $qs;
@@ -130,17 +133,17 @@
 				$string.= "@";
 			}
 
+			// Define o hostname, porta e database
+			$string.= "{$this->_connection_array['host']}:{$this->_connection_array['port']}" .
+					  "/{$this->_connection_array['path']}";
+
 			// Armazena a query
 			$query = $this->_connection_array['query'];
-			$query = array_filter($query, 'core::_not_empty');
+			$query = array_filter($query, 'core::_not_null');
 
 			// Se houver persistent
 			if(isset($query['persistent']))
 				$query['persistent'] = $query['persistent'] === true ? 'true' : 'false';
-
-			// Define o hostname, porta, database e a query
-			$string.= "{$this->_connection_array['host']}:{$this->_connection_array['port']}" .
-					  "/{$this->_connection_array['path']}";
 
 			// Se houver query
 			if(!empty($query))
