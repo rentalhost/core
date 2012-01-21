@@ -8,7 +8,8 @@
 		create_connection('mysqli://root@127.0.0.1/core_project');
 
 	// Cria uma conexão falsa, para testes
-	create_connection('mysqli://username:password@servername:1234/dbname?persistent=false&charset=latin1', 'fake');
+	create_connection('mysqli://username:password@servername:1234/dbname' .
+		'?persistent=false&charset=latin1&connect=false', 'fake');
 
 	// Inclui alguns arquivos que não vão para o commit
 	if(CORE_DEBUG === true

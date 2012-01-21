@@ -14,12 +14,19 @@
 		// Armazena o índex da conexão (geralmente default)
 		private $_connection_index;
 
+		// Configurações booleanas
+		static private $_bool_props = array('persistent', 'connect');
+
 		// Cria uma nova conexão
 		public function __construct($connection_string, $index_name) {
 			$this->_connection_string = $connection_string;
 			$this->_connection_index = $index_name;
 
-			if(config('database_lazy_mode') === false)
+			$this->_parse_connection_string();
+
+			if($this->_connection_array['query']['connect'] === true
+			|| ($this->_connection_array['query']['connect'] === null
+			 && config('database_lazy_mode') === false))
 				$this->connect();
 		}
 
@@ -41,7 +48,9 @@
 				parse_str($cs['query'], $qs);
 			else $qs = array();
 
-			$qs['persistent'] = isset($qs['persistent']) ? core::get_state($qs['persistent']) : null;
+			foreach(self::$_bool_props as $item)
+				$qs[$item] = isset($qs[$item]) ? core::get_state($qs[$item]) : null;
+
 			$qs['charset'] = isset($qs['charset']) ? $qs['charset'] : null;
 			$cs['query'] = $qs;
 
@@ -141,9 +150,11 @@
 			$query = $this->_connection_array['query'];
 			$query = array_filter($query, 'core::_not_null');
 
-			// Se houver persistent
-			if(isset($query['persistent']))
-				$query['persistent'] = $query['persistent'] === true ? 'true' : 'false';
+			// Configurações booleanas
+			foreach(self::$_bool_props as $item) {
+				if(isset($query[$item]))
+					$query[$item] = $query[$item] === true ? 'true' : 'false';
+			}
 
 			// Se houver query
 			if(!empty($query))

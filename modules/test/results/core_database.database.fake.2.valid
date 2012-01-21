@@ -1,1 +1,1 @@
-["string","mysqli:\/\/username:password@servername:1234\/dbname?persistent=false&charset=latin1"]
+["string","mysqli:\/\/username:password@servername:1234\/dbname?persistent=false&charset=latin1&connect=false"]

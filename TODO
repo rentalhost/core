@@ -10,7 +10,6 @@
 - error: mostrar a opçao "enviar um email quando houver solução";
 - database: adicionar suporte a transações;
 - database: adicionar diferentes propriedades na conexão;
-- database: alterar configuração de lazy_mode na querystring da conexão
 
 -- MILESTONE 1.1 --
 - atom: classes atom_code para gerenciar o código (parser, formatter e compiler);
