@@ -22,11 +22,14 @@
 			$this->_connection_string = $connection_string;
 			$this->_connection_index = $index_name;
 
-			$this->_parse_connection_string();
+			parse_str(parse_url($connection_string, PHP_URL_QUERY), $autoconnect);
+			$autoconnect = isset($autoconnect['connect']) ? core::get_state($autoconnect['connect']) : null;
 
-			if($this->_connection_array['query']['connect'] === true
-			|| ($this->_connection_array['query']['connect'] === null
-			 && config('database_lazy_mode') === false))
+			if($autoconnect === null
+			&& config('database_lazy_mode') === false)
+				$autoconnect = true;
+
+			if($autoconnect === true)
 				$this->connect();
 		}
 
