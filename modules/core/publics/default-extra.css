@@ -125,3 +125,6 @@ div.button.disabled {
 table.xdebug-error {
 	font: 11pt "Segoe UI";
 }
+pre.xdebug-var-dump {
+	user-select: initial;
+}

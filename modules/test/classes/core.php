@@ -17,6 +17,19 @@
 			$this->test(3, core::has_module('fake'));
 			$this->test(4, core::has_module('useful/fake'));
 			$this->test(5, core::has_module('/fake'));
+
+			$this->set_prefix('replace_domain');
+			$this->test(1, core::_replace_domain('*.domain.com'), '*.domain.com');
+			$this->test(2, core::_replace_domain('*?.domain.com'), '*?.domain.com');
+			$this->test(3, core::_replace_domain('www?.domain.com'), 'www?.domain.com');
+			$this->test(4, core::_replace_domain('abc.*.domain.com'), 'abc.*.domain.com');
+			$this->test(5, core::_replace_domain('*.*.domain.com'), '*.*.domain.com');
+			$this->test(6, core::_replace_domain('abc.*?.domain.com'), 'abc.*?.domain.com');
+			$this->test(7, core::_replace_domain('www.domain.com.br?'), 'www.domain.com.br?');
+			$this->test(8, core::_replace_domain('www.domain.com.*'), 'www.domain.com.*');
+			$this->test(9, core::_replace_domain('www.domain.com.*?'), 'www.domain.com.*?');
+			$this->test(10, core::_replace_domain('www.dom*ain.com'), 'www.dom*ain.com');
+			$this->test(11, core::_replace_domain('*?.*.com.br?'), '*?.*.com.br?');
 		}
 
 		public function test_server() {
@@ -40,6 +53,39 @@
 			$this->test(4, is_domain('domain.com:443'));
 			$this->test(5, is_domain('domain.com/core/test'));
 			$this->test(6, is_domain('domain.com/core/test/fake'));
+
+			$_SERVER['SERVER_NAME'] = 'www.domain.com';
+			$this->test(7, is_domain('*.domain.com'));
+			$this->test(8, is_domain('www?.domain.com'));
+			$this->test(9, is_domain('*?.domain.com'));
+
+			$_SERVER['SERVER_NAME'] = 'abc.www.domain.com';
+			$this->test(10, is_domain('*.domain.com'));
+			$this->test(11, is_domain('www?.domain.com'));
+			$this->test(12, is_domain('*?.domain.com'));
+			$this->test(19, is_domain('abc.*.domain.com'));
+			$this->test(20, is_domain('abc.www?.domain.com'));
+			$this->test(21, is_domain('*.*.domain.com'));
+			$this->test(22, is_domain('abc?.www?.domain.com'));
+
+			$_SERVER['SERVER_NAME'] = 'sub.domain.com';
+			$this->test(13, is_domain('*.domain.com'));
+			$this->test(14, is_domain('www?.domain.com'));
+			$this->test(15, is_domain('*?.domain.com'));
+
+			$_SERVER['SERVER_NAME'] = 'domain.com';
+			$this->test(16, is_domain('*.domain.com'));
+			$this->test(17, is_domain('www?.domain.com'));
+			$this->test(18, is_domain('*?.domain.com'));
+			$this->test(29, is_domain('domain.com.br?'));
+
+			$_SERVER['SERVER_NAME'] = 'domain.com.br';
+			$this->test(23, is_domain('domain.com'));
+			$this->test(24, is_domain('domain.com.br'));
+			$this->test(25, is_domain('domain.com.*'));
+			$this->test(26, is_domain('domain.com.*?'));
+			$this->test(27, is_domain('domain.com.br?'));
+			$this->test(28, is_domain('domain.com.us?'));
 
 			$_SERVER = $server;
 		}

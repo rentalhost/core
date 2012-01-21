@@ -379,8 +379,15 @@
 				}
 
 				// Verifica o hostname
-				if($domain[0] !== $_SERVER['SERVER_NAME'])
-					continue;
+				if($domain[0] !== $_SERVER['SERVER_NAME']) {
+					// Verificação simplificada
+					if(preg_match(CORE_HOSTNAME_VALID, $domain[0]))
+						continue;
+
+					// Verificação avançada
+					if(!preg_match(self::_replace_domain($domain[0]), $_SERVER['SERVER_NAME']))
+						continue;
+				}
 
 				// Se tudo foi validado corretamente, retorna true
 				return true;
@@ -442,5 +449,14 @@
 		// Helper interno para filtrar um array, removendo seus itens nulos
 		static public function _not_null($data) {
 			return !is_null($data);
+		}
+
+		// Faz os replaces dos dominios
+		static public function _replace_domain($domain) {
+			$domain = preg_replace('/\*(?!\?)/', CORE_HOSTNAME_WORD, $domain);
+			$domain = str_replace(array('.*?', '*?.', '.'),
+				array('(.'.CORE_HOSTNAME_WORD.')?', '('.CORE_HOSTNAME_WORD.'.)?', '\\.'), $domain);
+			$domain = preg_replace('/('.CORE_HOSTNAME_WORD.'\?(\\\.)|(\\\.)'.CORE_HOSTNAME_WORD.'\?)/', '($2$3$4$5)?', $domain);
+			return "/^{$domain}$/";
 		}
 	}

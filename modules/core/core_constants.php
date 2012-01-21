@@ -18,5 +18,11 @@
 	// http://stackoverflow.com/a/8748376/755393
 	define('CORE_VALID_PATH', '~^(?:(?:' . CORE_VALID_PATH_ID . '*|\[' . CORE_VALID_PATH_ID . '+\])(?=/|$)/?)+$~');
 
+	// Define um word para hostnames
+	// http://stackoverflow.com/a/106223/755393 @smink
+	define('CORE_HOSTNAME_WORD', '([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])');
+	// Define um hostname completo
+	define('CORE_HOSTNAME_VALID', '~^('.CORE_HOSTNAME_WORD.'\.)*'.CORE_HOSTNAME_WORD.'$~');
+
 	// Define o separador de chamada (usado para separar classe de método, como a::b)
 	define('CORE_VALID_CALLER', '~^(?:(?<object>(?:__)?' . CORE_VALID_ID . ')::)?(?<method>(?:__)?' . CORE_VALID_ID . ')$~');
