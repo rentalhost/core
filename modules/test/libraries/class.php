@@ -17,29 +17,42 @@
 
 		// Obtém informações sobre as classes existentes
 		static public function get_all() {
-			library( '__dir' );
+			library('__dir');
 
 			$results = array();
 			$loaded_classes = get_declared_classes();
 
 			$current_path = core::get_current_path();
 
-			$files = call('__dir::get_files', $current_path . '/results', false, '/\.valid$/');
+			if(!isset($_GET['class']))
+				$filter_path = '/\.valid$/';
+			else
+			$filter_path = '/^'.preg_quote($_GET['class'], '-').'\..*\.valid$/';
+
+			$files = call('__dir::get_files', $current_path . '/results', false, $filter_path);
 			foreach( $files as $file ) {
 				$file_id = substr(array_pop(array_slice(explode('/', $file), -1)), 0, -6);
 				$file_data = explode('.', $file_id);
 				self::$_files[$file_data[0]][] = array($file_id, $file_data, $file);
 			}
 
-			$old_classes = array_flip(array_keys(self::$_files));
-
-			foreach( call('__dir::get_files', $current_path . '/classes') as $file )
+			foreach(call('__dir::get_files', $current_path . '/classes') as $file)
 				require_once $file;
 
 			$loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
+			$old_classes = array_flip(array_keys(self::$_files));
 			foreach( $loaded_classes as $item ) {
 				$classname = str_replace('__', '_', substr($item, 5, -8));
-				$results[$classname] = self::_get_class_data($item);
+				if(!isset($_GET['class'])
+				|| $_GET['class'] === $classname)
+					$results[$classname] = self::_get_class_data($item);
+				else {
+					$results[$classname] = array(
+						'classname' => $classname,
+						'type' => 'unavailable',
+						'methods' => array()
+					);
+				}
 				unset($old_classes[$classname]);
 			}
 

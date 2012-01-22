@@ -9,9 +9,10 @@ $(function(){
 	}).resize();
 
 	// Ao clicar em um item do toolbar, utilizar seu href
-	$('ul#toolbar li[data-href]').click(function(){
+	$('[data-href]').click(function(){
 		var data = $(this).data('href');
 		location[data.charAt(0) === '?' ? 'search' : 'href'] = data;
+		return false;
 	});
 
 	// Ao clicar no idioma, abrir o modal de seleção

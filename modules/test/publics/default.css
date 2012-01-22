@@ -96,6 +96,31 @@ div.unit-class > span.message {
 	color: #b5b5b5;
 }
 
+div.unit-class > ul.actions {
+	margin: 0;
+	list-style: none;
+	float: right;
+	transition: opacity 0.1s ease-in-out;
+}
+div.unit-class > ul.actions > li {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	font-size: 8pt;
+	color: #004583;
+	margin-left: 15px;
+	transition: color 0.075s ease-in-out;
+	opacity: 0.8;
+}
+div.unit-class > ul.actions > li:hover {
+	color: #ff0000;
+	opacity: 1;
+}
+div.unit-class > ul.actions > li.disabled {
+	color: #c6c6c6;
+	opacity: 1;
+}
+
 div.unit-footer {
 	border-top: 2px #f3f3f3 solid;
 	border-bottom-left-radius: 3px;

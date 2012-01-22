@@ -56,6 +56,7 @@
 					<li class="disabled no-margin">[H]</li>
 					<?php endif; ?>
 					<li class="float-right accept-all disabled"><?php echo $lang->button_accept_all; ?></li>
+					<li data-href="../core" class="float-right"><?php echo $lang->button_manager; ?></li>
 				</ul>
 
 				<div id="classes-realm">
@@ -69,7 +70,8 @@
 						// Obtém e imprime as classes diretamente no modelo
 						$result = '';
 						$model_attrs = array(
-							'lang' => lang('models')
+							'lang' => lang('models'),
+							'page_lang' => $lang
 						);
 						foreach(call('__class::get_all') as $value) {
 							$model_attrs['class'] = (object) $value;

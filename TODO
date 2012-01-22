@@ -1,5 +1,5 @@
 -- MÁXIMA PRIORIDADE --
-- test: permitir rodar somente uma unit específica (ajuda nos testes especificos!)
+- test: mover /results para /files/results, e /files para /files/lines
 - core: usar modelo jquery para métodos (attr ao invés de get_attr, attr ao invés de set_attr)
 
 -- ALTA PRIORIDADE --
