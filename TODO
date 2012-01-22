@@ -1,6 +1,7 @@
 -- MÁXIMA PRIORIDADE --
 - core: get_modular_parts - opção que permita transformar ^/ ou ^__ no módulo base (atual) facilmente
 	- nota: deverá verificar todas as funções que usam a função para aplicar a alteração, se necessário!
+- test: obter informações sobre tempo e uso de memória, assim como o total da página
 
 -- ALTA PRIORIDADE --
 

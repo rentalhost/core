@@ -93,10 +93,10 @@
 
 			// Se for uma string, é necessário quebrar a informação
 			if( is_string( $modular_path ) ) {
-				!isset( $configs['split_by'] )			&& $configs['split_by']			= '_';
-				!isset( $configs['group_by'] )			&& $configs['group_by']			= '__';
-				!isset( $configs['neutral_by'] )		&& $configs['neutral_by']		= "\0";
-				!isset( $configs['make_underlined'] )	&& $configs['make_underlined']	= true;
+				!isset( $configs['split_by'] )			&& $configs['split_by']				= '_';
+				!isset( $configs['group_by'] )			&& $configs['group_by']				= '__';
+				!isset( $configs['neutral_by'] )		&& $configs['neutral_by']			= "\0";
+				!isset( $configs['make_underlined'] )	&& $configs['make_underlined']		= true;
 
 				$modular_path = str_replace( $configs['group_by'], $configs['neutral_by'], $modular_path );
 				$modular_path = explode( $configs['split_by'], $modular_path );
@@ -111,22 +111,23 @@
 			}
 
 			// Após ter a array, é necessário fazer a busca pelos arquivos
-			!isset( $configs['start_dir'] )			&& $configs['start_dir']		= CORE_MODULES;
-			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']		= false;
-			!isset( $configs['search_modules'] )	&& $configs['search_modules']	= true;
-			!isset( $configs['search_paths'] )		&& $configs['search_paths']		= true;
-			!isset( $configs['path_clip'] )			&& $configs['path_clip']		= false;
-			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']	= false;
-			!isset( $configs['path_complement'] )	&& $configs['path_complement']	= null;
-			!isset( $configs['file_extension'] )	&& $configs['file_extension']	= 'php';
-			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']	= false;
-			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']	= false;
+			!isset( $configs['modular_path_auto'] )	&& $configs['modular_path_auto']	= false;
+			!isset( $configs['start_dir'] )			&& $configs['start_dir']			= CORE_MODULES;
+			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']			= false;
+			!isset( $configs['search_modules'] )	&& $configs['search_modules']		= true;
+			!isset( $configs['search_paths'] )		&& $configs['search_paths']			= true;
+			!isset( $configs['path_clip'] )			&& $configs['path_clip']			= false;
+			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']		= false;
+			!isset( $configs['path_complement'] )	&& $configs['path_complement']		= null;
+			!isset( $configs['file_extension'] )	&& $configs['file_extension']		= 'php';
+			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']		= false;
+			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']		= false;
 
 			// Em modo depuração, verifica se alguma configuração não suportada foi definida
 			if(CORE_DEBUG === true) {
-				static $config_keys = array('split_by', 'group_by', 'neutral_by', 'make_underlined',
-					'start_dir', 'deep_modules', 'search_modules', 'search_paths', 'path_clip', 'path_clip_empty',
-					'path_complement', 'file_extension', 'make_fullpath');
+				static $config_keys = array('modular_path_auto', 'split_by', 'group_by', 'neutral_by',
+					'make_underlined', 'start_dir', 'deep_modules', 'search_modules', 'search_paths',
+					'path_clip', 'path_clip_empty', 'path_complement', 'file_extension', 'make_fullpath');
 
 				$config_diff = array_diff(array_keys($configs), $config_keys);
 				if(!empty($config_diff)) {
@@ -144,6 +145,14 @@
 			// Se for necessário "clipar" o último elemento do path...
 			if( $configs['path_clip'] === true ) {
 				$result->clipped = array_pop( $modular_path );
+			}
+
+			// Se necessário, aplica a raiz do módulo
+			if($configs['modular_path_auto'] === true) {
+				if(empty($modular_path[0]))
+					array_shift($modular_path);
+				else
+				$modular_path = array_merge(self::get_caller_module_path(), $modular_path);
 			}
 
 			// Se necessário, remove o último elemento do path se ele estiver vazio
@@ -403,14 +412,10 @@
 
 		// Retorna se um módulo existe
 		static public function has_module($module_path) {
-			$module_path = explode('/', $module_path);
-
-			if(!empty($module_path[0]))
-				$module_path = array_merge(self::get_caller_module_path(), $module_path);
-			else
-			array_shift($module_path);
-
-			$module_path = self::get_modular_parts($module_path, array('search_paths' => false));
+			$module_path = self::get_modular_parts(explode('/', $module_path), array(
+				'search_paths' => false,
+				'modular_path_auto' => true
+			));
 			return !isset($module_path->remains);
 		}
 
