@@ -78,8 +78,11 @@
 
 					if(substr($object_data["\0*\0code"], 0, 2) === 'Cx') {
 						$message_lang = lang('/core/errors/err' . substr($object_data["\0*\0code"], 2), array('en', 'pt-br'));
-						$object_data["\0*\0message"] = $message_lang->get_real_value('error_message');
+						$object_data["\0*\0message"] = $message_lang->get_value('error_message',
+							$object_data["\0core_exception\0_error"]->get_message_args());
 					}
+
+					unset($object_data["\0core_exception\0_error"]);
 				}
 				else
 				if($data instanceof core_language) {

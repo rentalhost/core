@@ -1,1 +1,1 @@
-["object",{"code":["number",0],"file":["string",".\/core\/modules\/core\/classes\/core_controller.php"],"message":["string","Controller method \"test_useful_fail_controller::index\" not found."]},"core_exception"]
+["object",{"code":["string","Cx2006"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","O m\u00e9todo de controle informado n\u00e3o foi encontrado em <code>test_useful_fail_controller::index<\/code>."]},"core_exception"]

@@ -59,6 +59,14 @@
 			return $this;
 		}
 
+		// Obtém os argumentos da mensagem
+		public function get_message_args() {
+			if(!isset($this->_args['args']))
+				return array();
+
+			return $this->_args['args'];
+		}
+
 		// Ativa a exceção especial (de autoloader)
 		public function run_special_exception() {
 			$this->_special_exception = true;
@@ -71,12 +79,12 @@
 			if($this->_is_fatal === false) {
 				// Se for uma exceção normal
 				if($this->_special_exception === false)
-					throw new core_exception(null, $this->_error_code);
+					throw new core_exception(null, $this->_error_code, $this);
 
 				// Senão, lança uma exceção de núcleo
 				$classname = $this->_args['classname'];
 				eval("class {$classname} extends core_exception {}");
-				throw new $classname(null, $this->_error_code);
+				throw new $classname(null, $this->_error_code, $this);
 			}
 
 			//TODO: registrar a ocorrência e alterara a página

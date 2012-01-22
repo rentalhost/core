@@ -67,24 +67,27 @@
 		// Lança uma exceção baseada no status
 		private function _throw_exception() {
 			if(($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
-				throw new core_exception("Controller file is not found at \"{$this->_modular_data->fullpath}\".");
+				$error = new core_error('Cx2002', null, array('args' => array($this->_modular_data->fullpath)));
 			}
 			else
 			if(($this->_status & self::STATUS_METHOD_REQUIRED) === self::STATUS_METHOD_REQUIRED) {
-				throw new core_exception("Controller method is required in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2003', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_PATH_REQUIRED) === self::STATUS_PATH_REQUIRED) {
-				throw new core_exception("Controller path not found in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2004', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_MODULAR_REQUIRED) === self::STATUS_MODULAR_REQUIRED) {
-				throw new core_exception("Controller modular not found in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2005', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_METHOD_NOT_EXISTS) === self::STATUS_METHOD_NOT_EXISTS) {
-				throw new core_exception("Controller method \"{$this->_modular_data->class}::{$this->_modular_data->method}\" not found.");
+				$error = new core_error('Cx2006', null,
+					array('args' => array("{$this->_modular_data->class}::{$this->_modular_data->method}")));
 			}
+
+			$error->run();
 		}
 
 		// Executa o controller
