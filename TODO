@@ -1,0 +1,30 @@
+-- MÁXIMA PRIORIDADE --
+- database: adicionar diferentes propriedades na conexão;
+
+-- ALTA PRIORIDADE --
+
+-- MÉDIA PRIORIDADE --
+
+-- BAIXA PRIORIDADE --
+- database: adicionar suporte a transações;
+
+-- MÍNIMA PRIORIDADE --
+- error: mostrar a opçao "enviar um email quando houver solução";
+- controller: pensar também em como reescrever rotas, por exemplo '[*]/user' => 'master/[@1]/user'
+- controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
+- controller: alterar automaticamente o tipo de saída se a função se chamar *_json;
+- controller: tentar evitar o lançamento de exceções em uso interno;
+- controller: adicionar $_proposed_url nas variáveis;
+- mover o sistema do file-coverage para uma library especializada;
+- controllers começados por _ são considerados privados e só podem ser executados via execute()
+- test: obter informações sobre tempo e uso de memória, assim como o total da página
+
+-- MILESTONE 1.1 --
+- atom: classes atom_code para gerenciar o código (parser, formatter e compiler);
+- test: mostrar diferença entre dois resultados (quando failed);
+- core: sistema de regras para as classes (rules);
+- core: controle de versão para SQL (criar tabelas e registros via XML, e fazer atualizações dentre versões);
+- coverage: tentar eliminar as linhas que não possuem itens a serem validados (mudar [H] para [F], pois só será exibido erros);
+
+-- SE NECESSÁRIO --
+- test: aplicar tradução de path nas keys dos resultados

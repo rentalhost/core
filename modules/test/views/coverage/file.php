@@ -8,7 +8,7 @@
 <ul class="file-lines" data-file="<?php echo $file_hex; ?>">
 	<?php
 
-		$ignored_lines = core::get_current_path() . "/files/{$file_hex}.lines";
+		$ignored_lines = core::get_current_path() . "/files/lines/{$file_hex}.lines";
 		$ignored_lines = is_file($ignored_lines)
 					   ? json_decode(file_get_contents($ignored_lines), true)
 					   : array();

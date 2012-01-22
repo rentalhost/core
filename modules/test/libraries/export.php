@@ -63,23 +63,58 @@
 				$data_values = array();
 
 				if(method_exists($data, '__toString')
-				&& !$data instanceof Exception)
+				&& !$data instanceof exception)
 					$data_values['__toString()'] = array('string', $data->__toString());
 
 				$object_data = (array) $data;
 
-				if($data instanceof Exception) {
+				if($data instanceof exception) {
 					$object_data["\0*\0file"] = core::get_path_fixed($object_data["\0*\0file"]);
 					unset($object_data['xdebug_message']);
 					unset($object_data["\0Exception\0string"]);
 					unset($object_data["\0*\0line"]);
 					unset($object_data["\0Exception\0trace"]);
 					unset($object_data["\0Exception\0previous"]); // PHP 5.3
+
+					if(substr($object_data["\0*\0code"], 0, 2) === 'Cx') {
+						$message_lang = lang('/core/errors/err' . substr($object_data["\0*\0code"], 2), array('en', 'pt-br'));
+						$object_data["\0*\0message"] = $message_lang->get_value('error_message',
+							$object_data["\0core_exception\0_error"]->get_message_args());
+					}
+
+					unset($object_data["\0core_exception\0_error"]);
 				}
 				else
 				if($data instanceof core_language) {
 					unset($object_data["\0core_language\0_lang_dir"]);
 					unset($object_data["\0core_language\0_lang_order"]);
+				}
+				else
+				if($data instanceof core_error) {
+					unset($object_data["\0core_error\0_globals"]);
+					unset($object_data["\0core_error\0_backtrace"]);
+				}
+				else
+				if($data instanceof mysqli) {
+					static $mysqli_keys = array('affected_rows', 'connect_errno', 'connect_error', 'errno',
+						'error', 'field_count', 'info', 'insert_id', 'sqlstate', 'warning_count');
+
+					$object_data = array();
+					foreach($mysqli_keys as $key)
+						$object_data[$key] = $data->{$key};
+				}
+				else
+				if($data instanceof mysqli_result) {
+					static $mysqli_result_keys = array('current_field', 'field_count', 'lengths', 'num_rows', 'type');
+
+					$object_data = array();
+					foreach($mysqli_result_keys as $key)
+						$object_data[$key] = $data->{$key};
+				}
+				else
+				if($data instanceof core_database) {
+					unset($object_data["\0core_database\0_connection_string"],
+						$object_data["\0core_database\0_connection_array"]);
 				}
 
 				foreach($object_data as $key => $value) {

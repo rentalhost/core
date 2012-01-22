@@ -3,7 +3,6 @@
 	// Núcleo geral
 	class core {
 		// Todas as chamadas de classes passarão por aqui
-		//DEBUG: para user class, verificar se elas concordam com a pattern
 		static public function __autoload( $classname ) {
 			// Se for uma classe do core...
 			if(substr($classname, 0, 5) === 'core_') {
@@ -12,9 +11,12 @@
 				// Após obter o caminho, inclui o arquivo
 				if(!is_file($classpath)) {
 					$classpath = self::get_path_fixed($classpath);
-					eval("class {$classname} extends core_exception {}");
-					throw new $classname("Core class \"{$classname}\" in {$classpath} not found.");
-					return false;
+
+					$error = new core_error('CxFFF0', null, array(
+						'classname' => $classname,
+						'classpath' => $classpath
+					));
+					$error->run_special_exception();
 				}
 
 				require_once $classpath;
@@ -23,7 +25,7 @@
 
 			// Localiza uma user class
 			// Primeiro localiza a parte modular
-			$classpath = core::get_modular_parts( $classname, array(
+			$classpath = self::get_modular_parts( $classname, array(
 				'path_clip' => true,
 				'search_paths' => false,
 				'make_fullpath' => true
@@ -37,7 +39,7 @@
 			}
 
 			// O próximo passo é localizar o arquivo que será incluido
-			$classpath_subdata = core::get_modular_parts( $classpath->remains, array(
+			$classpath_subdata = self::get_modular_parts( $classpath->remains, array(
 				'start_dir' => $classpath->fullpath,
 				'search_modules' => false,
 				'make_fullpath' => true
@@ -45,13 +47,15 @@
 
 			// Após obter o caminho, inclui o arquivo
 			if(!is_file($classpath_subdata->fullpath)) {
-				eval("class {$classname} extends core_exception {}");
-				throw new $classname("Class \"{$classname}\" in {$classpath->fullpath} not found.");
-				return false;
+				$error = new core_error('CxFFF1', null, array(
+					'classname' => $classname,
+					'classpath' => $classpath->fullpath
+				));
+				$error->run_special_exception();
 			}
 
 			// Inclui o arquivo
-			core::do_require($classpath_subdata->fullpath);
+			self::do_require($classpath_subdata->fullpath);
 		}
 
 		// Retorna a URL base com sua modular (por padrão)
@@ -70,21 +74,29 @@
 		// Retorna o path limpo (útil para operações com as configurações)
 		static public function get_path_clipped($path, $using_base = CORE_MODULES) {
 			// Retorna o resultado gerado
-			return core::get_path_fixed(substr($path, strlen($using_base) + 1));
+			return self::get_path_fixed(substr($path, strlen($using_base) + 1));
+		}
+
+		// Obtém o estado booleano de uma informação
+		static public function get_state($info) {
+			//NOTE: esta é a verificação direta do PHP
+			if(!is_string($info))
+				return (bool) $info;
+
+			static $on_mode = array('true', 'on', 'yes');
+			return in_array($info, $on_mode);
 		}
 
 		// Separa um modular path em pedaços
-		//DEBUG: verificar se uma parte colide com um arquivo ou pasta
-		//DEBUG: retorna um erro se uma configuração passada não for suportada
-		static public function get_modular_parts( $modular_path, $configs = null ) {
+		static public function get_modular_parts($modular_path, $configs = null) {
 			$configs = (array) $configs;
 
 			// Se for uma string, é necessário quebrar a informação
 			if( is_string( $modular_path ) ) {
-				!isset( $configs['split_by'] )			&& $configs['split_by']			= '_';
-				!isset( $configs['group_by'] )			&& $configs['group_by']			= '__';
-				!isset( $configs['neutral_by'] )		&& $configs['neutral_by']		= "\0";
-				!isset( $configs['make_underlined'] )	&& $configs['make_underlined']	= true;
+				!isset( $configs['split_by'] )			&& $configs['split_by']				= '_';
+				!isset( $configs['group_by'] )			&& $configs['group_by']				= '__';
+				!isset( $configs['neutral_by'] )		&& $configs['neutral_by']			= "\0";
+				!isset( $configs['make_underlined'] )	&& $configs['make_underlined']		= true;
 
 				$modular_path = str_replace( $configs['group_by'], $configs['neutral_by'], $modular_path );
 				$modular_path = explode( $configs['split_by'], $modular_path );
@@ -92,17 +104,37 @@
 				foreach( $modular_path as $key => $item )
 					$modular_path[$key] = str_replace( $configs['neutral_by'], $configs['split_by'], $item );
 			}
+			// Transforma o path em array
+			else
+			if($modular_path === null) {
+				$modular_path = array();
+			}
 
 			// Após ter a array, é necessário fazer a busca pelos arquivos
-			!isset( $configs['start_dir'] )			&& $configs['start_dir']		= CORE_MODULES;
-			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']		= false;
-			!isset( $configs['search_modules'] )	&& $configs['search_modules']	= true;
-			!isset( $configs['search_paths'] )		&& $configs['search_paths']		= true;
-			!isset( $configs['path_clip'] )			&& $configs['path_clip']		= false;
-			!isset( $configs['path_complement'] )	&& $configs['path_complement']	= null;
-			!isset( $configs['file_extension'] )	&& $configs['file_extension']	= 'php';
-			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']	= false;
-			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']	= false;
+			!isset( $configs['modular_path_auto'] )	&& $configs['modular_path_auto']	= false;
+			!isset( $configs['start_dir'] )			&& $configs['start_dir']			= CORE_MODULES;
+			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']			= false;
+			!isset( $configs['search_modules'] )	&& $configs['search_modules']		= true;
+			!isset( $configs['search_paths'] )		&& $configs['search_paths']			= true;
+			!isset( $configs['path_clip'] )			&& $configs['path_clip']			= false;
+			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']		= false;
+			!isset( $configs['path_complement'] )	&& $configs['path_complement']		= null;
+			!isset( $configs['file_extension'] )	&& $configs['file_extension']		= 'php';
+			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']		= false;
+			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']		= false;
+
+			// Em modo depuração, verifica se alguma configuração não suportada foi definida
+			if(CORE_DEBUG === true) {
+				static $config_keys = array('modular_path_auto', 'split_by', 'group_by', 'neutral_by',
+					'make_underlined', 'start_dir', 'deep_modules', 'search_modules', 'search_paths',
+					'path_clip', 'path_clip_empty', 'path_complement', 'file_extension', 'make_fullpath');
+
+				$config_diff = array_diff(array_keys($configs), $config_keys);
+				if(!empty($config_diff)) {
+					$error = new core_error('Cx2000', null, array('unknow_keys' => $config_diff));
+					$error->run();
+				}
+			}
 
 			// Define o diretório de partida
 			$current_path = $configs['start_dir'];
@@ -115,6 +147,18 @@
 				$result->clipped = array_pop( $modular_path );
 			}
 
+			// Se necessário, remove o último elemento do path se ele estiver vazio
+			if($configs['path_clip_empty'] === true
+			&& end($modular_path) === '')
+				array_pop($modular_path);
+
+			// Se necessário, aplica a raiz do módulo
+			if($configs['modular_path_auto'] === true) {
+				if(empty($modular_path[0]))
+					array_shift($modular_path);
+				else
+				$modular_path = array_merge(self::get_caller_module_path(), $modular_path);
+			}
 			// Se for necessário buscar por módulos...
 			if( $configs['search_modules'] === true
 			&&  empty( $modular_path ) === false ) {
@@ -230,7 +274,7 @@
 
 			// Se for necessário gerar o path completo...
 			if( $configs['make_fullpath'] === true ) {
-				$result->fullpath = core::get_path_fixed( realpath( $current_path ) );
+				$result->fullpath = self::get_path_fixed( realpath( $current_path ) );
 			}
 
 			// Retorna o resultado gerado
@@ -255,10 +299,10 @@
 				// Se a informação cropada for diferente do CORE_ROOT, é uma informação válida
 				if(isset($backtrace['file'])
 				&& substr($backtrace['file'], 0, $crop_length) !== $core_root) {
-					return core::get_path_fixed($backtrace['file']);
+					return self::get_path_fixed($backtrace['file']);
 				}
 			}
-		} //DEBUG: deve acontecer um erro do tipo Exception, caso chegue até aqui
+		}
 
 		// Obtém o caminho do módulo de onde a última chamada foi feita
 		static public function get_caller_module_path() {
@@ -285,7 +329,7 @@
 
 		// Obtém o caminho escrito do módulo atual
 		static public function get_current_path() {
-			return core::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
+			return self::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
 		}
 
 		// Cria uma setlist baseado na informação recebida (array)
@@ -306,6 +350,72 @@
 			// Quando usado \, a informação é usada literalmente no objeto anterior
 			// http://stackoverflow.com/a/6243797/755393 @NikiC
 			return preg_split('~\\\\.(*SKIP)(*FAIL)|\,\s*~s', trim($data));
+		}
+
+		// Retorna true se o domínio for compatível
+		static public function is_domain($domains) {
+			$current_uri = null;
+
+			// Para cada domínio na lista...
+			foreach(setlist($domains) as $domain) {
+				// Define o schema do dominio
+				$domain = explode('://', $domain, 2);
+				if(!isset($domain[1]))
+					array_unshift($domain, 'http');
+
+				// Verifica se o scheme é compatível
+				$scheme_url = isset($_SERVER['HTTPS']) ? 'https' : 'http';
+				if($domain[0] !== $scheme_url)
+					continue;
+
+				// Verifica a porta do domínio
+				$domain = explode(':', $domain[1], 2);
+				if(isset($domain[1])
+				&& $domain[1] !== $_SERVER['SERVER_PORT'])
+					continue;
+
+				// Verifica o path
+				$domain = explode('/', $domain[0], 2);
+				if(isset($domain[1])) {
+					// Armazena o URI de chamada
+					if($current_uri === null)
+					$current_uri = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL']
+						: array_shift(explode('?', $_SERVER['REQUEST_URI'], 2));
+
+					if($current_uri !== "/{$domain[1]}")
+						continue;
+				}
+
+				// Verifica o hostname
+				if($domain[0] !== $_SERVER['SERVER_NAME']) {
+					// Verificação simplificada
+					if(preg_match(CORE_HOSTNAME_VALID, $domain[0]))
+						continue;
+
+					// Verificação avançada
+					if(!preg_match(self::_replace_domain($domain[0]), $_SERVER['SERVER_NAME']))
+						continue;
+				}
+
+				// Se tudo foi validado corretamente, retorna true
+				return true;
+			}
+
+			return false;
+		}
+
+		// Retorna se for localhost
+		static public function is_localhost() {
+			return self::is_domain(array('127.0.0.1', '[::1]', 'localhost'));
+		}
+
+		// Retorna se um módulo existe
+		static public function has_module($module_path) {
+			$module_path = self::get_modular_parts(explode('/', $module_path), array(
+				'search_paths' => false,
+				'modular_path_auto' => true
+			));
+			return !isset($module_path->remains);
 		}
 
 		// Publica um arquivo, redirecinando próximos pedidos diretamente para o destino (HTTP 301)
@@ -335,8 +445,17 @@
 			return $__is_file;
 		}
 
-		// Helper interno para filtrar um array, removendo seus itens vazios
-		static public function _not_empty( $data ) {
-			return !empty( $data );
+		// Helper interno para filtrar um array, removendo seus itens nulos
+		static public function _not_null($data) {
+			return !is_null($data);
+		}
+
+		// Faz os replaces dos dominios
+		static public function _replace_domain($domain) {
+			$domain = preg_replace('/\*(?!\?)/', CORE_HOSTNAME_WORD, $domain);
+			$domain = str_replace(array('.*?', '*?.', '.'),
+				array('(.'.CORE_HOSTNAME_WORD.')?', '('.CORE_HOSTNAME_WORD.'.)?', '\\.'), $domain);
+			$domain = preg_replace('/('.CORE_HOSTNAME_WORD.'\?(\\\.)|(\\\.)'.CORE_HOSTNAME_WORD.'\?)/', '($2$3$4$5)?', $domain);
+			return "/^{$domain}$/";
 		}
 	}

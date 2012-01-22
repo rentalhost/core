@@ -1,101 +1,4 @@
 
-html,
-body {
-	margin: 0;
-	cursor: default;
-	user-select: none;
-}
-
-body {
-	font: 9pt "Segoe UI";
-}
-
-div#header {
-	height: 50px;
-	background: #f5f5f5 url(images/header-background.png);
-	border-bottom: 5px #eeeeee solid;
-}
-div#header > div.content {
-	width: 1000px;
-	height: 50px;
-	margin-bottom: 5px;
-	position: absolute;
-	left: 50%;
-	margin-left: -500px;
-}
-div#header > div.content > span.labs-platform,
-div#header > div.content > span.labs-language {
-	font-size: 8pt;
-	height: 27px;
-	padding-top: 23px;
-	padding-right: 20px;
-	display: inline-block;
-	vertical-align: top;
-	float: right;
-	color: #B3B3B3;
-	user-select: initial;
-}
-
-div#header > div.content > span.labs-title,
-div#header > div.content > span.labs-dcolon {
-	font-size: 10pt;
-	height: 30px;
-	padding-top: 20px;
-	display: inline-block;
-	vertical-align: top;
-	color: #999999;
-}
-div#header > div.content > span.labs-title {
-	color: #4D4D4D;
-}
-
-div#content {
-	background: #f9f9f9 url(images/content-side-background.png) repeat-x;
-	border-bottom: 5px #e2e2e2 solid;
-}
-div#content > div.content {
-	background: url(images/content-background.png) repeat-y;
-	width: 990px;
-	padding: 0px 15px;
-	position: relative;
-	left: 50%;
-	margin-left: -510px;
-}
-
-/** BARRA DE FERRAMENTAS */
-ul#toolbar {
-	margin: 0;
-	margin-bottom: 5px;
-	padding: 5px 15px 5px;
-	background-color: #f9f9f9;
-	width: 960px;
-	list-style: none;
-	border-radius: 0 0 5px 5px;
-}
-ul#toolbar > li {
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	font-size: 8pt;
-	color: #004583;
-	cursor: pointer;
-	margin-right: 15px;
-	transition: color 0.075s ease-in-out;
-}
-ul#toolbar > li.no-margin {
-	margin-left: -15px;
-}
-ul#toolbar > li:hover {
-	color: #ff0000;
-}
-ul#toolbar > li.disabled {
-	cursor: default;
-	color: #c6c6c6;
-}
-ul#toolbar > li.float-right {
-	float: right;
-}
-
 /** CLASSE */
 div.unit-class {
 	border-left: 1px solid;
@@ -191,6 +94,31 @@ div.unit-class > span.name {
 }
 div.unit-class > span.message {
 	color: #b5b5b5;
+}
+
+div.unit-class > ul.actions {
+	margin: 0;
+	list-style: none;
+	float: right;
+	transition: opacity 0.1s ease-in-out;
+}
+div.unit-class > ul.actions > li {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	font-size: 8pt;
+	color: #004583;
+	margin-left: 15px;
+	transition: color 0.075s ease-in-out;
+	opacity: 0.8;
+}
+div.unit-class > ul.actions > li:hover {
+	color: #ff0000;
+	opacity: 1;
+}
+div.unit-class > ul.actions > li.disabled {
+	color: #c6c6c6;
+	opacity: 1;
 }
 
 div.unit-footer {
@@ -368,80 +296,4 @@ ul.file-lines li > span.button {
 }
 ul.file-lines li > span.button:hover {
 	color: black;
-}
-
-/** MODAL */
-div.black-background {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.75);
-	display: none;
-}
-
-div.modal-content {
-	position: absolute;
-	top: 10%;
-	left: 50%;
-	width: 480px;
-	margin-left: -240px;
-	background-color: white;
-	border: 8px #fafafa solid;
-	border-radius: 12px;
-	display: none;
-}
-div.modal-content > h1 {
-	margin: 16px 0 0 24px;
-	font-size: 10pt;
-}
-
-ul.lang-list {
-	margin: 15px;
-	padding: 0;
-	list-style: none;
-	font-size: 11pt;
-}
-ul.lang-list > li {
-	padding: 8px 12px 8px 48px;
-	border-radius: 4px;
-	border: 4px transparent solid;
-	margin-bottom: 4px;
-	transition: 0.11s ease-in-out;
-	transition-property: background-color, border-color;
-}
-ul.lang-list > li.lang-current {
-	background-color: #f3f3ff;
-}
-ul.lang-list > li.lang-current > span {
-	font-weight: bold;
-}
-ul.lang-list > li:hover {
-	background-color: #D2DFFF;
-	border-color: #CBDAFF;
-	cursor: pointer;
-}
-ul.lang-list > li > em {
-	color: #ccc;
-}
-
-/** OUTROS */
-div.button  {
-	display: inline-block;
-	color: #004583;
-	transition: color 0.075s ease-in-out;
-	opacity: 0.8;
-}
-div.button:hover {
-	color: #ff0000;
-	opacity: 1;
-}
-div.button.disabled {
-	color: #c6c6c6;
-	opacity: 1;
-}
-
-table.xdebug-error {
-	font: 11pt "Segoe UI";
 }

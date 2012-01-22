@@ -1,14 +1,22 @@
 <?php
 
-	/** HELPERS DE URL */
-
+	/** HELPERS DE SERVIDOR */
 	// Obtém o URL base
-	function get_baseurl($include_modular = true) {
+	function baseurl($include_modular = true) {
 		return core::get_baseurl($include_modular);
 	}
 
-	/** HELPERS DE CONTEÚDO */
+	// Verifica se é o domínio informado
+	function is_domain($domains) {
+		return core::is_domain($domains);
+	}
 
+	// Verifica se é um domínio local
+	function is_localhost() {
+		return core::is_localhost();
+	}
+
+	/** HELPERS DE CONTEÚDO */
 	// Carrega um core_view
 	function load($view_path, $view_args = null, $cancel_print = false) {
 		return new core_view($view_path, $view_args, $cancel_print);
@@ -20,7 +28,6 @@
 	}
 
 	/** HELPERS DE CHAMADA */
-
 	// Executa a chamada de um helper ou library
 	function call($command = null) {
 		// Se nenhum comando for definido, retorna o objeto de chamada
@@ -33,7 +40,6 @@
 	}
 
 	/** HELPERS DE LIBRARY */
-
 	// Carrega uma biblioteca
 	function library($libraries) {
 		foreach(setlist($libraries) as $library)
@@ -41,8 +47,14 @@
 		return true;
 	}
 
-	/** HELPERS DE DADOS */
+	// Carrega um helper
+	function helper($helpers) {
+		foreach(setlist($helpers) as $helper)
+			core_caller::load_helper($helper);
+		return true;
+	}
 
+	/** HELPERS DE DADOS */
 	// Converte uma string separada por vírgula em um array
 	function setlist($data) {
 		return core::parse_setlist($data);
@@ -59,16 +71,37 @@
 		return $obj;
 	}
 
-	/** HELPERS DE CONFIGURAÇÃO */
+	/** HELPERS DE BANCO DE DADOS */
+	// Cria uma nova configuração de banco de dados
+	function create_connection($connection_string, $index_name = null) {
+		return core_database::_create_connection($connection_string, $index_name);
+	}
 
+	// Obtém a conexão atual
+	function connection($index_name = null, $conn_path = null) {
+		return core_database::_get_connection($conn_path, $index_name);
+	}
+
+	/** HELPERS DE CONFIGURAÇÃO */
 	// Obtém uma configuração rapidamente, usando a modular atual
 	function config($key, $default_value = null) {
 		return core_config::get_config(null, $key, $default_value);
 	}
 
 	/** HELPERS DE IDIOMA */
-
 	// Obtém um controlador de idiomas
 	function lang($path, $lang_order = null) {
 		return new core_language($path, $lang_order);
+	}
+
+	/** HELPERS DE SESSÃO */
+	// Obtém um objeto de sessão
+	function &session($index_name = '') {
+		if(!isset($_SESSION))
+			session_start();
+
+		if(!isset($_SESSION[$index_name]))
+			$_SESSION[$index_name] = null;
+
+		return $_SESSION[$index_name];
 	}

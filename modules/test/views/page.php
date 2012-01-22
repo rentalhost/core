@@ -3,11 +3,14 @@
 	<head>
 		<title><?php echo $lang->head_title(CORE_TITLE); ?> :: <?php echo CORE_VERSION; ?></title>
 		<meta http-equiv="Content-type" content="text/html; charset=<?php echo $lang->head_charset; ?>" />
-		<base href="<?php echo get_baseurl(); ?>" />
+		<base href="<?php echo baseurl(); ?>" />
+		<link href="../core/publics/default.css" rel="stylesheet" type="text/css" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
-		<link href="publics/images/labs-icon.png" rel="shortcut icon" type="image/png" />
-		<script src="publics/jquery-1.7.js"></script>
-		<script src="publics/jquery.css.js"></script>
+		<link href="../core/publics/default-extra.css" rel="stylesheet" type="text/css" />
+		<link href="publics/images/labs-icon-small.png" rel="shortcut icon" type="image/png" />
+		<script src="../core/publics/jquery.js"></script>
+		<script src="../core/publics/jquery.css.js"></script>
+		<script src="../core/publics/default.js"></script>
 		<script src="publics/default.js"></script>
 	</head>
 	<body>
@@ -44,7 +47,7 @@
 		<div id="content">
 			<div class="content">
 				<ul id="toolbar">
-					<li data-href="?default"><?php echo $lang->button_run; ?></li>
+					<li data-href=""><?php echo $lang->button_run; ?></li>
 					<?php if($xdebug_enabled): ?>
 					<li data-href="?coverage"><?php echo $lang->button_coverage; ?></li>
 					<li data-href="?coverage&hidden-success" class="no-margin">[H]</li>
@@ -53,6 +56,7 @@
 					<li class="disabled no-margin">[H]</li>
 					<?php endif; ?>
 					<li class="float-right accept-all disabled"><?php echo $lang->button_accept_all; ?></li>
+					<li data-href="../core" class="float-right"><?php echo $lang->button_manager; ?></li>
 				</ul>
 
 				<div id="classes-realm">
@@ -66,7 +70,8 @@
 						// Obtém e imprime as classes diretamente no modelo
 						$result = '';
 						$model_attrs = array(
-							'lang' => lang('models')
+							'lang' => lang('models'),
+							'page_lang' => $lang
 						);
 						foreach(call('__class::get_all') as $value) {
 							$model_attrs['class'] = (object) $value;
@@ -110,11 +115,13 @@
 			<h1><?php echo $lang->language_available; ?></h1>
 			<ul class="lang-list">
 				<?php
+
 					$lang_list = core_language::get_available(null, true);
 					asort($lang_list);
 
 					foreach($lang_list as $lang_id => $lang_name):
 						$current_class = $lang_order[0] === $lang_id ? ' lang-current' : null;
+
 				?>
 				<li class="change-language<?php echo $current_class; ?>" data-lang-id="<?php echo $lang_id; ?>">
 					<span><?php echo htmlspecialchars($lang_name); ?></span>

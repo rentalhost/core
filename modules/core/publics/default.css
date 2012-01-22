@@ -1,0 +1,51 @@
+
+html,
+body {
+	margin: 0;
+	cursor: default;
+	user-select: none;
+}
+
+body {
+	font: 9pt "Segoe UI";
+}
+
+div#header {
+	height: 50px;
+	background: #f5f5f5 url(images/header-background.png);
+	border-bottom: 5px #eeeeee solid;
+}
+div#header > div.content {
+	width: 1000px;
+	height: 50px;
+	margin-bottom: 5px;
+	position: absolute;
+	left: 50%;
+	margin-left: -500px;
+}
+
+div#header > div.content > span.labs-title,
+div#header > div.content > span.labs-dcolon {
+	font-size: 10pt;
+	height: 30px;
+	padding-top: 20px;
+	display: inline-block;
+	vertical-align: top;
+	color: #999999;
+}
+div#header > div.content > span.labs-title {
+	color: #4D4D4D;
+}
+
+div#content {
+	background: #f9f9f9 url(images/content-side-background.png) repeat-x;
+	border-bottom: 5px #e2e2e2 solid;
+}
+div#content > div.content {
+	background: url(images/content-background.png) repeat-y;
+	width: 990px;
+	padding: 0px 15px;
+	position: relative;
+	left: 50%;
+	margin-left: -510px;
+}

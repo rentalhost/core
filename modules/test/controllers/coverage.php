@@ -13,7 +13,7 @@
 				return false;
 
 			// Carrega o arquivo, se existir
-			$file = core::get_current_path() . "/files/{$_POST['file']}.lines";
+			$file = core::get_current_path() . "/files/lines/{$_POST['file']}.lines";
 			$data = is_file($file)
 				  ? json_decode(file_get_contents($file), true)
 				  : array();
@@ -35,7 +35,7 @@
 				return false;
 
 			// Carrega o arquivo, se existir
-			$file = core::get_current_path() . "/files/{$_POST['file']}.lines";
+			$file = core::get_current_path() . "/files/lines/{$_POST['file']}.lines";
 			$data = is_file($file)
 				  ? json_decode(file_get_contents($file), true)
 				  : array();

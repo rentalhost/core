@@ -67,24 +67,27 @@
 		// Lança uma exceção baseada no status
 		private function _throw_exception() {
 			if(($this->_status & self::STATUS_CONTROLLER_NOT_FOUND) === self::STATUS_CONTROLLER_NOT_FOUND) {
-				throw new core_exception("Controller file is not found at \"{$this->_modular_data->fullpath}\".");
+				$error = new core_error('Cx2002', null, array('args' => array($this->_modular_data->fullpath)));
 			}
 			else
 			if(($this->_status & self::STATUS_METHOD_REQUIRED) === self::STATUS_METHOD_REQUIRED) {
-				throw new core_exception("Controller method is required in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2003', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_PATH_REQUIRED) === self::STATUS_PATH_REQUIRED) {
-				throw new core_exception("Controller path not found in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2004', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_MODULAR_REQUIRED) === self::STATUS_MODULAR_REQUIRED) {
-				throw new core_exception("Controller modular not found in \"{$this->_modular_data->url}\".");
+				$error = new core_error('Cx2005', null, array('args' => array($this->_modular_data->url)));
 			}
 			else
 			if(($this->_status & self::STATUS_METHOD_NOT_EXISTS) === self::STATUS_METHOD_NOT_EXISTS) {
-				throw new core_exception("Controller method \"{$this->_modular_data->class}::{$this->_modular_data->method}\" not found.");
+				$error = new core_error('Cx2006', null,
+					array('args' => array("{$this->_modular_data->class}::{$this->_modular_data->method}")));
 			}
+
+			$error->run();
 		}
 
 		// Executa o controller
@@ -200,11 +203,6 @@
 		}
 
 		// Carrega uma URL
-		//TODO: suporte a route exchange. Ex: [any]
-		//TODO: quando o método chamado recebe .json no final, altera automaticamente o tipo de saída
-		//DEBUG: verificar por ambiguidade no conteúdo
-		//DEBUG: só deve haver uma classe de controller definida no arquivo incluído
-		//DEBUG: se o método não existir, exibe um erro
 		static public function _create_controller( $modular_path_data, $cancel_print = false, $auto_execute = true,
 				$can_detect_caller_path = false ) {
 			// Armazena o método padrão, ele será usado em vários momentos
@@ -260,6 +258,7 @@
 				// Ex: http://127.0.0.1/site
 				$modular_path_data = core::get_modular_parts( $modular_path_data, array(
 					'search_paths' => false,
+					'path_clip_empty' => true,
 					'make_fullpath' => true
 				) );
 
@@ -285,11 +284,11 @@
 				// Ex: http://127.0.0.1/site/master ou simplesmente http://127.0.0.1/master
 				$modular_path_data = core::get_modular_parts( @$modular_path_data->remains, array(
 					'start_dir' => $modular_path_data->fullpath . '/controllers',
-					'search_modular' => false
+					'search_modules' => false
 				) );
 
 				// Se o controller não for definido, define com o valor padrão
-				if(isset($modular_path_data->path)) {
+				if(!empty($modular_path_data->path)) {
 					$modular_path->path = $modular_path_data->path;
 				}
 				// Se a rota estrita estiver desativada, preenche com a configuração padrão
@@ -331,7 +330,6 @@
 			}
 
 			// Senão, faz um require da classe solicitada
-			//DEBUG: o arquivo precisa existir
 			if(class_exists($modular_path->class, false) === false)
 				core::do_require($modular_path->fullpath);
 

@@ -6,7 +6,6 @@
 			$this->hello_world();
 		}
 
-		//TODO: usar View!
 		private function hello_world() {
 			load( 'hello_world' );
 		}

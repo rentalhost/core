@@ -31,7 +31,6 @@
 		private $_result_printed	= false;
 
 		// Cria uma nova view
-		//TODO: penser em uma forma de proteger views estrangeiras (site//hello_world)
 		public function __construct($view_path, $view_args, $cancel_print) {
 			// Corrige o path solicitado
 			$this->_proposed_view = core::get_path_fixed( $view_path );
@@ -48,20 +47,10 @@
 				return;
 			}
 
-			// Se o primeiro caractere for uma /, a view será buscada desde o princípio
-			$deep_search = $this->_proposed_view[0] === '/';
-
-			// Quebra a view por barras e remove os resultados vazios
-			// É necessário fazer um key reset para que o deep search funcione corretamente
-			$view_path_data = array_values( array_filter( explode( '/', $this->_proposed_view ), 'core::_not_empty' ) );
-
 			// Busca pelo caminho da view
-			$view_path_data = core::get_modular_parts( $view_path_data, array(
-				'start_dir' => $deep_search === true
-					? CORE_MODULES
-					: CORE_MODULES . '/' . join( '/_', core::get_caller_module_path() ),
+			$view_path_data = core::get_modular_parts(explode('/', $this->_proposed_view), array(
+				'modular_path_auto' => true,
 				'path_complement' => '/views',
-				'deep_modules' => $deep_search === false,
 				'make_fullpath' => true
 			) );
 
@@ -119,21 +108,23 @@
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
 				if(($this->_status & self::STATUS_VIEW_IS_INSECURE) === self::STATUS_VIEW_IS_INSECURE) {
-					throw new core_exception("View is not valid because it is insecure: \"{$this->_proposed_view}\".");
+					$error = new core_error('Cx2008', null, array('args' => array($this->_proposed_view)));
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_HAS_REMAINS) === self::STATUS_VIEW_HAS_REMAINS) {
 					$remains = join('/', $this->_modular_data->remains);
-					throw new core_exception("View is not valid because it have remains on path definition: \"{$remains}\".");
+					$error = new core_error('Cx2009', null, array('args' => array($remains, $this->_proposed_view)));
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_IS_EMPTY) === self::STATUS_VIEW_IS_EMPTY) {
-					throw new core_exception("View is not valid because it is empty.");
+					$error = new core_error('Cx200A');
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_NOT_FOUND) === self::STATUS_VIEW_NOT_FOUND) {
-					throw new core_exception("View is not valid because it is a dir: \"{$this->_path}\".");
+					$error = new core_error('Cx200B', null, array('args' => array($this->_path)));
 				}
+
+				$error->run();
 			}
 
 			return $this;
