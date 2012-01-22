@@ -1,7 +1,5 @@
 -- MÁXIMA PRIORIDADE --
-- core: get_modular_parts - opção que permita transformar ^/ ou ^__ no módulo base (atual) facilmente
-	- nota: deverá verificar todas as funções que usam a função para aplicar a alteração, se necessário!
-- test: obter informações sobre tempo e uso de memória, assim como o total da página
+- core_exception: localizar onde ainda faz uso de message;
 
 -- ALTA PRIORIDADE --
 
@@ -20,6 +18,7 @@
 - controller: adicionar $_proposed_url nas variáveis;
 - mover o sistema do file-coverage para uma library especializada;
 - controllers começados por _ são considerados privados e só podem ser executados via execute()
+- test: obter informações sobre tempo e uso de memória, assim como o total da página
 
 -- MILESTONE 1.1 --
 - atom: classes atom_code para gerenciar o código (parser, formatter e compiler);
