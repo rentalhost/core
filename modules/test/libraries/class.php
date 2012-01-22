@@ -7,12 +7,12 @@
 
 		// Tipo numerico / prioridade
 		static private $_priority = array(
-			'unavailable' => 0,
-			'success'	=> 1,
-			'new'		=> 2,
-			'removed'	=> 3,
-			'failed'	=> 4,
-			'exception'	=> 5
+			'unavailable'	=> 0,
+			'success'		=> 1,
+			'new'			=> 2,
+			'removed'		=> 3,
+			'failed'		=> 4,
+			'exception'		=> 5
 		);
 
 		// Obtém informações sobre as classes existentes
@@ -29,14 +29,14 @@
 			else
 			$filter_path = '/^'.preg_quote($_GET['class'], '-').'\..*\.valid$/';
 
-			$files = call('__dir::get_files', $current_path . '/results', false, $filter_path);
+			$files = call('__dir::get_files', $current_path . '/files/results', false, $filter_path);
 			foreach( $files as $file ) {
 				$file_id = substr(array_pop(array_slice(explode('/', $file), -1)), 0, -6);
 				$file_data = explode('.', $file_id);
 				self::$_files[$file_data[0]][] = array($file_id, $file_data, $file);
 			}
 
-			foreach(call('__dir::get_files', $current_path . '/classes') as $file)
+			foreach(call('__dir::get_files', $current_path . '/files/classes') as $file)
 				require_once $file;
 
 			$loaded_classes = array_diff( get_declared_classes(), $loaded_classes );
@@ -156,7 +156,7 @@
 					return false;
 
 				// Se for, remove o resultado atual, se existir, e move o novo resultado sobre este
-				$file =  "{$current_path}/results/{$id}";
+				$file =  "{$current_path}/files/results/{$id}";
 			   @unlink("{$file}.valid");
 				rename("{$file}.last", "{$file}.valid");
 			}
@@ -171,7 +171,7 @@
 				return false;
 
 			// A rejeição é apenas a remoção do arquivo .valid do ID referente
-		   @unlink(core::get_current_path() . "/results/{$id}.valid");
+		   @unlink(core::get_current_path() . "/files/results/{$id}.valid");
 
 			return true;
 		}
@@ -213,7 +213,7 @@
 			$result = call( '__export::prepare_result', $result );
 			$result_type = 'new';
 
-			$file = core::get_current_path() . "/results/{$id}";
+			$file = core::get_current_path() . "/files/results/{$id}";
 			$json_result = json_encode($result);
 
 			if(is_file("{$file}.valid") === false
