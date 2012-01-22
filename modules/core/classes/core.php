@@ -25,7 +25,7 @@
 
 			// Localiza uma user class
 			// Primeiro localiza a parte modular
-			$classpath = core::get_modular_parts( $classname, array(
+			$classpath = self::get_modular_parts( $classname, array(
 				'path_clip' => true,
 				'search_paths' => false,
 				'make_fullpath' => true
@@ -39,7 +39,7 @@
 			}
 
 			// O próximo passo é localizar o arquivo que será incluido
-			$classpath_subdata = core::get_modular_parts( $classpath->remains, array(
+			$classpath_subdata = self::get_modular_parts( $classpath->remains, array(
 				'start_dir' => $classpath->fullpath,
 				'search_modules' => false,
 				'make_fullpath' => true
@@ -55,7 +55,7 @@
 			}
 
 			// Inclui o arquivo
-			core::do_require($classpath_subdata->fullpath);
+			self::do_require($classpath_subdata->fullpath);
 		}
 
 		// Retorna a URL base com sua modular (por padrão)
@@ -74,7 +74,7 @@
 		// Retorna o path limpo (útil para operações com as configurações)
 		static public function get_path_clipped($path, $using_base = CORE_MODULES) {
 			// Retorna o resultado gerado
-			return core::get_path_fixed(substr($path, strlen($using_base) + 1));
+			return self::get_path_fixed(substr($path, strlen($using_base) + 1));
 		}
 
 		// Obtém o estado booleano de uma informação
@@ -266,7 +266,7 @@
 
 			// Se for necessário gerar o path completo...
 			if( $configs['make_fullpath'] === true ) {
-				$result->fullpath = core::get_path_fixed( realpath( $current_path ) );
+				$result->fullpath = self::get_path_fixed( realpath( $current_path ) );
 			}
 
 			// Retorna o resultado gerado
@@ -291,7 +291,7 @@
 				// Se a informação cropada for diferente do CORE_ROOT, é uma informação válida
 				if(isset($backtrace['file'])
 				&& substr($backtrace['file'], 0, $crop_length) !== $core_root) {
-					return core::get_path_fixed($backtrace['file']);
+					return self::get_path_fixed($backtrace['file']);
 				}
 			}
 		}
@@ -321,7 +321,7 @@
 
 		// Obtém o caminho escrito do módulo atual
 		static public function get_current_path() {
-			return core::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
+			return self::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
 		}
 
 		// Cria uma setlist baseado na informação recebida (array)
@@ -406,11 +406,11 @@
 			$module_path = explode('/', $module_path);
 
 			if(!empty($module_path[0]))
-				$module_path = array_merge(core::get_caller_module_path(), $module_path);
+				$module_path = array_merge(self::get_caller_module_path(), $module_path);
 			else
 			array_shift($module_path);
 
-			$module_path = core::get_modular_parts($module_path, array('search_paths' => false));
+			$module_path = self::get_modular_parts($module_path, array('search_paths' => false));
 			return !isset($module_path->remains);
 		}
 

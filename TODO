@@ -1,9 +1,8 @@
 -- MÁXIMA PRIORIDADE --
-- core: usar modelo jquery para métodos (attr ao invés de get_attr, attr ao invés de set_attr)
-
--- ALTA PRIORIDADE --
 - core: get_modular_parts - opção que permita transformar ^/ ou ^__ no módulo base (atual) facilmente
 	- nota: deverá verificar todas as funções que usam a função para aplicar a alteração, se necessário!
+
+-- ALTA PRIORIDADE --
 
 -- MÉDIA PRIORIDADE --
 - database: adicionar diferentes propriedades na conexão;
