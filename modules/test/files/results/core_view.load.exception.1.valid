@@ -1,1 +1,1 @@
-["object",{"code":["number",0],"file":["string",".\/core\/modules\/core\/classes\/core_view.php"],"message":["string","View is not valid because it is a dir: \".\/core\/modules\/test\/_useful\/views\/sub_test\"."]},"core_exception"]
+["object",{"code":["string","Cx200B"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","A view n\u00e3o \u00e9 v\u00e1lida pois informa apenas o diret\u00f3rio (<code>\".\/core\/modules\/test\/_useful\/views\/sub_test\"<\/code>)."]},"core_exception"]

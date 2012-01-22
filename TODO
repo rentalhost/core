@@ -1,10 +1,9 @@
 -- MÁXIMA PRIORIDADE --
-- core_exception: localizar onde ainda faz uso de message;
+- database: adicionar diferentes propriedades na conexão;
 
 -- ALTA PRIORIDADE --
 
 -- MÉDIA PRIORIDADE --
-- database: adicionar diferentes propriedades na conexão;
 
 -- BAIXA PRIORIDADE --
 - database: adicionar suporte a transações;

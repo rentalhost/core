@@ -108,21 +108,23 @@
 		public function required() {
 			if( $this->_status !== self::STATUS_SUCCESS ) {
 				if(($this->_status & self::STATUS_VIEW_IS_INSECURE) === self::STATUS_VIEW_IS_INSECURE) {
-					throw new core_exception("View is not valid because it is insecure: \"{$this->_proposed_view}\".");
+					$error = new core_error('Cx2008', null, array('args' => array($this->_proposed_view)));
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_HAS_REMAINS) === self::STATUS_VIEW_HAS_REMAINS) {
 					$remains = join('/', $this->_modular_data->remains);
-					throw new core_exception("View is not valid because it have remains on path definition: \"{$remains}\".");
+					$error = new core_error('Cx2009', null, array('args' => array($remains, $this->_proposed_view)));
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_IS_EMPTY) === self::STATUS_VIEW_IS_EMPTY) {
-					throw new core_exception("View is not valid because it is empty.");
+					$error = new core_error('Cx200A');
 				}
 				else
 				if(($this->_status & self::STATUS_VIEW_NOT_FOUND) === self::STATUS_VIEW_NOT_FOUND) {
-					throw new core_exception("View is not valid because it is a dir: \"{$this->_path}\".");
+					$error = new core_error('Cx200B', null, array('args' => array($this->_path)));
 				}
+
+				$error->run();
 			}
 
 			return $this;

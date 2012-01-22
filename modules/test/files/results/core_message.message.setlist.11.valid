@@ -1,1 +1,1 @@
-["object",{"code":["number",0],"file":["string",".\/core\/modules\/core\/classes\/core_message.php"],"message":["string","Message type \"fake\" unknow in \"fake\"."]},"core_exception"]
+["object",{"code":["string","Cx2007"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","O tipo de mensagem informado <code>\"fake\"<\/code> \u00e9 desconhecido em <code>\"fake\"<\/code>."]},"core_exception"]

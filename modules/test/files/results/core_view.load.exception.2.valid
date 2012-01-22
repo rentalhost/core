@@ -1,1 +1,1 @@
-["object",{"code":["number",0],"file":["string",".\/core\/modules\/core\/classes\/core_view.php"],"message":["string","View is not valid because it have remains on path definition: \"fail\"."]},"core_exception"]
+["object",{"code":["string","Cx2009"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","A view n\u00e3o \u00e9 v\u00e1lida pois sobrou informa\u00e7\u00f5es na sua chamada (sobra: <code>\"fail\"<\/code> em <code>\"useful\/fail\"<\/code>)."]},"core_exception"]

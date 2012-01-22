@@ -39,7 +39,8 @@
 						case 'exception':	$code|= self::TYPE_EXCEPTION;	break;
 						case 'all':			$code = self::TYPE_ALL;			break;
 						default:
-							throw new core_exception("Message type \"{$item}\" unknow in \"{$type_data}\".");
+							$error = new core_error('Cx2007', null, array('args' => array($item, $type_data)));
+							$error->run();
 					}
 				}
 
