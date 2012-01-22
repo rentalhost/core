@@ -20,21 +20,10 @@
 				$lang_order = config('language_default_order');
 			$this->_lang_order = self::_get_order(setlist($lang_order));
 
-			// Armazena o caminho onde será feito a busca
-			// Se o primeiro caractere for uma /, o language será buscado desde o princípio
-			$deep_search = $path[0] === '/';
-
-			// Quebra o language por barras e remove os resultados vazios
-			// É necessário fazer um key reset para que o deep search funcione corretamente
-			$lang_path_data = array_values(array_filter(explode('/', $path), 'core::_not_empty'));
-
 			// Busca pelo caminho do language
-			$lang_path_data = core::get_modular_parts($lang_path_data, array(
-				'start_dir' => $deep_search === true
-					? CORE_MODULES
-					: CORE_MODULES . '/' . join('/_', core::get_caller_module_path()),
+			$lang_path_data = core::get_modular_parts(explode('/', $path), array(
+				'modular_path_auto' => true,
 				'path_complement' => '/languages',
-				'deep_modules' => $deep_search === false,
 				'make_fullpath' => true
 			));
 

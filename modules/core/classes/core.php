@@ -147,6 +147,11 @@
 				$result->clipped = array_pop( $modular_path );
 			}
 
+			// Se necessário, remove o último elemento do path se ele estiver vazio
+			if($configs['path_clip_empty'] === true
+			&& end($modular_path) === '')
+				array_pop($modular_path);
+
 			// Se necessário, aplica a raiz do módulo
 			if($configs['modular_path_auto'] === true) {
 				if(empty($modular_path[0]))
@@ -154,12 +159,6 @@
 				else
 				$modular_path = array_merge(self::get_caller_module_path(), $modular_path);
 			}
-
-			// Se necessário, remove o último elemento do path se ele estiver vazio
-			if($configs['path_clip_empty'] === true
-			&& end($modular_path) === '')
-				array_pop($modular_path);
-
 			// Se for necessário buscar por módulos...
 			if( $configs['search_modules'] === true
 			&&  empty( $modular_path ) === false ) {

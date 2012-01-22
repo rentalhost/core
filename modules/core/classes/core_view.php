@@ -47,20 +47,10 @@
 				return;
 			}
 
-			// Se o primeiro caractere for uma /, a view será buscada desde o princípio
-			$deep_search = $this->_proposed_view[0] === '/';
-
-			// Quebra a view por barras e remove os resultados vazios
-			// É necessário fazer um key reset para que o deep search funcione corretamente
-			$view_path_data = array_values( array_filter( explode( '/', $this->_proposed_view ), 'core::_not_empty' ) );
-
 			// Busca pelo caminho da view
-			$view_path_data = core::get_modular_parts( $view_path_data, array(
-				'start_dir' => $deep_search === true
-					? CORE_MODULES
-					: CORE_MODULES . '/' . join( '/_', core::get_caller_module_path() ),
+			$view_path_data = core::get_modular_parts(explode('/', $this->_proposed_view), array(
+				'modular_path_auto' => true,
 				'path_complement' => '/views',
-				'deep_modules' => $deep_search === false,
 				'make_fullpath' => true
 			) );
 
