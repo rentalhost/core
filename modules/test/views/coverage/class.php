@@ -20,7 +20,7 @@
 
 ?>
 
-<div class="unit-class <?php echo $type; ?>-type" data-percentage="<?php echo $percentage; ?>">
+<div class="unit-class <?php echo $type; ?>-type file-coverage" data-percentage="<?php echo $percentage; ?>">
 	<span class="strong"><?php echo $lang->strong_file; ?></span>
 	<span class="name"><?php echo $name; ?></span>
 	<span>::</span>

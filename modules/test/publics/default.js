@@ -15,7 +15,7 @@ $(function(){
 	});
 
 	// Dá um auto-click em alguns tipos de classes
-	div_classes.filter('.unavailable-type, .success-type').click();
+	div_classes.filter('.unavailable-type, .success-type, .failed-type.file-coverage').click();
 
 	// Dá um auto-click em alguns tipos de resultados
 	div_units.filter('.new-type, .removed-type, .failed-type, .exception-type').click();
