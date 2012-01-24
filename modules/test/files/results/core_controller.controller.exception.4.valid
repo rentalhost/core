@@ -1,1 +1,1 @@
-["object",{"code":["string","Cx2004"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","O caminho de controle precisa ser informado em <code>\"http:\/\/...\/core\/test\/useful\/fake\/index\"<\/code>."]},"core_exception"]
+["object",{"code":["string","Cx2004"],"file":["string",".\/core\/modules\/core\/classes\/core_error.php"],"message":["string","O caminho de controle precisa ser informado em <code>http:\/\/...\/core\/test\/useful\/fake\/index<\/code>."]},"core_exception"]
