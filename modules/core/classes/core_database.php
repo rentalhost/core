@@ -66,7 +66,12 @@
 		}
 
 		// Abre a conexão com o banco
-		public function connect() {
+		public function connect($reconnect = false) {
+			// Se já houver conexão, desconecta antes (reconexão)
+			if($reconnect === true
+			&& $this->_connection_string === null)
+				$this->disconnect();
+
 			// Somente se não houver conexão...
 			if($this->_connected === false) {
 				// Se o array de conexão ainda não foi definido, gera
