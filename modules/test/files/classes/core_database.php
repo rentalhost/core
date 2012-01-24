@@ -16,5 +16,24 @@
 			$conn = connection('fake');
 			$this->test(1, $conn->get_connection_string());
 			$this->test(2, $conn->get_connection_string());
+
+			$this->test(3, $conn->get_property('driver'));
+			$this->test(4, $conn->get_property('username'));
+			$this->test(5, $conn->get_property('password'));
+			$this->test(6, $conn->get_property('port'));
+			$this->test(7, $conn->get_property('database'));
+			$this->test(8, $conn->get_property('persistent'));
+			$this->test(9, $conn->get_property('connect'));
+			$this->test(10, $conn->get_property('charset'));
+
+			$this->test(11, $conn->set_property('driver', 'pdo'), 'currently only for test');
+			$this->test(12, $conn->set_property('username', 'newuser'));
+			$this->test(13, $conn->set_property('password', 'oldpass'));
+			$this->test(14, $conn->set_property('port', 2012));
+			$this->test(15, $conn->set_property('database', 'samedatabase'));
+			$this->test(16, $conn->set_property('persistent', 'on'));
+			$this->test(17, $conn->set_property('connect', 'yes'));
+			$this->test(18, $conn->set_property('charset', 'utf8'));
+			$this->test(19, $conn->get_connection_string());
 		}
 	}

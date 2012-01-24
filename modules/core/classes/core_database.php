@@ -16,6 +16,8 @@
 
 		// Configurações booleanas
 		static private $_bool_props = array('persistent', 'connect');
+		// Configurações gerais
+		static private $_props = array('persistent', 'charset', 'connect');
 
 		// Cria uma nova conexão
 		public function __construct($connection_string, $index_name) {
@@ -38,24 +40,25 @@
 			// Decodifica a URL enviada
 			$cs = parse_url($this->_connection_string);
 
-			// Preenche o scheme/driver, a porta, a senha e o path/database
-			$cs['scheme'] = isset($cs['scheme']) ? $cs['scheme'] : 'mysqli';
-			$cs['host'] = isset($cs['host']) ? $cs['host'] : $_SERVER['HTTP_HOST'];
-			$cs['port'] = isset($cs['port']) ? (int) $cs['port'] : 3306;
-			$cs['user'] = isset($cs['user']) ? $cs['user'] : null;
-			$cs['pass'] = isset($cs['pass']) ? $cs['pass'] : null;
-			$cs['path'] = (isset($cs['path']) && $cs['path'] !== '/') ? substr($cs['path'], 1) : null;
-
 			// Preenche a persistência de conexão e o charset que será usado
 			if(isset($cs['query']))
 				parse_str($cs['query'], $qs);
 			else $qs = array();
 
-			foreach(self::$_bool_props as $item)
-				$qs[$item] = isset($qs[$item]) ? core::get_state($qs[$item]) : null;
+			// Preenche o scheme/driver, a porta, a senha e o path/database
+			$cs = array(
+				'driver'	=> isset($cs['scheme']) ? $cs['scheme'] : 'mysqli',
+				'host'		=> isset($cs['host']) ? $cs['host'] : $_SERVER['HTTP_HOST'],
+				'port'		=> isset($cs['port']) ? (int) $cs['port'] : 3306,
+				'username'	=> isset($cs['user']) ? $cs['user'] : null,
+				'password'	=> isset($cs['pass']) ? $cs['pass'] : null,
+				'database'	=> (isset($cs['path']) && $cs['path'] !== '/') ? substr($cs['path'], 1) : null
+			);
 
-			$qs['charset'] = isset($qs['charset']) ? $qs['charset'] : null;
-			$cs['query'] = $qs;
+			foreach(self::$_bool_props as $item)
+				$cs[$item] = isset($qs[$item]) ? core::get_state($qs[$item]) : null;
+
+			$cs['charset'] = isset($qs['charset']) ? $qs['charset'] : null;
 
 			// Remove os dados da conexão
 			$this->_connection_string = null;
@@ -73,24 +76,24 @@
 				// Define o host
 				$hostname = $this->_connection_array['host'];
 
-				// Se for necessário conexão permanente
-				if($this->_connection_array['query']['persistent'] === true
-				|| ($this->_connection_array['query']['persistent'] === null
-				 && config('database_persistent_mode') === true))
-				 	if(PHP_VERSION >= 503000)
+				// Se for necessário conexão permanente (apenas PHP 5.3)
+				if(PHP_VERSION >= 503000)
+					if($this->_connection_array['persistent'] === true
+					|| ($this->_connection_array['persistent'] === null
+					 && config('database_persistent_mode') === true))
 						$hostname = "p:{$hostname}";
 
 				// Abre a conexão
 				$this->_connection = new mysqli($hostname,
-					$this->_connection_array['user'],
-					$this->_connection_array['pass'],
-					$this->_connection_array['path'],
+					$this->_connection_array['username'],
+					$this->_connection_array['password'],
+					$this->_connection_array['database'],
 					$this->_connection_array['port']);
 
 				// Define o charset
 					//config('database_default_charset')
-				$charset = $this->_connection_array['query']['charset'] !== null
-					? $this->_connection_array['query']['charset'] : config('database_default_charset');
+				$charset = $this->_connection_array['charset'] !== null
+					? $this->_connection_array['charset'] : config('database_default_charset');
 				$this->_connection->set_charset($charset);
 
 				// Define que a conexão foi feita
@@ -129,34 +132,33 @@
 				return $this->_connection_string;
 
 			// Define o scheme/driver
-			$string = "{$this->_connection_array['scheme']}://";
+			$string = "{$this->_connection_array['driver']}://";
 
 			// Se o usuário ou a senha for definido
-			if($this->_connection_array['user']
-			|| $this->_connection_array['pass']) {
+			if($this->_connection_array['username']
+			|| $this->_connection_array['password']) {
 				// Se ao menos o usuário for definido
-				if($this->_connection_array['user'])
-					$string.= $this->_connection_array['user'];
+				if($this->_connection_array['username'])
+					$string.= $this->_connection_array['username'];
 
 				// Se ao menos a senha for definida
-				if($this->_connection_array['pass'])
-					$string.= ":{$this->_connection_array['pass']}";
+				if($this->_connection_array['password'])
+					$string.= ":{$this->_connection_array['password']}";
 
 				$string.= "@";
 			}
 
 			// Define o hostname, porta e database
 			$string.= "{$this->_connection_array['host']}:{$this->_connection_array['port']}" .
-					  "/{$this->_connection_array['path']}";
+					  "/{$this->_connection_array['database']}";
 
 			// Armazena a query
-			$query = $this->_connection_array['query'];
-			$query = array_filter($query, 'core::_not_null');
-
-			// Configurações booleanas
-			foreach(self::$_bool_props as $item) {
-				if(isset($query[$item]))
-					$query[$item] = $query[$item] === true ? 'true' : 'false';
+			$query = array();
+			foreach(self::$_props as $item) {
+				if(in_array($item, self::$_bool_props))
+				{ $query[$item] = $this->_connection_array[$item] === true ? 'true' : 'false'; }
+				else
+				{ $query[$item] = $this->_connection_array[$item]; }
 			}
 
 			// Se houver query
@@ -166,6 +168,30 @@
 			// Armazena e retorna o resultado gerado
 			$this->_connection_string = $string;
 	  		return $string;
+		}
+
+		// Obtém uma propriedade individual
+		public function get_property($property) {
+			// Se o array ainda não foi construído, o constrói
+			if($this->_connection_array === null)
+				$this->_parse_connection_string();
+
+			return $this->_connection_array[$property];
+		}
+
+		// Define uma propriedade individual
+		public function set_property($property, $value) {
+			// Se o array ainda não foi construído, o constrói
+			if($this->_connection_array === null)
+				$this->_parse_connection_string();
+			$this->_connection_string = null;
+
+			if(in_array($property, self::$_bool_props))
+			{ $this->_connection_array[$property] = core::get_state($value); }
+			else
+			{ $this->_connection_array[$property] = $value; }
+
+			return $this->_connection_array[$property];
 		}
 
 		/** OBJETO */
