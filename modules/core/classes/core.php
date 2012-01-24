@@ -445,11 +445,6 @@
 			return $__is_file;
 		}
 
-		// Helper interno para filtrar um array, removendo seus itens nulos
-		static public function _not_null($data) {
-			return !is_null($data);
-		}
-
 		// Faz os replaces dos dominios
 		static public function _replace_domain($domain) {
 			$domain = preg_replace('/\*(?!\?)/', CORE_HOSTNAME_WORD, $domain);
