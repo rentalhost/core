@@ -10,6 +10,7 @@
 	// Cria uma conexão falsa, para testes
 	create_connection('mysqli://username:password@servername:1234/dbname' .
 		'?persistent=false&charset=latin1&connect=false', 'fake');
+	create_connection('mysqli://fakeserver', 'fake2');
 
 	// Inclui alguns arquivos que não vão para o commit
 	if(CORE_DEBUG === true

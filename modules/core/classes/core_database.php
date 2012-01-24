@@ -77,7 +77,7 @@
 				$hostname = $this->_connection_array['host'];
 
 				// Se for necessário conexão permanente (apenas PHP 5.3)
-				if(PHP_VERSION >= 503000)
+				if(PHP_VERSION_ID >= 50300)
 					if($this->_connection_array['persistent'] === true
 					|| ($this->_connection_array['persistent'] === null
 					 && config('database_persistent_mode') === true))
@@ -155,6 +155,9 @@
 			// Armazena a query
 			$query = array();
 			foreach(self::$_props as $item) {
+				if($this->_connection_array[$item] === null)
+					continue;
+
 				if(in_array($item, self::$_bool_props))
 				{ $query[$item] = $this->_connection_array[$item] === true ? 'true' : 'false'; }
 				else

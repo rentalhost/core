@@ -35,5 +35,9 @@
 			$this->test(17, $conn->set_property('connect', 'yes'));
 			$this->test(18, $conn->set_property('charset', 'utf8'));
 			$this->test(19, $conn->get_connection_string());
+
+			$this->set_prefix('fake2');
+			$conn = connection('fake2');
+			$this->test(1, $conn->get_connection_string());
 		}
 	}

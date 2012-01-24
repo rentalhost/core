@@ -1,6 +1,7 @@
 -- MÁXIMA PRIORIDADE --
-- database: adicionar diferentes propriedades na conexão;
+- database: ao usar connect, verificar se é necessário reconectar;
 - coverage: ativar somente o coverage da classe selecionada individualmente;
+- coverage: deixar arquivos fechados inicialmente;
 
 -- ALTA PRIORIDADE --
 - controller: alterar automaticamente o tipo de saída se a função se chamar *_json;
