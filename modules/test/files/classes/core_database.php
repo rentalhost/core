@@ -39,5 +39,9 @@
 			$this->set_prefix('fake2');
 			$conn = connection('fake2');
 			$this->test(1, $conn->get_connection_string());
+
+			$this->set_prefix('fake3');
+			$conn = connection('fake3');
+			$this->test(1, $conn->get_connection_string());
 		}
 	}

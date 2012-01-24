@@ -45,6 +45,12 @@
 				parse_str($cs['query'], $qs);
 			else $qs = array();
 
+			// Se um host não for informado, usa a informação do path
+			if(!isset($cs['host'])) {
+				$cs['host'] = $cs['path'];
+				unset($cs['path']);
+			}
+
 			// Preenche o scheme/driver, a porta, a senha e o path/database
 			$cs = array(
 				'driver'	=> isset($cs['scheme']) ? $cs['scheme'] : 'mysqli',
