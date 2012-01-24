@@ -1,20 +1,28 @@
 <?php
 
-	$accepted_lines = 1;
-	$total_lines = 1;
-	$result = load('coverage/file', array(
-		'lang' => $lang,
-		'name' => $name,
-		'file' => $file,
-		'lines' => $lines,
-		'accepted_lines' => &$accepted_lines,
-		'total_lines' => &$total_lines
-	), true);
+	if(isset($_GET['class'])
+	&& $_GET['class'] !== substr($name, 13, -4)) {
+		$type = 'unavailable';
+		$percentage = '0.00';
+		$result = null;
+	}
+	else {
+		$accepted_lines = 1;
+		$total_lines = 1;
+		$result = load('coverage/file', array(
+			'lang' => $lang,
+			'name' => $name,
+			'file' => $file,
+			'lines' => $lines,
+			'accepted_lines' => &$accepted_lines,
+			'total_lines' => &$total_lines
+		), true);
 
-	$percentage = number_format(100 / $total_lines * $accepted_lines, 2, '.', '');
-	$type = $percentage === '100.00' ? 'success' : 'failed';
+		$percentage = number_format(100 / $total_lines * $accepted_lines, 2, '.', '');
+		$type = $percentage === '100.00' ? 'success' : 'failed';
+	}
 
-	if($type === 'success'
+	if($type !== 'failed'
 	&& isset($_GET['hidden-success']) === true)
 		return true;
 

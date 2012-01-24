@@ -48,9 +48,12 @@
 			<div class="content">
 				<ul id="toolbar">
 					<li data-href=""><?php echo $lang->button_run; ?></li>
-					<?php if($xdebug_enabled): ?>
-					<li data-href="?coverage"><?php echo $lang->button_coverage; ?></li>
-					<li data-href="?coverage&hidden-success" class="no-margin">[H]</li>
+					<?php
+						if($xdebug_enabled):
+							$extra_class = isset($_GET['class']) ? 'class=' . urlencode($_GET['class']) . '&' : null;
+					?>
+					<li data-href="?<?php echo $extra_class; ?>coverage"><?php echo $lang->button_coverage; ?></li>
+					<li data-href="?<?php echo $extra_class; ?>coverage&hidden-success" class="no-margin">[H]</li>
 					<?php else: ?>
 					<li class="disabled" title="<?php echo $lang->require_xdebug; ?>"><?php echo $lang->button_coverage; ?></li>
 					<li class="disabled no-margin">[H]</li>
