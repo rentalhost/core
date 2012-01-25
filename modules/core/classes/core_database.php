@@ -71,6 +71,16 @@
 			$this->_connection_array = $cs;
 		}
 
+		// Abre uma conexão
+		private function _real_connect($hostname) {
+			// Abre a conexão
+			$this->_connection = new mysqli($hostname,
+				$this->_connection_array['username'],
+				$this->_connection_array['password'],
+				$this->_connection_array['database'],
+				$this->_connection_array['port']);
+		}
+
 		// Abre a conexão com o banco
 		public function connect($reconnect = false) {
 			// Se já houver conexão, desconecta antes (reconexão)
@@ -88,18 +98,22 @@
 				$hostname = $this->_connection_array['host'];
 
 				// Se for necessário conexão permanente (apenas PHP 5.3)
-				if(PHP_VERSION_ID >= 50300)
-					if($this->_connection_array['persistent'] === true
-					|| ($this->_connection_array['persistent'] === null
-					 && config('database_persistent_mode') === true))
+				$persistent_mode = false;
+				if(PHP_VERSION_ID >= 50300) {
+					$persistent_mode = $this->_connection_array['persistent'] === true
+									|| ($this->_connection_array['persistent'] === null
+									 && config('database_persistent_mode') === true);
+					if($persistent_mode === true)
 						$hostname = "p:{$hostname}";
+				}
 
 				// Abre a conexão
-				$this->_connection = new mysqli($hostname,
-					$this->_connection_array['username'],
-					$this->_connection_array['password'],
-					$this->_connection_array['database'],
-					$this->_connection_array['port']);
+			   @$this->_real_connect($hostname);
+
+				// Faz um ping
+				if($persistent_mode === true
+				&& $this->_connection->ping() === false)
+					$this->_real_connect($hostname);
 
 				// Define o charset
 					//config('database_default_charset')

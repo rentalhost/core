@@ -11,6 +11,7 @@
 			$this->test(3, $conn);
 			$this->test(4, $conn->query('SELECT 1'));
 			$this->test(5, $conn);
+			$this->test(6, $conn->query('SELECT 1 AS `test`')->fetch_object());
 
 			$this->set_prefix('fake');
 			$conn = connection('fake');

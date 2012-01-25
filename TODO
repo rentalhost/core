@@ -1,34 +1,34 @@
 -- MÁXIMA PRIORIDADE --
-
--- ALTA PRIORIDADE --
-- controller: alterar automaticamente o tipo de saída se a função se chamar *_json;
 - model: contruir a classe de modelos;
 
--- MÉDIA PRIORIDADE --
+-- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
 
--- BAIXA PRIORIDADE --
+-- MÉDIA PRIORIDADE --
 - database: adicionar suporte a transações;
-
--- MÍNIMA PRIORIDADE --
+	- adicionar controle de transações no php_shutdown;
 - error: mostrar a opçao "enviar um email quando houver solução";
-- controller: tentar evitar o lançamento de exceções em uso interno;
-- controller: adicionar $_proposed_url nas variáveis;
-- mover o sistema do file-coverage para uma library especializada;
-- controllers começados por _ são considerados privados e só podem ser executados via execute()
+	- error: exibir erro na tela automaticamente se a execução for em localhost;
+- error: capturar erros e exceções não capturadas;
 - test: obter informações sobre tempo e uso de memória, assim como o total da página
+
+-- BAIXA PRIORIDADE --
+- controller: adicionar $_proposed_url nas variáveis;
+- controller: tentar evitar o lançamento de exceções em uso interno;
+- controllers começados por _ são considerados privados e só podem ser executados via execute()
 - controller: permitir private $private = true; na classe para informar que ela é totalmente privada
 - controller: permitir usar $this->set_private(true) no método para informar que ele passou a ser privado
 	neste caso, o método retorna /true/ se for chamado de um execute ou /false/ se é a chamada principal
 
--- SE NECESSÁRIO --
-- test: aplicar tradução de path nas keys dos resultados
+-- MÍNIMA PRIORIDADE --
+- mover o sistema do file-coverage para uma library especializada;
+- verificar o nome de todos os métodos e procurar reduzir o número
 
 -- MILESTONE 1.1 --
 - atom: classes atom_code para gerenciar o código (parser, formatter e compiler);
 - test: mostrar diferença entre dois resultados (quando failed);
 - core: sistema de regras para as classes (rules);
-- core: controle de versão para SQL (criar tabelas e registros via XML, e fazer atualizações dentre versões);
+- core: controle de versão para SQL (criar tabelas e registros via XML, e fazer atualizações dentre as versões);
 - coverage: tentar eliminar as linhas que não possuem itens a serem validados (mudar [H] para [F], pois só será exibido erros);
 - controller: pensar também em como reescrever rotas, por exemplo '[*]/user' => 'master/[@1]/user'
 - core: suporte ao Zend Framework (lib) através do CORE_ZEND_SUPPORT = true
