@@ -6,7 +6,6 @@
 			$row = model('useful/user');
 			$row_model = $row->model();
 
-			$this->set_prefix('model');
 			$this->test(1, $row_model);
 			$this->test(2, $row_model->prefix());
 			$this->test(3, $row_model->prefix(false));
