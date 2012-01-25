@@ -56,6 +56,10 @@
 
 			// Inclui o arquivo
 			self::do_require($classpath_subdata->fullpath);
+
+			// Se for um modelo, é necessário iniciá-lo
+			if($classpath->clipped === 'model')
+				core_model::_get_instance($classname);
 		}
 
 		// Retorna a URL base com sua modular (por padrão)

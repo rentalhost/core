@@ -82,6 +82,11 @@
 		return core_database::_get_connection($conn_path, $index_name);
 	}
 
+	// Obtém um modelo
+	function model($model_path, $load_id = null) {
+		return core_model::_create_row($model_path, $load_id);
+	}
+
 	/** HELPERS DE CONFIGURAÇÃO */
 	// Obtém uma configuração rapidamente, usando a modular atual
 	function config($key, $default_value = null) {
