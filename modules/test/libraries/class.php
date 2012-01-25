@@ -75,6 +75,16 @@
 				);
 			}
 
+			$data_priority = array();
+			foreach($results as $key => $value) {
+				$data_class[$key] = $value['classname'];
+				$data_priority[$key] = self::$_priority[$value['type']];
+			}
+
+			array_multisort($data_priority, SORT_DESC,
+							$data_class, SORT_STRING,
+							$results);
+
 			return $results;
 		}
 
