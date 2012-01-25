@@ -117,7 +117,6 @@
 			// Após ter a array, é necessário fazer a busca pelos arquivos
 			!isset( $configs['modular_path_auto'] )	&& $configs['modular_path_auto']	= false;
 			!isset( $configs['start_dir'] )			&& $configs['start_dir']			= CORE_MODULES;
-			!isset( $configs['deep_modules'] )		&& $configs['deep_modules']			= false;
 			!isset( $configs['search_modules'] )	&& $configs['search_modules']		= true;
 			!isset( $configs['search_paths'] )		&& $configs['search_paths']			= true;
 			!isset( $configs['path_clip'] )			&& $configs['path_clip']			= false;
@@ -130,7 +129,7 @@
 			// Em modo depuração, verifica se alguma configuração não suportada foi definida
 			if(CORE_DEBUG === true) {
 				static $config_keys = array('modular_path_auto', 'split_by', 'group_by', 'neutral_by',
-					'make_underlined', 'start_dir', 'deep_modules', 'search_modules', 'search_paths',
+					'make_underlined', 'start_dir', 'search_modules', 'search_paths',
 					'path_clip', 'path_clip_empty', 'path_complement', 'file_extension', 'make_fullpath');
 
 				$config_diff = array_diff(array_keys($configs), $config_keys);
@@ -173,7 +172,7 @@
 				foreach( $modular_path as $key => $value ) {
 					// Propõe um diretório, a partir do segundo é usado um underline submodular
 					$proposed_path = $current_path .
-						( $key === 0 && $configs['deep_modules'] === false ? "/{$value}" : "/_{$value}" );
+						( $key === 0 ? "/{$value}" : "/_{$value}" );
 
 					// Se o diretório for aceito, adiciona aos módulos, aceita a proposta e continua a busca
 					if( is_dir( $proposed_path ) ) {

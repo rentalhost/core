@@ -201,7 +201,6 @@
 				$lang_path_data = core::get_modular_parts(explode('/', $path), array(
 					'modular_path_auto' => true,
 					'path_complement' => '/languages',
-					'deep_modules' => $path[0] !== '/',
 					'make_fullpath' => true
 				));
 

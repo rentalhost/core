@@ -1,6 +1,5 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
-- core: verificar se deep_modules ainda é necessário;
 - core: renomear path_complement para path_extension
 
 -- ALTA PRIORIDADE --
