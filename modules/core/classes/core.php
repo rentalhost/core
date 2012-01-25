@@ -95,6 +95,9 @@
 		static public function get_modular_parts($modular_path, $configs = null) {
 			$configs = (array) $configs;
 
+			// Aplica o modular path
+			!isset( $configs['modular_path_auto'] )	&& $configs['modular_path_auto']	= false;
+
 			// Se for uma string, é necessário quebrar a informação
 			if( is_string( $modular_path ) ) {
 				!isset( $configs['split_by'] )			&& $configs['split_by']				= '_';
@@ -107,6 +110,10 @@
 
 				foreach( $modular_path as $key => $item )
 					$modular_path[$key] = str_replace( $configs['neutral_by'], $configs['split_by'], $item );
+
+				if($configs['modular_path_auto'] === true
+				&& $modular_path[0][0] === '_')
+					$modular_path[0] = substr($modular_path[0], 1);
 			}
 			// Transforma o path em array
 			else
@@ -115,7 +122,6 @@
 			}
 
 			// Após ter a array, é necessário fazer a busca pelos arquivos
-			!isset( $configs['modular_path_auto'] )	&& $configs['modular_path_auto']	= false;
 			!isset( $configs['start_dir'] )			&& $configs['start_dir']			= CORE_MODULES;
 			!isset( $configs['search_modules'] )	&& $configs['search_modules']		= true;
 			!isset( $configs['search_paths'] )		&& $configs['search_paths']			= true;
