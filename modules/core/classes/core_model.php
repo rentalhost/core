@@ -39,6 +39,17 @@
 			return self::$_class_instances[$model_instance] = $model;
 		}
 
+		// Obtém uma instância de um path linear (__exemplo)
+		static public function _get_linear($model_path) {
+			$model_path = core::get_modular_parts($model_path, array(
+				'modular_path_auto' => true,
+				'path_complement' => '/models',
+				'make_fullpath' => true,
+			));
+
+			return self::_get_instance(core::get_joined_class($model_path, 'model'));
+		}
+
 		/** INSTÂNCIA */
 		// Armazena o nome da tabela do modelo único e completo
 		protected $_table;
