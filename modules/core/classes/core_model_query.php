@@ -1,8 +1,8 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_VALID_ID.')(?:\.(?<column>'.CORE_VALID_ID.')'
-		. '(?:\((?<type>'.CORE_VALID_ID.')\))?)?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?$/');
+	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_VALID_ID_EX.')(?:\.(?<column>'.CORE_VALID_ID.')'
+		. '(?:\((?<type>'.CORE_VALID_ID_EX.')\))?)?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?$/');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
