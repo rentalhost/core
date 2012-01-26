@@ -128,6 +128,11 @@
 			return true;
 		}
 
+		// Reinicia a conexão
+		public function reconnect() {
+			return $this->connect(true);
+		}
+
 		// Fecha a conexão
 		public function disconnect() {
 			$this->_connection = null;
@@ -143,6 +148,15 @@
 
 			// Armazena o resultado da query
 			return $this->_connection->query($query_string);
+		}
+
+		// Protege uma informação
+		public function escape($data) {
+			// Inicia a conexão, se necessário
+			if($this->_connected === false)
+				$this->connect();
+
+			return $this->_connection->real_escape_string($data);
 		}
 
 		/** PROPRIEDADES */

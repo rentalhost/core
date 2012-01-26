@@ -42,5 +42,30 @@
 
 			foreach($tests as $key => $test)
 				$this->test($key, core_model_query::parse_query($test), $test);
+
+			$this->set_prefix('query');
+			$conn = connection();
+			$model = model('useful/user')->model();
+			$model_args_1 = array(
+				'key'		=> 'test',
+				'int'		=> '1234',
+				'float'		=> '12.34',
+				'float2'	=> '12,34',
+				'sql'		=> 'DATE()',
+			);
+			$this->test(1, core_model_query::query($conn, 'SELECT [this];', $model));
+			$this->test(2, core_model_query::query($conn, 'SELECT [this.id];', $model));
+			$this->test(3, core_model_query::query($conn, 'SELECT [this.id(int)];', $model));
+			$this->test(4, core_model_query::query($conn, 'SELECT [this.id(int) as id_user];', $model));
+			$this->test(5, core_model_query::query($conn, 'SELECT [this: id, name];', $model));
+			$this->test(6, core_model_query::query($conn, 'SELECT [this.*];', $model));
+			$this->test(7, core_model_query::query($conn, 'SELECT [@int];', $model, $model_args_1));
+			$this->test(8, core_model_query::query($conn, 'SELECT [@int(int)];', $model, $model_args_1));
+			$this->test(9, core_model_query::query($conn, 'SELECT [@float(float)];', $model, $model_args_1));
+			$this->test(10, core_model_query::query($conn, 'SELECT [@float2(float)];', $model, $model_args_1));
+			$this->test(11, core_model_query::query($conn, 'SELECT [@float(int)];', $model, $model_args_1));
+			$this->test(12, core_model_query::query($conn, 'SELECT [@float2(int)];', $model, $model_args_1));
+			$this->test(13, core_model_query::query($conn, 'SELECT [@sql(sql)];', $model, $model_args_1));
+			$this->test(14, core_model_query::query($conn, 'SELECT [@key(key)];', $model, $model_args_1));
 		}
 	}

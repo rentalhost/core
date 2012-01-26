@@ -149,4 +149,60 @@
 
 			return $result;
 		}
+
+		// Este método permite proteger uma variável recebida
+		//TODO: conversão de tipo baseado na classe de tipos
+		static private function _protect_data($conn, $data, $data_type, $optional) {
+			if($data === null
+			&& $optional === false)
+				return null; //TODO: acionar um erro, pois não é opcional
+
+			switch($data_type) {
+				case 'key':
+					return '`' . $conn->escape($data) . '`';
+					break;
+				case 'int':
+					return (int) $data;
+					break;
+				case 'float':
+					return (float) str_replace(',', '.', $data);
+					break;
+				case 'sql':
+					return $data;
+					break;
+				default:
+					return '"' . $conn->escape($data) . '"';
+					break;
+			}
+		}
+
+		// Executa uma query, passando o SQL e os parâmetros necessários
+		static public function query($conn, $query, $from = null, $args = null) {
+			$query = self::parse_query($query);
+			$query_string = null;
+
+			foreach($query as $data) {
+				// Se for uma string, apenas copia
+				if(is_string($data)) {
+					$query_string.= $data;
+					continue;
+				}
+
+				switch($data['object']) {
+					// Se for um object this
+					case 'this':
+						$query_string.= self::_protect_data($conn, $from->table(), 'key', false);
+						continue 2;
+					// Se for uma variável
+					case 'variable':
+						$variable_data = ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']];
+						$query_string.= self::_protect_data($conn, $variable_data, @$data['type'], @$data['optional']);
+						continue 2;
+				}
+
+				var_dump($data);
+			}
+
+			return $query_string;
+		}
 	}
