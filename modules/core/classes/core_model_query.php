@@ -1,9 +1,8 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_VAR_ID', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?');
-	define('CORE_EX_QUERY_VARIABLE', '/^@'.CORE_EX_QUERY_VAR_ID.'$/');
-	define('CORE_EX_QUERY_COLUMN', CORE_EX_QUERY_VAR_ID . '(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
+	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?$/');
+	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
 	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
 
