@@ -1,1 +1,1 @@
-["object",[["string","SELECT "],["object",[["string","variable"],["string","telefone"],["string","phone"],["boolean",true]],"array"],["string",";"]],"array"]
+["object",[["string","SELECT "],["object",{"object":["string","variable"],"name":["string","telefone"],"type":["string","phone"],"optional":["boolean",true]},"array"],["string",";"]],"array"]

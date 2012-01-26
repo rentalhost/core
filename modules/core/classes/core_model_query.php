@@ -43,26 +43,25 @@
 
 				// Se for this, retorna um valor rápido
 				if($item['content'][0] === 'this') {
-					self::_query_push($query_data, array('this'));
+					self::_query_push($query_data, array('object' => 'this'));
 					continue;
 				}
 
 				// Se for this.* ou somente *
 				if($item['content'][0] === 'this.*'
 				|| $item['content'][0] === '*') {
-					self::_query_push($query_data, array('this'));
+					self::_query_push($query_data, array('object' => 'this'));
 					self::_query_push($query_data, '.*');
 					continue;
 				}
 
 				// Analisa uma variável
 				if(preg_match(CORE_EX_QUERY_VARIABLE, $item['content'][0], $object)) {
-					$object_data = array('variable', $object['column']);
+					$object_data = array('object' => 'variable', 'name' => $object['column']);
 
 					if(!empty($object['type'])) {
-						$object_data[] = $object['type'];
-						if(!empty($object['opt']))
-							$object_data[] = true;
+						$object_data['type'] = $object['type'];
+						$object_data['optional'] = !empty($object['opt']);
 					}
 
 					self::_query_push($query_data, $object_data);
@@ -120,7 +119,7 @@
 				return '`' . core_model::_get_linear($object['object'])->table() . '`';
 
 			// Senão, anexa this na tabela
-			self::_query_push($query_data, array('this'));
+			self::_query_push($query_data, array('object' => 'this'));
 		}
 
 		// Adiciona uma nova coluna
