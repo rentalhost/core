@@ -1,8 +1,10 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_VALID_ID_EX.')(?:\.(?<column>'.CORE_VALID_ID.')'
-		. '(?:\((?<type>'.CORE_VALID_ID_EX.')\))?)?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?$/');
+	define('CORE_EX_QUERY_COLUMN',
+		'(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
+	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
+	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
@@ -39,51 +41,45 @@
 					continue;
 				}
 
+				// Se for this, retorna um valor rápido
+				if($item['content'][0] === 'this') {
+					self::_query_push($query_data, array('this'));
+					continue;
+				}
+
+				// Se for this.* ou somente *
+				if($item['content'][0] === 'this.*'
+				|| $item['content'][0] === '*') {
+					self::_query_push($query_data, array('this'));
+					self::_query_push($query_data, '.*');
+					continue;
+				}
+
 				// Se for um modelo ou uma coluna de modelo
 				if(preg_match(CORE_EX_QUERY_OBJECT, $item['content'][0], $object)) {
-					$object_data = array();
+					$object_string = self::_id_string($query_data, $object);
+					self::_query_push($query_data, self::_column_string($object, $object_string));
+					continue;
+				}
 
-					// Armazena o dado que foi gerado
-					$object_string = null;
+				// Analisa um sql multi-colunas
+				if(preg_match(CORE_EX_QUERY_MULTI, $item['content'][0], $object)) {
+					preg_match_all('/' . CORE_EX_QUERY_COLUMN . '/', $object['columns'], $object_columns, PREG_SET_ORDER);
 
-					// Se for [this...] usa um array de dados, se não, obtém a informação do modelo
-					if($object['object'] === 'this') {
-						self::_query_push($query_data, '`');
-						self::_query_push($query_data, array('object' => 'this'));
-						self::_query_push($query_data, '`');
+					foreach($object_columns as $key => $column) {
+						// A partir da key 1, adiciona ,
+						if($key > 0)
+							self::_query_push($query_data, ', ');
+
+						// Adiciona o tipo principal da informação
+						$object_string = self::_id_string($query_data, $object);
+						self::_query_push($query_data, self::_column_string($column, $object_string));
 					}
-					else $object_string.= '`' . core_model::_get_linear($object['object'])->table() . '`';
-
-					// Se a coluna for definida
-					if(!empty($object['column'])) {
-						$object_string.= '.`' . $object['column'] . '`';
-					}
-
-					// Se o nome for definido, mas o tipo não, basta um simples alias
-					if(!empty($object['name'])
-					&& empty($object['type']))
-						$object_string.= ' AS `' . $object['name'] . '`';
-					else
-					if(!empty($object['column'])
-					&& !empty($object['type'])) {
-						// Sem outra situação, é necessário criar um objeto json
-						$object_json = array(
-							'name' => empty($object['name']) ? $object['column'] : $object['name'],
-							'type' => $object['type']
-						);
-
-						// Armazena a informação
-						$object_string.= ' AS `' . json_encode($object_json) . '`';
-					}
-
-					// Se for necessário...
-					if($object_string !== null)
-						self::_query_push($query_data, $object_string);
 
 					continue;
 				}
 
-				//DEBUG:
+				//DEBUG: exibirá um erro, caso a informação passada não seja reconhecida
 				$query_data[] = null;
 			}
 
@@ -101,5 +97,43 @@
 				return $query_data[key($query_data)].= $data;
 
 			$query_data[] = $data;
+		}
+
+		// Adiciona um novo identificador
+		static private function _id_string(&$query_data, $object) {
+			// Se não for [this], considera um modelo
+			if($object['object'] !== 'this')
+				return '`' . core_model::_get_linear($object['object'])->table() . '`';
+
+			// Senão, anexa this na tabela
+			self::_query_push($query_data, array('this'));
+		}
+
+		// Adiciona uma nova coluna
+		static private function _column_string($object, $result = null) {
+			// Se a coluna for definida
+			if(!empty($object['column'])) {
+				$result.= '.`' . $object['column'] . '`';
+			}
+
+			// Se o nome for definido, mas o tipo não, basta um simples alias
+			if(!empty($object['name'])
+			&& empty($object['type']))
+				$result.= ' AS `' . $object['name'] . '`';
+			else
+			if(!empty($object['column'])
+			&& !empty($object['type'])) {
+				// Sem outra situação, é necessário criar um objeto json
+				$object_json = array(
+					'name' => empty($object['name']) ? $object['column'] : $object['name'],
+					'type' => $object['type']
+				);
+
+				// Armazena a informação
+				//DEBUG: se o json passar de 256 caracteres, é um erro (limitação do mysql)
+				$result.= ' AS `' . json_encode($object_json) . '`';
+			}
+
+			return $result;
 		}
 	}

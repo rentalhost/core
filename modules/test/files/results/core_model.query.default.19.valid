@@ -1,0 +1,1 @@
+["object",[["string","SELECT `test_useful_users`.`id` AS `{\"name\":\"test\",\"type\":\"type\"}`, `test_useful_users`.`date` AS `{\"name\":\"subtest\",\"type\":\"subtype\"}`;"]],"array"]

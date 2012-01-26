@@ -25,7 +25,14 @@
 				9	=> 'SELECT [__useful_user.id];',
 				10	=> 'SELECT [__useful_user.date_created(date)];',
 				11	=> 'SELECT [__useful_user.date_created as date];',
-				12	=> 'SELECT [__useful_user.date_created(date) as date];'
+				12	=> 'SELECT [__useful_user.date_created(date) as date];',
+				13	=> 'SELECT [*];',
+				14	=> 'SELECT [this.*];',
+				15	=> 'SELECT [__useful_user: id];',
+				16	=> 'SELECT [__useful_user: id, name];',
+				17	=> 'SELECT [this: id, name];',
+				18	=> 'SELECT [__useful_user: id(type) as test];',
+				19	=> 'SELECT [__useful_user: id(type) as test, date(subtype) as subtest];',
 			);
 
 			foreach($tests as $key => $test)

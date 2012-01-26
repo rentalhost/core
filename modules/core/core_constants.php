@@ -14,7 +14,6 @@
 	define('CORE_VALID_PATH_ID', '[a-z_0-9A-Z\x7f-\xff]');
 	// Define o ID de variáveis (usado em nomes de classes ou métodos, por exemplo)
 	define('CORE_VALID_ID', '[a-zA-Z\x7f-\xff]' . CORE_VALID_PATH_ID . '*');
-	define('CORE_VALID_ID_EX', '[a-z_A-Z\x7f-\xff]' . CORE_VALID_PATH_ID . '*');
 	// Define um path válido para views e outras ocasiões
 	// http://stackoverflow.com/a/8748376/755393
 	define('CORE_VALID_PATH', '~^(?:(?:' . CORE_VALID_PATH_ID . '*|\[' . CORE_VALID_PATH_ID . '+\])(?=/|$)/?)+$~');
