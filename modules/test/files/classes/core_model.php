@@ -37,6 +37,7 @@
 				21	=> 'SELECT [@telefone(phone)];',
 				22	=> 'SELECT [@1];',
 				23	=> 'SELECT [@1(phone)];',
+				24	=> 'SELECT [@telefone(phone?)];',
 			);
 
 			foreach($tests as $key => $test)

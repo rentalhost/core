@@ -1,7 +1,7 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?$/');
+	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')(?<opt>\?)?\))?$/');
 	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
 	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
@@ -58,8 +58,12 @@
 				// Analisa uma variável
 				if(preg_match(CORE_EX_QUERY_VARIABLE, $item['content'][0], $object)) {
 					$object_data = array('variable', $object['column']);
-					if(!empty($object['type']))
+
+					if(!empty($object['type'])) {
 						$object_data[] = $object['type'];
+						if(!empty($object['opt']))
+							$object_data[] = true;
+					}
 
 					self::_query_push($query_data, $object_data);
 					continue;
