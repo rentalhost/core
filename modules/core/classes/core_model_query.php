@@ -1,15 +1,16 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_COLUMN',
-		'(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
+	define('CORE_EX_QUERY_VAR_ID', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?');
+	define('CORE_EX_QUERY_VARIABLE', '/^@'.CORE_EX_QUERY_VAR_ID.'$/');
+	define('CORE_EX_QUERY_COLUMN', CORE_EX_QUERY_VAR_ID . '(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
 	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
 		// Permite obter a divisão por [...]
-		const	QUERY_SPLITTER			= '/(?<open>\[?\[)(?<content>(?:\\\]|[^\[\]])*)(?<close>\]?\])/';
+		const	QUERY_SPLITTER = '/(?<open>\[?\[)(?<content>(?:\\\]|[^\[\]])*)(?<close>\]?\])/';
 
 		// Analisa uma query e divide em partes especiais
 		static public function parse_query($query) {
@@ -52,6 +53,16 @@
 				|| $item['content'][0] === '*') {
 					self::_query_push($query_data, array('this'));
 					self::_query_push($query_data, '.*');
+					continue;
+				}
+
+				// Analisa uma variável
+				if(preg_match(CORE_EX_QUERY_VARIABLE, $item['content'][0], $object)) {
+					$object_data = array('variable', $object['column']);
+					if(!empty($object['type']))
+						$object_data[] = $object['type'];
+
+					self::_query_push($query_data, $object_data);
 					continue;
 				}
 

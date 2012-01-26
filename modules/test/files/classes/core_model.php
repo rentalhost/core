@@ -33,6 +33,8 @@
 				17	=> 'SELECT [this: id, name];',
 				18	=> 'SELECT [__useful_user: id(type) as test];',
 				19	=> 'SELECT [__useful_user: id(type) as test, date(subtype) as subtest];',
+				20	=> 'SELECT [@telefone];',
+				21	=> 'SELECT [@telefone(phone)];',
 			);
 
 			foreach($tests as $key => $test)
