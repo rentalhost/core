@@ -1,7 +1,8 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_VALID_ID.')(?:\.(?<column>'.CORE_VALID_ID.'))?$/');
+	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_VALID_ID.')(?:\.(?<column>'.CORE_VALID_ID.')'
+		. '(?:\((?<type>'.CORE_VALID_ID.')\))?)?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?$/');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
@@ -39,28 +40,45 @@
 				}
 
 				// Se for um modelo ou uma coluna de modelo
-				if(preg_match(CORE_EX_QUERY_OBJECT, $item['content'][0], $item2)) {
-					// Se não houver uma definição de coluna, é um objeto
-					if(empty($item2['column'])) {
-						// Se for uma definição de this, aplica um array especial
-						if($item2['object'] === 'this')
-						self::_query_push($query_data, array('type' => 'this.table'));
-						// Senão, é necessário obter o nome da tabela do modelo informado
-						else
-						self::_query_push($query_data, '`' . core_model::_get_linear($item2['object'])->table() . '`');
+				if(preg_match(CORE_EX_QUERY_OBJECT, $item['content'][0], $object)) {
+					$object_data = array();
+
+					// Armazena o dado que foi gerado
+					$object_string = null;
+
+					// Se for [this...] usa um array de dados, se não, obtém a informação do modelo
+					if($object['object'] === 'this') {
+						self::_query_push($query_data, '`');
+						self::_query_push($query_data, array('object' => 'this'));
+						self::_query_push($query_data, '`');
 					}
-					// Se não, aplica o nome da coluna
-					else {
-						// Se for uma definição de this, aplica um array especial
-						if($item2['object'] === 'this')
-						self::_query_push($query_data, array(
-							'type' => 'this.column',
-							'column' => $item2['column']));
-						// Senão, é necessário obter o nome da tabela do modelo informado
-						else
-						self::_query_push($query_data, '`' . core_model::_get_linear($item2['object'])->table()
-							. '`.`' . $item2['column'] . '`');
+					else $object_string.= '`' . core_model::_get_linear($object['object'])->table() . '`';
+
+					// Se a coluna for definida
+					if(!empty($object['column'])) {
+						$object_string.= '.`' . $object['column'] . '`';
 					}
+
+					// Se o nome for definido, mas o tipo não, basta um simples alias
+					if(!empty($object['name'])
+					&& empty($object['type']))
+						$object_string.= ' AS `' . $object['name'] . '`';
+					else
+					if(!empty($object['column'])
+					&& !empty($object['type'])) {
+						// Sem outra situação, é necessário criar um objeto json
+						$object_json = array(
+							'name' => empty($object['name']) ? $object['column'] : $object['name'],
+							'type' => $object['type']
+						);
+
+						// Armazena a informação
+						$object_string.= ' AS `' . json_encode($object_json) . '`';
+					}
+
+					// Se for necessário...
+					if($object_string !== null)
+						self::_query_push($query_data, $object_string);
 
 					continue;
 				}

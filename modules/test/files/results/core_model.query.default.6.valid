@@ -1,1 +1,1 @@
-["object",[["string","SELECT "],["object",{"type":["string","this.table"]},"array"],["string",";"]],"array"]
+["object",[["string","SELECT `"],["object",{"object":["string","this"]},"array"],["string","`;"]],"array"]

@@ -1,1 +1,1 @@
-["object",[["string","SELECT "],["object",{"type":["string","this.column"],"column":["string","id"]},"array"],["string",";"]],"array"]
+["object",[["string","SELECT `"],["object",{"object":["string","this"]},"array"],["string","`.`id`;"]],"array"]

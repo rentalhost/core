@@ -14,13 +14,21 @@
 		}
 
 		public function test_query() {
-			$this->test(1, core_model_query::parse_query('SELECT 1;'));
-			$this->test(3, core_model_query::parse_query('SELECT [[test]];'));
-			$this->test(4, core_model_query::parse_query('SELECT [[[test]]];'));
-			$this->test(5, core_model_query::parse_query('SELECT [[[te\]st]]];'));
-			$this->test(6, core_model_query::parse_query('SELECT [this];'));
-			$this->test(7, core_model_query::parse_query('SELECT [__useful_user];'));
-			$this->test(8, core_model_query::parse_query('SELECT [this.id];'));
-			$this->test(9, core_model_query::parse_query('SELECT [__useful_user.id];'));
+			$tests = array(
+				1	=> 'SELECT 1;',
+				3	=> 'SELECT [[test]];',
+				4	=> 'SELECT [[[test]]];',
+				5	=> 'SELECT [[[te\]st]]];',
+				6	=> 'SELECT [this];',
+				7	=> 'SELECT [__useful_user];',
+				8	=> 'SELECT [this.id];',
+				9	=> 'SELECT [__useful_user.id];',
+				10	=> 'SELECT [__useful_user.date_created(date)];',
+				11	=> 'SELECT [__useful_user.date_created as date];',
+				12	=> 'SELECT [__useful_user.date_created(date) as date];'
+			);
+
+			foreach($tests as $key => $test)
+				$this->test($key, core_model_query::parse_query($test), $test);
 		}
 	}

@@ -1,6 +1,7 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
 - core: renomear path_complement para path_extension
+- constants: identificadores não podem começar por _
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
