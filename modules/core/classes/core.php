@@ -233,25 +233,6 @@
 						// Propõe um diretório
 						$proposed_path = $current_path . "/{$value}";
 
-						// Propõe um arquivo
-						$proposed_file = $proposed_path . ".{$configs['file_extension']}";
-
-						// Se for um arquivo, adiciona aos paths
-						// Ao achar um arquivo, fecha a busca e avança a chave, simulando uma nova proposta
-						if( is_file( $proposed_file ) ) {
-							// Se for necessário dar duplo underline...
-							if( $configs['make_underlined'] === true ) {
-								$value = str_replace( '_', '__', $value );
-							}
-
-							// Registra a ocorrência
-							$result->path[] = $value;
-							$current_path = $proposed_file;
-							$key++;
-
-							$last_try = false;
-						}
-						else
 						// Se o diretório for aceito, adiciona aos paths, aceita a proposta e continua a busca
 						if( is_dir( $proposed_path ) ) {
 							// Se for necessário dar duplo underline...
@@ -283,6 +264,25 @@
 							}
 
 							continue;
+						}
+
+						// Propõe um arquivo
+						$proposed_file = $proposed_path . ".{$configs['file_extension']}";
+
+						// Se for um arquivo, adiciona aos paths
+						// Ao achar um arquivo, fecha a busca e avança a chave, simulando uma nova proposta
+						if( is_file( $proposed_file ) ) {
+							// Se for necessário dar duplo underline...
+							if( $configs['make_underlined'] === true ) {
+								$value = str_replace( '_', '__', $value );
+							}
+
+							// Registra a ocorrência
+							$result->path[] = $value;
+							$current_path = $proposed_file;
+							$key++;
+
+							$last_try = false;
 						}
 
 						// Quando terminar os diretórios, remove os caminhos encontrados do modular path

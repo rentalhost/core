@@ -142,6 +142,7 @@
 				'path_extension' => '/views'
 			)));
 			$this->test(6, core::get_modular_parts('test_useful_same__name', array('make_fullpath' => true)));
+			$this->test(7, core::get_modular_parts('test_useful_same__dir', array('make_fullpath' => true)));
 		}
 
 		public function test_get_joined_class() {
