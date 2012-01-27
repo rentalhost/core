@@ -118,8 +118,13 @@
 				}
 				else
 				if($data instanceof core_model_row) {
-					unset($object_data["\0core_model_row\0_model_instance"]);
+					unset($object_data["\0core_model_row\0_model"]);
 					unset($object_data["\0core_model_row\0_from"]);
+				}
+				else
+				if($data instanceof core_model_results) {
+					unset($object_data["\0core_model_results\0_model"]);
+					unset($object_data["\0core_model_results\0_from"]);
 				}
 
 				foreach($object_data as $key => $value) {

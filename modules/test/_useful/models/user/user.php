@@ -20,5 +20,8 @@
 
 			// Chaves para one
 			$this->add_key('one_profile', 'useful/user/profile', 'id_profile');
+
+			// Chaves para multi
+			$this->add_key('multi_users', 'SELECT [this.*] FROM [this] WHERE [this.access_username] LIKE "%a%"');
 		}
 	}

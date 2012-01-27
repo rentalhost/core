@@ -1,6 +1,5 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
-- model: aplicar o próprio prefix() se for definido antes de table()
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
@@ -40,3 +39,5 @@
 - controller: pensar também em como reescrever rotas, por exemplo '[*]/user' => 'master/[@1]/user'
 - core: suporte ao Zend Framework (lib) através do CORE_ZEND_SUPPORT = true
 - model: suportar [modelo.* as alias], um tipo especial para a SQL
+- model_row: ->add_column($name, $type) permite adicionar tipos padrões de colunas
+	- por padrão, id será sempre int

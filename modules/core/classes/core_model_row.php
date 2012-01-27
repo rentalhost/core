@@ -6,7 +6,7 @@
 		private $_conn;
 
 		// Armazena a instância do modelo
-		private $_model_instance;
+		private $_model;
 		// Armazena a instãncia do row de onde veio
 		private $_from;
 
@@ -18,7 +18,7 @@
 		// Constrói um row
 		public function __construct($conn, $model_instance, $load_id) {
 			$this->_conn = $conn;
-			$this->_model_instance = $model_instance;
+			$this->_model = $model_instance;
 
 			// Carrega o ID inicial
 			if($load_id !== null)
@@ -33,6 +33,11 @@
 				array('id' => $id))->fetch_object());
 		}
 
+		// Obtém o ID atual
+		public function id() {
+			return (int) @$this->_data->id;
+		}
+
 		// Calcula a quantidade de registros de um modelo
 		public function count() {
 			// Faz a busca e aplica uma informação recebida
@@ -44,8 +49,13 @@
 			return $this->_from;
 		}
 
+		// Obtém os valores armazenados internamente
+		public function values() {
+			return (array) $this->_data;
+		}
+
 		// Aplica os dados recebidos
-		private function _apply_data($result) {
+		public function _apply_data($result) {
 			// Se não for informado um resultado...
 			if($result === false) {
 				$this->_exists = false;
@@ -63,7 +73,7 @@
 			// Se for um key válido
 			if(preg_match(core_model::METHOD_KEY_VALIDATE, $func)) {
 				// Obtém as configurações da chave
-				$key = $this->_model_instance->_get_key($func);
+				$key = $this->_model->_get_key($func);
 
 				// A depender do tipo de chave...
 				switch($key->type) {
@@ -84,6 +94,10 @@
 						$model = model($key->model, $this->_data->{$key->column}, $this->_conn);
 						$model->_from = $this;
 						return $model;
+					// Chave multi retorna múltiplos resultados do mesmo tipo deste modelo
+					case 'multi':
+						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
+						return new core_model_results($this->_conn, $query, $this->_model, $this);
 				}
 			}
 		}
@@ -103,11 +117,11 @@
 		/** EXTRA */
 		// Obtém o modelo
 		public function model() {
-			return $this->_model_instance;
+			return $this->_model;
 		}
 
 		// Executa uma query no modelo
 		public function query($query, $args = null) {
-			return $this->_model_instance->query($this->_conn, $query, $args, $this);
+			return $this->_model->query($this->_conn, $query, $args, $this);
 		}
 	}

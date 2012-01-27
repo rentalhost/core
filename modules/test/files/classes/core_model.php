@@ -103,5 +103,10 @@
 			$profile = $user->one_profile();
 			$this->test(11, $profile);
 			$this->test(12, $profile->from() === $user);
+
+			$this->set_prefix('multi');
+			$user = model('useful/user', 1);
+			foreach($user->multi_users()->fetch_all() as $key => $value)
+				$this->test($key, $value->values());
 		}
 	}
