@@ -83,8 +83,8 @@
 	}
 
 	// Obtém um modelo
-	function model($model_path, $load_id = null) {
-		return core_model::_create_row($model_path, $load_id);
+	function model($model_path, $load_id = null, $conn = null) {
+		return core_model::_create_row($conn ? $conn : connection(), $model_path, $load_id);
 	}
 
 	/** HELPERS DE CONFIGURAÇÃO */

@@ -75,5 +75,10 @@
 			$this->test(19, core_model_query::query($conn, 'SELECT [@fake?];', $model, $model_args_1));
 			$this->test(20, core_model_query::query($conn, 'SELECT [@fake(int)?null];', $model, $model_args_1));
 			$this->test(21, core_model_query::query($conn, 'SELECT [@fake?null];', $model, $model_args_1));
+
+			$this->set_prefix('model');
+			$row = model('useful/user');
+			$this->test(1, $row->query('SELECT [this.id];'));
+			$this->test(2, $row->query('SELECT [@test];', array('test' => 'okay')));
 		}
 	}

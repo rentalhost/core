@@ -21,9 +21,9 @@
 		}
 
 		// Carrega um objeto de um modelo
-		static public function _create_row($model_path, $load_id) {
+		static public function _create_row($conn, $model_path, $load_id) {
 			$model_instance = self::_load_model($model_path);
-			return new core_model_row(self::_get_instance($model_instance), $load_id);
+			return new core_model_row($conn, self::_get_instance($model_instance), $load_id);
 		}
 
 		// Obtém a instância de um modelo
@@ -123,6 +123,11 @@
 				// Retorna a tabela prefixada (table()) ou não-prefixada (table(false))
 				return $model_table !== false ? $this->_table_full : $this->_table;
 			}
+		}
+
+		// Executa uma query no modelo
+		public function query($conn, $query, $args = null) {
+			return core_model_query::query($conn, $query, $this, $args);
 		}
 
 		// Cria uma nova key
