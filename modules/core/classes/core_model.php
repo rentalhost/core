@@ -135,7 +135,7 @@
 
 		// Cria uma nova key
 		//TODO: se não for uma key válida, retorna um erro
-		public function key_bind($keyname) {
+		public function add_key($keyname) {
 			$args = func_get_args();
 			preg_match(self::METHOD_KEY_VALIDATE, $keyname, $key);
 
@@ -175,17 +175,17 @@
 
 		/** EVENTOS */
 		// Ocorre ao inserir ou atualizar um registro
-		protected function before_save($instance, $operation) {}
-		protected function on_save($instance, $operation) {}
+		public function before_save($instance, $operation) {}
+		public function on_save($instance, $operation) {}
 		// Ocorre apenas ao inserir um registro
-		protected function before_insert($instance) {}
-		protected function on_insert($instance) {}
+		public function before_insert($instance) {}
+		public function on_insert($instance) {}
 		// Ocorre apenas ao atualizar um registro
-		protected function before_update($instance) {}
-		protected function on_update($instance) {}
+		public function before_update($instance) {}
+		public function on_update($instance) {}
 		// Ocorre ao deletar um registro
-		protected function before_delete($instance) {}
-		protected function on_delete($instance) {}
+		public function before_delete($instance) {}
+		public function on_delete($instance) {}
 		// Ocorre ao criar uma instância de row
-		protected function on_instance($instance) {}
+		public function on_instance($instance) {}
 	}

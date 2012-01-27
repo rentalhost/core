@@ -7,7 +7,7 @@
 			$this->table('users');
 
 			// Carrega um usuário por username
-			$this->key_bind('load_by_username', 'SELECT * FROM [this] '.
+			$this->add_key('load_by_username', 'SELECT * FROM [this] '.
 				'WHERE [this.access_username] = [@username]', 'username');
 		}
 	}
