@@ -135,12 +135,13 @@
 		public function test_get_modular_parts() {
 			$this->test(1, core::get_modular_parts( 'test'));
 			$this->test(2, core::get_modular_parts('untest'));
-			$this->test(3, core::get_modular_parts('test_useful_folder__underlined'));
-			$this->test(4, core::get_modular_parts('test_useful_file__underlined'));
+			$this->test(3, core::get_modular_parts('test_useful_folder__underlined', array('make_fullpath' => true)));
+			$this->test(4, core::get_modular_parts('test_useful_file__underlined', array('make_fullpath' => true)));
 			$this->test(5, core::get_modular_parts('__useful_other_test', array(
 				'modular_path_auto' => true,
 				'path_complement' => '/views'
 			)));
+			$this->test(6, core::get_modular_parts('test_useful_same__name', array('make_fullpath' => true)));
 		}
 
 		public function test_get_joined_class() {

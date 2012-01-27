@@ -1,1 +1,1 @@
-["object",{"modular":["object",[["string","test"],["string","useful"]],"array"],"path":["object",[["string","file__underlined"]],"array"]},"stdClass"]
+["object",{"modular":["object",[["string","test"],["string","useful"]],"array"],"path":["object",[["string","file__underlined"]],"array"],"fullpath":["string",".\/core\/modules\/test\/_useful\/file_underlined.php"]},"stdClass"]

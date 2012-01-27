@@ -50,6 +50,7 @@
 			// Busca pelo caminho da view
 			$view_path_data = core::get_modular_parts(explode('/', $this->_proposed_view), array(
 				'modular_path_auto' => true,
+				'path_repeat' => false,
 				'path_complement' => '/views',
 				'make_fullpath' => true
 			) );
