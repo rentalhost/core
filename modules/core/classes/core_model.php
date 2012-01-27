@@ -142,7 +142,6 @@
 			// Objeto que será preenchido
 			$object = new stdclass;
 			$object->type = $key['key'];
-			$object->parsed = false;
 
 			// A depender do tipo de chave, preenche alguns parâmetros
 			switch($key['key']) {
@@ -153,7 +152,7 @@
 				case 'multi':
 					$object->sql = $args[1];
 					$object->args_order = isset($args[2]) ? $args[2] : null;
-					$object->args_default = isset($args[3]) ? $args[3] : null;
+					$object->args_default = isset($args[3]) ? $args[3] : array();
 					break;
 				// Se for one
 				case 'one':
@@ -165,12 +164,17 @@
 					$object->sql = $args[2];
 					$object->model = $args[1];
 					$object->args_order = isset($args[3]) ? $args[3] : null;
-					$object->args_default = isset($args[4]) ? $args[4] : null;
+					$object->args_default = isset($args[4]) ? $args[4] : array();
 					break;
 			}
 
 			// Preenche a key
 			$this->_keys[$keyname] = $object;
+		}
+
+		// Obtém a configuração de uma chave
+		public function _get_key($keyname) {
+			return $this->_keys[$keyname];
 		}
 
 		/** EVENTOS */

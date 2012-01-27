@@ -85,5 +85,13 @@
 		public function test_row() {
 			$user = model('useful/user', 1);
 			$this->test(1, $user);
+			$user->load_by_username('operator');
+			$this->test(2, $user);
+			$user->load_columns('operator');
+			$this->test(3, $user);
+			$user->load_default();
+			$this->test(4, $user);
+			$user->load_default('admin');
+			$this->test(5, $user);
 		}
 	}

@@ -152,6 +152,25 @@
 			return $result;
 		}
 
+		// Mescla os argumentos
+		static public function merge_args($args, $key) {
+			// Se não for definido uma ordem padrão, usa index
+			if($key->args_order === null)
+				return array_values(array_merge($args, $key->args_default));
+
+			// Cria uma setlist
+			$args_order = setlist($key->args_order);
+			$args_data = array();
+
+			// Preenche as informações e retorna
+			// Usa o valor padrão somente quando necessário
+			foreach($args_order as $index => $var)
+				$args_data[$var] = isset($args[$index]) ? $args[$index] :
+					(isset($key->args_default[$var]) ? $key->args_default[$var] : null);
+
+			return $args_data;
+		}
+
 		// Executa uma query, passando o SQL e os parâmetros necessários
 		static public function query($conn, $query, $from = null, $args = null) {
 			$query = self::parse_query($query);
@@ -177,8 +196,6 @@
 							@$data['optional'], @$data['null']);
 						continue 2;
 				}
-
-				var_dump($data);
 			}
 
 			return $query_string;

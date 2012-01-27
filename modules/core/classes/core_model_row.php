@@ -43,6 +43,24 @@
 			}
 		}
 
+		/** MÁGICO */
+		// Faz uma chamada a um key
+		public function __call($func, $args) {
+			// Se for um key válido
+			if(preg_match(core_model::METHOD_KEY_VALIDATE, $func)) {
+				// Obtém as configurações da chave
+				$key = $this->_model_instance->_get_key($func);
+
+				// A depender do tipo de chave...
+				switch($key->type) {
+					case 'load':
+						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
+						return $this->_apply_data($query->fetch_object());
+						break;
+				}
+			}
+		}
+
 		/** EXTRA */
 		// Obtém o modelo
 		public function model() {

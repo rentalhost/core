@@ -14,6 +14,9 @@
 		// Armazena o índex da conexão (geralmente default)
 		private $_connection_index;
 
+		// Armazena a última query executada
+		private $_last_query;
+
 		// Configurações booleanas
 		static private $_bool_props = array('persistent', 'connect');
 		// Configurações gerais
@@ -147,7 +150,7 @@
 				$this->connect();
 
 			// Armazena o resultado da query
-			return $this->_connection->query($query_string);
+			return $this->_connection->query($this->_last_query = $query_string);
 		}
 
 		// Protege uma informação
