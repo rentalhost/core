@@ -98,6 +98,11 @@
 					case 'multi':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
 						return new core_model_results($this->_conn, $query, $this->_model, $this);
+					// Chave many retorna múltiplos resultados de um diferente modelo
+					case 'many':
+						$model = model($key->model);
+						$query = $model->query($key->sql, core_model_query::merge_args($args, $key), $this);
+						return new core_model_results($this->_conn, $query, $model->model(), $this);
 				}
 			}
 		}
@@ -121,7 +126,7 @@
 		}
 
 		// Executa uma query no modelo
-		public function query($query, $args = null) {
-			return $this->_model->query($this->_conn, $query, $args, $this);
+		public function query($query, $args = null, $from = null) {
+			return $this->_model->query($this->_conn, $query, $args, $from ? $from : $this);
 		}
 	}

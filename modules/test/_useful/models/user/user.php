@@ -23,5 +23,8 @@
 
 			// Chaves para multi
 			$this->add_key('multi_users', 'SELECT [this.*] FROM [this] WHERE [this.access_username] LIKE "%a%"');
+
+			// Chaves para many
+			$this->add_key('many_phones', 'useful/user/phone', 'SELECT [this.*] FROM [this] WHERE [this.id_user] = [@this.id(int)]');
 		}
 	}

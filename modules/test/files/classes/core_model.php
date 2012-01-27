@@ -108,5 +108,9 @@
 			$user = model('useful/user', 1);
 			foreach($user->multi_users()->fetch_all() as $key => $value)
 				$this->test($key, $value->values());
+
+			$this->set_prefix('many');
+			foreach($user->many_phones()->fetch_all() as $key => $value)
+				$this->test($key, $value->values());
 		}
 	}
