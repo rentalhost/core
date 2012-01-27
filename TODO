@@ -1,6 +1,6 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
-- model: criar a classe de configuração de dados sql (como tipagem);
+- model: usar [@valor?null] força o uso de NULL caso a informação não seja passada
 - core: renomear path_complement para path_extension
 
 -- ALTA PRIORIDADE --
