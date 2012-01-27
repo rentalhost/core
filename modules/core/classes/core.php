@@ -128,7 +128,7 @@
 			!isset( $configs['path_repeat'] )		&& $configs['path_repeat']			= true;
 			!isset( $configs['path_clip'] )			&& $configs['path_clip']			= false;
 			!isset( $configs['path_clip_empty'] )	&& $configs['path_clip_empty']		= false;
-			!isset( $configs['path_complement'] )	&& $configs['path_complement']		= null;
+			!isset( $configs['path_extension'] )	&& $configs['path_extension']		= null;
 			!isset( $configs['file_extension'] )	&& $configs['file_extension']		= 'php';
 			!isset( $configs['make_fullpath'] )		&& $configs['make_fullpath']		= false;
 			!isset( $configs['make_underlined'] )	&& $configs['make_underlined']		= false;
@@ -137,7 +137,7 @@
 			if(CORE_DEBUG === true) {
 				static $config_keys = array('modular_path_auto', 'split_by', 'group_by', 'neutral_by',
 					'make_underlined', 'start_dir', 'search_modules', 'search_paths', 'path_repeat',
-					'path_clip', 'path_clip_empty', 'path_complement', 'file_extension', 'make_fullpath');
+					'path_clip', 'path_clip_empty', 'path_extension', 'file_extension', 'make_fullpath');
 
 				$config_diff = array_diff(array_keys($configs), $config_keys);
 				if(!empty($config_diff)) {
@@ -213,8 +213,8 @@
 			}
 
 			// Após buscar o módulo, se for necessário, anexa o complemento
-			if( !empty( $configs['path_complement'] ) ) {
-				$current_path .= $configs['path_complement'];
+			if( !empty( $configs['path_extension'] ) ) {
+				$current_path .= $configs['path_extension'];
 			}
 
 			// Se for necessário buscar por paths...

@@ -70,7 +70,7 @@
 
 			// Agora é necessário localizar o helper e carregá-lo
 			$modular_path = core::get_modular_parts($helper, array(
-				'path_complement' => '/helpers',
+				'path_extension' => '/helpers',
 				'make_fullpath' => true
 			));
 

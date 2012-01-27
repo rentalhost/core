@@ -1,7 +1,6 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
 - model: usar [@valor?null] força o uso de NULL caso a informação não seja passada
-- core: renomear path_complement para path_extension
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
@@ -40,6 +39,4 @@
 - coverage: tentar eliminar as linhas que não possuem itens a serem validados (mudar [H] para [F], pois só será exibido erros);
 - controller: pensar também em como reescrever rotas, por exemplo '[*]/user' => 'master/[@1]/user'
 - core: suporte ao Zend Framework (lib) através do CORE_ZEND_SUPPORT = true
-- core: ao buscar um path como /a/b, tentar localizar primeiro em /a/.../b.php e depois em /a/.../b/b.php
-	- a opção deverá vir ativada por padrão, podendo ser desabilitada
 - model: suportar [modelo.* as alias], um tipo especial para a SQL

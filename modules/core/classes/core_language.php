@@ -23,7 +23,7 @@
 			// Busca pelo caminho do language
 			$lang_path_data = core::get_modular_parts(explode('/', $path), array(
 				'modular_path_auto' => true,
-				'path_complement' => '/languages',
+				'path_extension' => '/languages',
 				'make_fullpath' => true
 			));
 
@@ -200,7 +200,7 @@
 				// Busca pelo caminho do language
 				$lang_path_data = core::get_modular_parts(explode('/', $path), array(
 					'modular_path_auto' => true,
-					'path_complement' => '/languages',
+					'path_extension' => '/languages',
 					'make_fullpath' => true
 				));
 

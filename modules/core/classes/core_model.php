@@ -13,7 +13,7 @@
 		static public function _load_model($model_path) {
 			$model_path = core::get_modular_parts(explode('/', $model_path), array(
 				'modular_path_auto' => true,
-				'path_complement' => '/models',
+				'path_extension' => '/models',
 				'make_fullpath' => true,
 			));
 
@@ -46,7 +46,7 @@
 		static public function _get_linear($model_path) {
 			$model_path = core::get_modular_parts($model_path, array(
 				'modular_path_auto' => true,
-				'path_complement' => '/models',
+				'path_extension' => '/models',
 				'make_fullpath' => true,
 			));
 

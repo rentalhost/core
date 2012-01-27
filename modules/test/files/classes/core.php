@@ -139,7 +139,7 @@
 			$this->test(4, core::get_modular_parts('test_useful_file__underlined', array('make_fullpath' => true)));
 			$this->test(5, core::get_modular_parts('__useful_other_test', array(
 				'modular_path_auto' => true,
-				'path_complement' => '/views'
+				'path_extension' => '/views'
 			)));
 			$this->test(6, core::get_modular_parts('test_useful_same__name', array('make_fullpath' => true)));
 		}
