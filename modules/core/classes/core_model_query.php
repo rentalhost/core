@@ -170,7 +170,7 @@
 					// Se for uma variável
 					case 'variable':
 						$data_type = isset($data['type']) ? $data['type'] : 'string';
-						$variable_data = ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']];
+						$variable_data = @(ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']]);
 						$query_string.= core_type::type_return($conn, $data_type, $variable_data, @$data['optional']);
 						continue 2;
 				}
