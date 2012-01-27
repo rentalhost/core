@@ -97,5 +97,6 @@
 			$this->test(7, $user->exists_username('fake'));
 			$this->test(8, $user->count_like('%a%'));
 			$this->test(9, $user->count_like('%z%'));
+			$this->test(10, $user->count());
 		}
 	}

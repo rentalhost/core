@@ -30,6 +30,12 @@
 				array('id' => $id))->fetch_object());
 		}
 
+		// Calcula a quantidade de registros de um modelo
+		public function count() {
+			// Faz a busca e aplica uma informação recebida
+			return (int) array_pop($this->query('SELECT COUNT(*) FROM [this];')->fetch_array());
+		}
+
 		// Aplica os dados recebidos
 		private function _apply_data($result) {
 			// Se não for informado um resultado...
