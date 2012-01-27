@@ -26,6 +26,12 @@
 - mover o sistema do file-coverage para uma library especializada;
 - verificar o nome de todos os métodos e procurar reduzir o número
 
+-- PUBLICAÇÃO --
+- fazer uma última execução com coverage;
+- fazer testes em todos os servidores disponíveis;
+- fazer um backup do sql para o core, e para test;
+- fazer uma limpeza de testes de execução;
+
 -- MILESTONE 1.1 --
 - atom: classes atom_code para gerenciar o código (parser, formatter e compiler);
 - test: mostrar diferença entre dois resultados (quando failed);

@@ -22,8 +22,11 @@
 
 		// Carrega um objeto de um modelo
 		static public function _create_row($conn, $model_path, $load_id) {
-			$model_instance = self::_load_model($model_path);
-			return new core_model_row($conn, self::_get_instance($model_instance), $load_id);
+			$model_instance = self::_get_instance(self::_load_model($model_path));
+			$model_row = new core_model_row($conn, $model_instance, $load_id);
+
+			$model_instance->on_instance($model_row);
+			return $model_row;
 		}
 
 		// Obtém a instância de um modelo
@@ -169,4 +172,20 @@
 			// Preenche a key
 			$this->_keys[$keyname] = $object;
 		}
+
+		/** EVENTOS */
+		// Ocorre ao inserir ou atualizar um registro
+		protected function before_save($instance, $operation) {}
+		protected function on_save($instance, $operation) {}
+		// Ocorre apenas ao inserir um registro
+		protected function before_insert($instance) {}
+		protected function on_insert($instance) {}
+		// Ocorre apenas ao atualizar um registro
+		protected function before_update($instance) {}
+		protected function on_update($instance) {}
+		// Ocorre ao deletar um registro
+		protected function before_delete($instance) {}
+		protected function on_delete($instance) {}
+		// Ocorre ao criar uma instância de row
+		protected function on_instance($instance) {}
 	}
