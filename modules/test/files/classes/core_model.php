@@ -98,6 +98,8 @@
 			$this->test(8, $user->count_like('%a%'));
 			$this->test(9, $user->count_like('%z%'));
 			$this->test(10, $user->count());
-			$this->test(11, $user->one_profile());
+			$profile = $user->one_profile();
+			$this->test(11, $profile);
+			$this->test(12, $profile->from() === $user);
 		}
 	}

@@ -4,8 +4,11 @@
 	class core_model_row {
 		// Conexão usada
 		private $_conn;
+
 		// Armazena a instância do modelo
 		private $_model_instance;
+		// Armazena a instãncia do row de onde veio
+		private $_from;
 
 		// Armazena a informação da linha
 		private $_data = null;
@@ -34,6 +37,11 @@
 		public function count() {
 			// Faz a busca e aplica uma informação recebida
 			return (int) array_pop($this->query('SELECT COUNT(*) FROM [this];')->fetch_array());
+		}
+
+		// Obtém de onde esta row foi criada (dentro da chave one)
+		public function from() {
+			return $this->_from;
 		}
 
 		// Aplica os dados recebidos
@@ -73,8 +81,9 @@
 						break;
 					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
 					case 'one':
-						return model($key->model, $this->_data->{$key->column}, $this->_conn);
-						break;
+						$model = model($key->model, $this->_data->{$key->column}, $this->_conn);
+						$model->_from = $this;
+						return $model;
 				}
 			}
 		}
