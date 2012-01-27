@@ -1,1 +1,1 @@
-["string","SELECT \"okay\";"]
+["object",{"okay":["string","okay"]},"stdClass"]

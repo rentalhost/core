@@ -116,6 +116,10 @@
 					unset($object_data["\0core_database\0_connection_string"],
 						$object_data["\0core_database\0_connection_array"]);
 				}
+				else
+				if($data instanceof core_model_row) {
+					unset($object_data["\0core_model_row\0_model_instance"]);
+				}
 
 				foreach($object_data as $key => $value) {
 					$key = explode("\0", $key);

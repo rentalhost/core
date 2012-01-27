@@ -78,7 +78,12 @@
 
 			$this->set_prefix('model');
 			$row = model('useful/user');
-			$this->test(1, $row->query('SELECT [this.id];'));
-			$this->test(2, $row->query('SELECT [@test];', array('test' => 'okay')));
+			$this->test(1, $row->query('SELECT [this.id] FROM [this];')->fetch_object());
+			$this->test(2, $row->query('SELECT [@test];', array('test' => 'okay'))->fetch_object());
+		}
+
+		public function test_row() {
+			$user = model('useful/user', 1);
+			$this->test(1, $user);
 		}
 	}

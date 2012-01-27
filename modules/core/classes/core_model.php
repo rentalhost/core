@@ -130,7 +130,7 @@
 
 		// Executa uma query no modelo
 		public function query($conn, $query, $args = null) {
-			return core_model_query::query($conn, $query, $this, $args);
+			return $conn->query(core_model_query::query($conn, $query, $this, $args));
 		}
 
 		// Cria uma nova key
