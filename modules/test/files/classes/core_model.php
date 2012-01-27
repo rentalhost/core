@@ -39,6 +39,7 @@
 				23	=> 'SELECT [@1(phone)];',
 				24	=> 'SELECT [@telefone(phone)?];',
 				25	=> 'SELECT [@telefone?];',
+				26	=> 'SELECT [@telefone?null];',
 			);
 
 			foreach($tests as $key => $test)
@@ -72,5 +73,7 @@
 			$this->test(17, core_model_query::query($conn, 'SELECT [@fake(float)?];', $model, $model_args_1));
 			$this->test(18, core_model_query::query($conn, 'SELECT [@fake(string)?];', $model, $model_args_1));
 			$this->test(19, core_model_query::query($conn, 'SELECT [@fake?];', $model, $model_args_1));
+			$this->test(20, core_model_query::query($conn, 'SELECT [@fake(int)?null];', $model, $model_args_1));
+			$this->test(21, core_model_query::query($conn, 'SELECT [@fake?null];', $model, $model_args_1));
 		}
 	}

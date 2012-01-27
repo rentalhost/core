@@ -1,7 +1,7 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?<opt>\?)?$/');
+	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:(?<opt>\?)(?<null>null)?)?$/');
 	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
 	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
@@ -63,6 +63,8 @@
 						$object_data['type'] = $object['type'];
 
 					$object_data['optional'] = !empty($object['opt']);
+					if($object_data['optional'] === true)
+						$object_data['null'] = !empty($object['null']);
 
 					self::_query_push($query_data, $object_data);
 					continue;
@@ -171,7 +173,8 @@
 					case 'variable':
 						$data_type = isset($data['type']) ? $data['type'] : 'string';
 						$variable_data = @(ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']]);
-						$query_string.= core_type::type_return($conn, $data_type, $variable_data, @$data['optional']);
+						$query_string.= core_type::type_return($conn, $data_type, $variable_data,
+							@$data['optional'], @$data['null']);
 						continue 2;
 				}
 

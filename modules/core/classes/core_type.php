@@ -14,7 +14,7 @@
 		}
 
 		// Obtém o valor de um tipo
-		static public function type_return($conn, $type, $data, $optional = false, $method = 'set') {
+		static public function type_return($conn, $type, $data, $optional = null, $nullable = null, $method = 'set') {
 			self::$_conn = $conn;
 
 			// Obtém os dados do tipo
@@ -22,12 +22,12 @@
 
 			// Se for opcional e o valor estiver vazio
 			if($data === null) {
-				if($optional === false
+				if($optional === null
 				|| $type['optional'] === null)
 					return null; //TODO: se não for opcional para o valor ou para o tipo, informa um erro
 
 				// Em outro caso, retorna o valor opcional
-				return $type['optional'];
+				return $nullable !== true ? $type['optional'] : 'NULL';
 			}
 
 			// Se tudo acontecer normalmente, define o método que será usado
