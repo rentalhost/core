@@ -53,9 +53,15 @@
 
 				// A depender do tipo de chave...
 				switch($key->type) {
+					// Chave load carrega uma informação para os dados internos
 					case 'load':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
 						return $this->_apply_data($query->fetch_object());
+						break;
+					// Chave exists apenas retorna true se a informação existir (ao menos um registro)
+					case 'exists':
+						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
+						return $query->num_rows > 0;
 						break;
 				}
 			}

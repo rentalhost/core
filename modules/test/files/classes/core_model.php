@@ -93,5 +93,7 @@
 			$this->test(4, $user);
 			$user->load_default('admin');
 			$this->test(5, $user);
+			$this->test(6, $user->exists_username('operator'));
+			$this->test(7, $user->exists_username('fake'));
 		}
 	}
