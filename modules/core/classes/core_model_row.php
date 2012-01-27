@@ -59,9 +59,11 @@
 						return $this->_apply_data($query->fetch_object());
 						break;
 					// Chave exists apenas retorna true se a informação existir (ao menos um registro)
+					// Chave count retorna a quantidade de registros compatíveis
 					case 'exists':
+					case 'count':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
-						return $query->num_rows > 0;
+						return $key->type === 'exists' ? $query->num_rows > 0 : $query->num_rows;
 						break;
 				}
 			}

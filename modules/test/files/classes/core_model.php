@@ -95,5 +95,7 @@
 			$this->test(5, $user);
 			$this->test(6, $user->exists_username('operator'));
 			$this->test(7, $user->exists_username('fake'));
+			$this->test(8, $user->count_like('%a%'));
+			$this->test(9, $user->count_like('%z%'));
 		}
 	}

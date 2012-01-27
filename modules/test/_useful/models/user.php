@@ -12,6 +12,9 @@
 			$this->add_key('load_default', 'SELECT [*] FROM [this] WHERE [this.access_username] = [@1]', null, array('operator'));
 
 			// Chaves para exists
-			$this->add_key('exists_username', 'SELECT [this.id] FROM [this] WHERE [this.access_username] = [@1]');
+			$this->add_key('exists_username', 'SELECT NULL FROM [this] WHERE [this.access_username] = [@1]');
+
+			// Chaves para exists
+			$this->add_key('count_like', 'SELECT NULL FROM [this] WHERE [this.access_username] LIKE [@1]');
 		}
 	}
