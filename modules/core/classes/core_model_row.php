@@ -88,6 +88,18 @@
 			}
 		}
 
+		// Obtém a informação tipada
+		//TODO: tipar
+		public function __get($key) {
+			return $this->_data->{$key};
+		}
+
+		// Altera a informação tipada
+		//TODO: tipar
+		public function __set($key, $value) {
+			$this->_data->{$key} = $value;
+		}
+
 		/** EXTRA */
 		// Obtém o modelo
 		public function model() {
@@ -96,6 +108,6 @@
 
 		// Executa uma query no modelo
 		public function query($query, $args = null) {
-			return $this->_model_instance->query($this->_conn, $query, $args);
+			return $this->_model_instance->query($this->_conn, $query, $args, $this);
 		}
 	}

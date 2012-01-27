@@ -1,7 +1,7 @@
 <?php
 
 	// Define algumas constantes externas
-	define('CORE_EX_QUERY_VARIABLE', '/^@(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:(?<opt>\?)(?<null>null)?)?$/');
+	define('CORE_EX_QUERY_VARIABLE', '/^@(?<this>this\.)?(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:(?<opt>\?)(?<null>null)?)?$/');
 	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
 	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
@@ -58,6 +58,9 @@
 				// Analisa uma variável
 				if(preg_match(CORE_EX_QUERY_VARIABLE, $item['content'][0], $object)) {
 					$object_data = array('object' => 'variable', 'name' => $object['column']);
+
+					if(!empty($object['this']))
+						$object_data['this'] = true;
 
 					if(!empty($object['type']))
 						$object_data['type'] = $object['type'];
@@ -172,7 +175,7 @@
 		}
 
 		// Executa uma query, passando o SQL e os parâmetros necessários
-		static public function query($conn, $query, $from = null, $args = null) {
+		static public function query($conn, $query, $from = null, $args = null, $row = null) {
 			$query = self::parse_query($query);
 			$query_string = null;
 
@@ -190,8 +193,13 @@
 						continue 2;
 					// Se for uma variável
 					case 'variable':
+						// Define a informação que será passada
+						// Se for uma variável do objeto [@this.id]...
+						// Em casos comuns, usa o argumento informado
+						$variable_data = isset($data['this']) ? $row->__get($data['name'])
+							: (@(ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']]));
+
 						$data_type = isset($data['type']) ? $data['type'] : 'string';
-						$variable_data = @(ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']]);
 						$query_string.= core_type::type_return($conn, $data_type, $variable_data,
 							@$data['optional'], @$data['null']);
 						continue 2;
