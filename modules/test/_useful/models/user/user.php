@@ -5,6 +5,7 @@
 		// Prepara o modelo
 		public function on_require() {
 			$this->table('users');
+			$this->prefix('user_');
 
 			// Chaves para load
 			$this->add_key('load_by_username', 'SELECT * FROM [this] WHERE [this.access_username] = [@username]', 'username');
@@ -16,5 +17,8 @@
 
 			// Chaves para exists
 			$this->add_key('count_like', 'SELECT NULL FROM [this] WHERE [this.access_username] LIKE [@1]');
+
+			// Chaves para one
+			$this->add_key('one_profile', 'useful/user/profile', 'id_profile');
 		}
 	}

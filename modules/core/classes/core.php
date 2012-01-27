@@ -315,6 +315,9 @@
 
 		// Obtém o nome de uma classe de um modular parts
 		static public function get_joined_class( $modular_parts, $class_sulfix = null ) {
+			if(isset($modular_parts->repeated))
+				array_pop($modular_parts->path);
+
 			return join( '_', $modular_parts->modular ) . '_'
 				 . join( '_', $modular_parts->path )
 				 . ( $class_sulfix !== null ? "_{$class_sulfix}" : null );

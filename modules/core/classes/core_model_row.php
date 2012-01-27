@@ -71,6 +71,10 @@
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
 						return $key->type === 'exists' ? $query->num_rows > 0 : $query->num_rows;
 						break;
+					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
+					case 'one':
+						return model($key->model, $this->_data->{$key->column}, $this->_conn);
+						break;
 				}
 			}
 		}

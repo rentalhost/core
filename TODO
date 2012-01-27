@@ -1,6 +1,7 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
-- model: usar [@valor?null] força o uso de NULL caso a informação não seja passada
+- model: aplicar o próprio prefix() se for definido antes de table()
+- model: função from() para saber de qual objeto veio a chamada one_();
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
