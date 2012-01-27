@@ -1,1 +1,1 @@
-["object",[["string","SELECT "],["object",{"object":["string","variable"],"name":["string","1"]},"array"],["string",";"]],"array"]
+["object",[["string","SELECT "],["object",{"object":["string","variable"],"name":["string","1"],"optional":["boolean",false]},"array"],["string",";"]],"array"]

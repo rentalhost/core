@@ -37,7 +37,8 @@
 				21	=> 'SELECT [@telefone(phone)];',
 				22	=> 'SELECT [@1];',
 				23	=> 'SELECT [@1(phone)];',
-				24	=> 'SELECT [@telefone(phone?)];',
+				24	=> 'SELECT [@telefone(phone)?];',
+				25	=> 'SELECT [@telefone?];',
 			);
 
 			foreach($tests as $key => $test)
@@ -67,8 +68,9 @@
 			$this->test(12, core_model_query::query($conn, 'SELECT [@float2(int)];', $model, $model_args_1));
 			$this->test(13, core_model_query::query($conn, 'SELECT [@sql(sql)];', $model, $model_args_1));
 			$this->test(14, core_model_query::query($conn, 'SELECT [@key(key)];', $model, $model_args_1));
-			$this->test(16, core_model_query::query($conn, 'SELECT [@fake(int?)];', $model, $model_args_1));
-			$this->test(17, core_model_query::query($conn, 'SELECT [@fake(float?)];', $model, $model_args_1));
-			$this->test(18, core_model_query::query($conn, 'SELECT [@fake(string?)];', $model, $model_args_1));
+			$this->test(16, core_model_query::query($conn, 'SELECT [@fake(int)?];', $model, $model_args_1));
+			$this->test(17, core_model_query::query($conn, 'SELECT [@fake(float)?];', $model, $model_args_1));
+			$this->test(18, core_model_query::query($conn, 'SELECT [@fake(string)?];', $model, $model_args_1));
+			$this->test(19, core_model_query::query($conn, 'SELECT [@fake?];', $model, $model_args_1));
 		}
 	}
