@@ -1,5 +1,8 @@
 -- MÁXIMA PRIORIDADE --
 - model: contruir a classe de modelos;
+	- model: inserir, atualizar, salvar e remover;
+	- model: eventos;
+- core: aceitar novos tipos via classe core_type;
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
@@ -25,6 +28,7 @@
 - verificar o nome de todos os métodos e procurar reduzir o número
 
 -- PUBLICAÇÃO --
+- fazer uma busca por TODO: e DEBUG:;
 - fazer uma última execução com coverage;
 - fazer testes em todos os servidores disponíveis;
 - fazer um backup do sql para o core, e para test;

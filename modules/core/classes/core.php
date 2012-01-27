@@ -289,8 +289,6 @@
 						$modular_path = array_slice( $modular_path, $key );
 						break 2;
 					}
-
-					break;
 				}
 
 				// Se nenhum path for cadastro, apaga a variável

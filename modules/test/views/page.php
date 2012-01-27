@@ -67,8 +67,10 @@
 
 						// Se necessário, inicia o sistema de depuração
 						if($xdebug_enabled === true
-						&& isset($_GET['coverage']))
+						&& isset($_GET['coverage'])) {
+							set_time_limit(15);
 							xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+						}
 
 						// Obtém e imprime as classes diretamente no modelo
 						$result = '';

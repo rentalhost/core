@@ -117,6 +117,10 @@
 						$object_data["\0core_database\0_connection_array"]);
 				}
 				else
+				if($data instanceof core_model) {
+					unset($object_data["\0*\0_keys"]);
+				}
+				else
 				if($data instanceof core_model_row) {
 					unset($object_data["\0core_model_row\0_model"]);
 					unset($object_data["\0core_model_row\0_from"]);

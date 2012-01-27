@@ -103,14 +103,28 @@
 			$profile = $user->one_profile();
 			$this->test(11, $profile);
 			$this->test(12, $profile->from() === $user);
+			$user->load_default('fake');
+			$this->test(13, $user);
 
 			$this->set_prefix('multi');
 			$user = model('useful/user', 1);
-			foreach($user->multi_users()->fetch_all() as $key => $value)
+			$users = $user->multi_users();
+			foreach($users->fetch_all() as $key => $value)
 				$this->test($key, $value->values());
 
+			$this->set_prefix('multi_results');
+			$this->test(1, $users->model());
+			$this->test(2, $users->from());
+			$this->test(3, count($users));
+
 			$this->set_prefix('many');
-			foreach($user->many_phones()->fetch_all() as $key => $value)
+			$phones = $user->many_phones();
+			foreach($phones->fetch_all() as $key => $value)
 				$this->test($key, $value->values());
+
+			$this->set_prefix('many_results');
+			$this->test(1, $phones->model());
+			$this->test(2, $phones->from());
+			$this->test(3, count($phones));
 		}
 	}

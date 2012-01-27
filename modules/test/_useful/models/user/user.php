@@ -5,7 +5,7 @@
 		// Prepara o modelo
 		public function on_require() {
 			$this->table('users');
-			$this->prefix('user_');
+			$this->prefix('test_useful_user_', true);
 
 			// Chaves para load
 			$this->add_key('load_by_username', 'SELECT * FROM [this] WHERE [this.access_username] = [@username]', 'username');

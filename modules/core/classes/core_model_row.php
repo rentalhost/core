@@ -57,8 +57,9 @@
 		// Aplica os dados recebidos
 		public function _apply_data($result) {
 			// Se não for informado um resultado...
-			if($result === false) {
+			if($result == false) {
 				$this->_exists = false;
+				$this->_data = null;
 			}
 			// Senão, aplica as informações
 			else {

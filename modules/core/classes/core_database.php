@@ -140,6 +140,7 @@
 		public function disconnect() {
 			$this->_connection = null;
 			$this->_connected = false;
+			$this->_last_query = null;
 		}
 
 		// Executa uma query
