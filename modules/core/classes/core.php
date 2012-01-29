@@ -162,6 +162,10 @@
 			&& end($modular_path) === '')
 				array_pop($modular_path);
 
+			// Repete a última definição do path, se possível
+			$last_try = $configs['path_repeat'];
+			$using_last_try = false;
+
 			// Se necessário, aplica a raiz do módulo
 			if($configs['modular_path_auto'] === true) {
 				if(empty($modular_path[0]))
@@ -210,6 +214,15 @@
 				if( empty( $result->modular ) ) {
 					unset( $result->modular );
 				}
+
+				// Se for necessário repetir
+				if($last_try === true
+				&& empty($modular_path)
+				&& !empty($result->modular)) {
+					$last_try = false;
+					$using_last_try = true;
+					$modular_path[] = end($result->modular);
+				}
 			}
 
 			// Após buscar o módulo, se for necessário, anexa o complemento
@@ -221,7 +234,6 @@
 			if( $configs['search_paths'] === true
 			&&  empty( $modular_path ) === false ) {
 				$result->path = array();
-				$last_try = $configs['path_repeat'];
 
 				// Para cada modular, busca pelo sub-diretório
 				while(true) {
@@ -298,9 +310,9 @@
 			}
 
 			// Se sobrar alguma informação no path, armazena
-			if( !empty( $modular_path ) ) {
+			if($using_last_try === false
+			&& !empty($modular_path))
 				$result->remains = $modular_path;
-			}
 
 			// Se for necessário gerar o path completo...
 			if( $configs['make_fullpath'] === true ) {

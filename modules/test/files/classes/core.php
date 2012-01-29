@@ -143,6 +143,18 @@
 			)));
 			$this->test(6, core::get_modular_parts('test_useful_same__name', array('make_fullpath' => true)));
 			$this->test(7, core::get_modular_parts('test_useful_same__dir', array('make_fullpath' => true)));
+			$this->test(8, core::get_modular_parts('__useful', array(
+				'modular_path_auto' => true,
+				'path_extension' => '/views',
+				'path_repeat' => true,
+				'make_fullpath' => true
+			)));
+			$this->test(9, core::get_modular_parts('__useful_other', array(
+				'modular_path_auto' => true,
+				'path_extension' => '/views',
+				'path_repeat' => true,
+				'make_fullpath' => true
+			)));
 		}
 
 		public function test_get_joined_class() {
