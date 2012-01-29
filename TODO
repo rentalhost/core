@@ -26,6 +26,11 @@
 -- MÍNIMA PRIORIDADE --
 - mover o sistema do file-coverage para uma library especializada;
 - verificar o nome de todos os métodos e procurar reduzir o número
+- core_types: permitir o uso de __tipo dentro de um SQL, se baseando no modelo de onde foi escrito (core_model)
+- core_types, core: é necessário permitir repetir um path, mesmo se houver sobras
+	- ex: helper test_user_phone() pode estar em test/_user/helpers/user.php, mas a chamada ainda tem "phone" como remains
+		  isso faz com que, como há sobra, o path_repeat pare de funcionar e não encontra user.php,
+		  ele espera phone.php ou phone/phone.php ao invés.
 
 -- PUBLICAÇÃO --
 - fazer uma busca por TODO: e DEBUG:;

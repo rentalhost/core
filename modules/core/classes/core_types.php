@@ -18,7 +18,7 @@
 			self::$_conn = $conn;
 
 			// Obtém os dados do tipo
-			$type = self::$_types[$type];
+			$type = isset(self::$_types[$type]) ? self::$_types[$type] : self::_load_type($type);
 
 			// Se for opcional e o valor estiver vazio
 			if($data === null) {
@@ -40,6 +40,28 @@
 
 			// Em outro caso, retorna um valor padrão
 			return $method === 'get' ? null : 'NULL';
+		}
+
+		// Carrega um novo tipo
+		static private function _load_type($type) {
+			// Procura o arquivo de tipo
+			$type_data = core::get_modular_parts($type, array(
+				'path_clip' => true,
+				'path_repeat' => true,
+				'path_extension' => '/types',
+				'make_fullpath' => true
+			));
+
+			// Obtém o nome e inclui a classe responsável
+			$type_class = core::get_joined_class($type_data, 'types');
+			core::do_require($type_data->fullpath);
+
+			// Inclui e prepara a classe
+			$type_object = new $type_class();
+			$type_object->on_require();
+
+			// Retorna o objeto com o tipo selecionado
+			return self::$_types[$type];
 		}
 
 		/** OBJETO */

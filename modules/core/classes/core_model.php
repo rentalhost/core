@@ -55,14 +55,14 @@
 
 		/** INSTÂNCIA */
 		// Armazena o nome da tabela do modelo único e completo
-		protected $_table;
-		protected $_table_full;
+		private $_table;
+		private $_table_full;
 		// Armazena o prefixo do modelo único e completo
-		protected $_prefix = null;
-		protected $_prefix_full = null;
+		private $_prefix = null;
+		private $_prefix_full = null;
 
 		// Armazena as keys do modelo
-		protected $_keys = array();
+		private $_keys = array();
 
 		// Obtém ou altera o prefixo da tabela
 		public function prefix($model_prefix = null, $use_as_full = false) {

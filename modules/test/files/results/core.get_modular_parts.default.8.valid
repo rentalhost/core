@@ -1,1 +1,1 @@
-["object",{"modular":["object",[["string","test"],["string","useful"]],"array"],"path":["object",[["string","useful"]],"array"],"fullpath":["string",".\/core\/modules\/test\/_useful\/views\/useful.php"]},"stdClass"]
+["object",{"modular":["object",[["string","test"],["string","useful"]],"array"],"path":["object",[["string","useful"]],"array"],"repeated":["boolean",true],"fullpath":["string",".\/core\/modules\/test\/_useful\/views\/useful.php"]},"stdClass"]

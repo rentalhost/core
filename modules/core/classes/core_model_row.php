@@ -30,12 +30,12 @@
 		public function load($id) {
 			// Faz a busca e aplica uma informação recebida
 			return $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
-				array('id' => $id))->fetch_object());
+				array('id' => $id))->fetch_assoc());
 		}
 
 		// Obtém o ID atual
 		public function id() {
-			return (int) @$this->_data->id;
+			return (int) @$this->_data['id'];
 		}
 
 		// Calcula a quantidade de registros de um modelo
@@ -63,8 +63,23 @@
 			}
 			// Senão, aplica as informações
 			else {
+				// Armazena o novo resultado
+				$new_result = array();
+
+				// Reconfigura o resultado, onde for necessário
+				foreach($result as $key => $value) {
+					// Se for configurado (json), reconfigura
+					if($key[0] === '{') {
+						$key_data = json_decode($key, true);
+						$new_result[$key_data['name']] = core_types::type_return($this->_conn, $key_data['type'],
+							$value, @$key_data['optional'], @$key_data['null'], 'get');
+					}
+					else
+					$new_result[$key] = $value;
+				}
+
 				$this->_exists = true;
-				$this->_data = $result;
+				$this->_data = $new_result;
 			}
 		}
 
@@ -81,7 +96,7 @@
 					// Chave load carrega uma informação para os dados internos
 					case 'load':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
-						return $this->_apply_data($query->fetch_object());
+						return $this->_apply_data($query->fetch_assoc());
 						break;
 					// Chave exists apenas retorna true se a informação existir (ao menos um registro)
 					// Chave count retorna a quantidade de registros compatíveis
@@ -92,7 +107,7 @@
 						break;
 					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
 					case 'one':
-						$model = model($key->model, $this->_data->{$key->column}, $this->_conn);
+						$model = model($key->model, $this->_data[$key->column], $this->_conn);
 						$model->_from = $this;
 						return $model;
 					// Chave multi retorna múltiplos resultados do mesmo tipo deste modelo
@@ -111,13 +126,13 @@
 		// Obtém a informação tipada
 		//TODO: tipar
 		public function __get($key) {
-			return $this->_data->{$key};
+			return $this->_data[$key];
 		}
 
 		// Altera a informação tipada
 		//TODO: tipar
 		public function __set($key, $value) {
-			$this->_data->{$key} = $value;
+			$this->_data[$key] = $value;
 		}
 
 		/** EXTRA */

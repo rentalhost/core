@@ -221,7 +221,7 @@
 				&& !empty($result->modular)) {
 					$last_try = false;
 					$using_last_try = true;
-					$modular_path[] = end($result->modular);
+					array_unshift($modular_path, end($result->modular));
 				}
 			}
 
@@ -310,9 +310,13 @@
 			}
 
 			// Se sobrar alguma informação no path, armazena
-			if($using_last_try === false
-			&& !empty($modular_path))
-				$result->remains = $modular_path;
+			if($using_last_try === false) {
+				if(!empty($modular_path))
+					$result->remains = $modular_path;
+			}
+			else
+			if(empty($modular_path))
+				$result->repeated = true;
 
 			// Se for necessário gerar o path completo...
 			if( $configs['make_fullpath'] === true ) {
@@ -328,9 +332,9 @@
 			if(isset($modular_parts->repeated))
 				array_pop($modular_parts->path);
 
-			return join( '_', $modular_parts->modular ) . '_'
-				 . join( '_', $modular_parts->path )
-				 . ( $class_sulfix !== null ? "_{$class_sulfix}" : null );
+			return join('_', $modular_parts->modular)
+				 . (!empty($modular_parts->path) ? '_' . join('_', $modular_parts->path) : null)
+				 . ($class_sulfix !== null ? "_{$class_sulfix}" : null);
 		}
 
 		// Obtém o nome do arquivo responsável pela chamada, mas que não seja do core

@@ -26,5 +26,6 @@
 
 			// Chaves para many
 			$this->add_key('many_phones', 'useful/user/phone', 'SELECT [this.*] FROM [this] WHERE [this.id_user] = [@this.id(int)]');
+			$this->add_key('many_phones_typed', 'useful/user/phone', 'SELECT [this: id(int), phone_number(test_useful_phone)] FROM [this] WHERE [this.id_user] = [@this.id(int)]');
 		}
 	}

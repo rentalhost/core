@@ -118,7 +118,7 @@
 				}
 				else
 				if($data instanceof core_model) {
-					unset($object_data["\0*\0_keys"]);
+					unset($object_data["\0core_model\0_keys"]);
 				}
 				else
 				if($data instanceof core_model_row) {

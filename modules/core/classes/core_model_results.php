@@ -55,7 +55,7 @@
 
 		// Avança ao próximo objeto da lista
 		public function next(){
-			$next_row = $this->_query->fetch_object();
+			$next_row = $this->_query->fetch_assoc();
 			if($next_row === null)
 				return $this->_last_row = null;
 

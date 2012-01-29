@@ -122,6 +122,11 @@
 			foreach($phones->fetch_all() as $key => $value)
 				$this->test($key, $value->values());
 
+			$this->set_prefix('many_typed');
+			$phones = $user->many_phones_typed();
+			foreach($phones->fetch_all() as $key => $value)
+				$this->test($key, $value->values());
+
 			$this->set_prefix('many_results');
 			$this->test(1, $phones->model());
 			$this->test(2, $phones->from());
