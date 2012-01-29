@@ -200,7 +200,7 @@
 							: (@(ctype_digit($data['name']) ? $args[$data['name'] - 1] : $args[$data['name']]));
 
 						$data_type = isset($data['type']) ? $data['type'] : 'string';
-						$query_string.= core_type::type_return($conn, $data_type, $variable_data,
+						$query_string.= core_types::type_return($conn, $data_type, $variable_data,
 							@$data['optional'], @$data['null']);
 						continue 2;
 				}

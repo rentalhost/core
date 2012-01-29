@@ -1,7 +1,7 @@
 <?php
 
 	// Classe que gerencia tipos sql
-	class core_type {
+	class core_types {
 		/** ESTÁTICO */
 		// Armazena os tipos existentes
 		static private $_types = array();

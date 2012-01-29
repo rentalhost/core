@@ -2,7 +2,7 @@
 - model: contruir a classe de modelos;
 	- model: inserir, atualizar, salvar e remover;
 	- model: eventos;
-- core: aceitar novos tipos via classe core_type;
+- core: aceitar novos tipos via classe core_types;
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;

@@ -1,7 +1,7 @@
 <?php
 
 	// Esta classe adiciona os tipos mais comuns de sql para o core
-	class core_default_type extends core_type {
+	class core_default_types extends core_types {
 		// Adiciona os tipos padrões
 		//TODO: tipo key não pode ser usado para output
 		public function on_require() {
@@ -39,5 +39,5 @@
 	}
 
 	// Inicia o objeto
-	$default_types = new core_default_type;
+	$default_types = new core_default_types;
 	$default_types->on_require();
