@@ -134,11 +134,18 @@
 		}
 
 		public function test_basic() {
-			$log = model('useful/user/log', 1);
+			$log = model('useful/user/log');
 			$log->truncate();
 
 			$this->test(1, $log);
+			$log->load(1);
 			$this->test(2, $log->exists());
 
+			$log->log_text = "Saving a log...";
+			$log->log_date = 1328821108;
+
+			$this->test(3, $log);
+			$this->test(4, $log->save());
+			$this->test(5, $log->exists());
 		}
 	}

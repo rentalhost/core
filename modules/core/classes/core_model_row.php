@@ -26,19 +26,6 @@
 
 		}
 
-		// Carrega o objeto do modelo por ID
-		public function load($id) {
-			// Faz a busca e aplica uma informação recebida
-			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
-				array('id' => $id))->fetch_assoc());
-
-			// Se um resultado não for encontrado, aplica ao menos o id informado
-			if($result === false)
-				$this->_data['id'] = $id;
-
-			return $result;
-		}
-
 		// Obtém o ID atual
 		public function id() {
 			return (int) @$this->_data['id'];
@@ -60,11 +47,67 @@
 			return (array) $this->_data;
 		}
 
+		/** MÉTODOS DE REGISTRO */
+		// Carrega o objeto do modelo por ID
+		public function load($id) {
+			// Faz a busca e aplica uma informação recebida
+			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
+				array('id' => $id))->fetch_assoc());
+
+			// Se um resultado não for encontrado, aplica ao menos o id informado
+			if($result === false)
+				$this->_data['id'] = $id;
+
+			return $result;
+		}
+
+		// Salva o objeto
+		public function save() {
+			// Se o objeto já existir, faz um update
+			if($this->_exists === true) {
+				// Gera uma lista de modificações
+				$args = array('setlist' => array());
+
+				// Para cada item de dados, aplica na setlist
+				foreach($this->_data as $column => $value)
+					$args['setlist'][] = "`{$column}` = \"" . $this->_conn->escape($value) . '"';
+				$args['setlist'] = join(', ', $args['setlist']);
+
+				// Atualiza a informação no banco
+				$this->query('UPDATE [this] SET [@setlist(sql)] WHERE `id` = [@this.id];', $args);
+
+				return true;
+			}
+			// Caso contrário, é uma operação de inserção
+			else {
+				// Gera a lista de inserção
+				$args = array('insertlist' => array());
+
+				// Para cada item de dados, aplica na insertlist
+				foreach($this->_data as $column => $value)
+					$args['insertlist'][] = "`{$column}` = \"" . $this->_conn->escape($value) . '"';
+				$args['insertlist'] = join(', ', $args['insertlist']);
+
+				// Insere a informação no banco
+				$this->query('INSERT INTO [this] SET [@insertlist(sql)]', $args);
+
+				// Se um ID não foi informado, aplica o ID recebido
+				if(empty($this->_data['id']))
+					$this->_data['id'] = $this->_conn->insert_id;
+
+				// Define que agora a informação existe
+				$this->_exists = true;
+
+				return true;
+			}
+		}
+
 		// Retorna se o registro existe na tabela
 		public function exists() {
 			return $this->_exists;
 		}
 
+		/** APLICA INFORMAÇÕES */
 		// Aplica os dados recebidos
 		public function _apply_data($result) {
 			// Se não for informado um resultado...
