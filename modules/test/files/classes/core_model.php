@@ -162,5 +162,11 @@
 			$this->test(4, $log->save());
 			$this->test(5, $log);
 			$this->test(6, $log->exists());
+
+			$this->set_prefix('delete');
+			$log = model('useful/user/log', 1);
+			$this->test(1, $log->exists());
+			$this->test(2, $log->delete());
+			$this->test(3, $log->exists());
 		}
 	}

@@ -92,6 +92,21 @@
 			return true;
 		}
 
+		// Remove um registro
+		public function delete($id = null) {
+			// Se um id não for informado, usa o ID atual
+			if($id === null) {
+				// Se o registro não existir, cancela, mas retorna true
+				if($this->_exists === false)
+					return true;
+
+				$id = $this->_data['id'];
+				$this->_exists = false;
+			}
+
+			return $this->query('DELETE FROM [this] WHERE `id` = [@id(int)]', array('id' => $id));
+		}
+
 		// Retorna se o registro existe na tabela
 		public function exists() {
 			return $this->_exists;
