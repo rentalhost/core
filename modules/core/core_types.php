@@ -25,6 +25,9 @@
 			else
 			if(is_float($input))
 				return (float) $input;
+			else
+			if($input instanceof core_model_row)
+				return $input->id();
 		}
 
 		/** KEY */

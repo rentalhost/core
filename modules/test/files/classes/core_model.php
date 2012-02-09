@@ -163,6 +163,16 @@
 			$this->test(5, $log);
 			$this->test(6, $log->exists());
 
+			$this->set_prefix('foreign');
+			$user = model('useful/user', 1);
+			$log = model('useful/user/log', 1);
+			$log->id_user = $user;
+
+			$this->test(1, $log);
+			$this->test(2, $log->save());
+			$this->test(3, $log->reload());
+			$this->test(4, $log);
+
 			$this->set_prefix('delete');
 			$log = model('useful/user/log', 1);
 			$this->test(1, $log->exists());
