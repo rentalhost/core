@@ -134,7 +134,11 @@
 		}
 
 		public function test_basic() {
-			$user = model('useful/user', 1);
-			$this->test(1, $user->exists());
+			$log = model('useful/user/log', 1);
+			$log->truncate();
+
+			$this->test(1, $log);
+			$this->test(2, $log->exists());
+
 		}
 	}

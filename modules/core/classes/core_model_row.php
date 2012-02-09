@@ -29,8 +29,14 @@
 		// Carrega o objeto do modelo por ID
 		public function load($id) {
 			// Faz a busca e aplica uma informação recebida
-			return $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
+			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
 				array('id' => $id))->fetch_assoc());
+
+			// Se um resultado não for encontrado, aplica ao menos o id informado
+			if($result === false)
+				$this->_data['id'] = $id;
+
+			return $result;
 		}
 
 		// Obtém o ID atual
@@ -64,7 +70,9 @@
 			// Se não for informado um resultado...
 			if($result == false) {
 				$this->_exists = false;
-				$this->_data = null;
+				$this->_data = array();
+
+				return false;
 			}
 			// Senão, aplica as informações
 			else {
@@ -85,6 +93,8 @@
 
 				$this->_exists = true;
 				$this->_data = $new_result;
+
+				return true;
 			}
 		}
 
@@ -138,6 +148,15 @@
 		//TODO: tipar
 		public function __set($key, $value) {
 			$this->_data[$key] = $value;
+		}
+
+		/** MODELO */
+		// Trunca a tabela (remove todos os rows)
+		public function truncate() {
+			// Ao truncar, não existe mais nenhum row, então este também deixa de existir
+			$this->_exists = false;
+
+			return $this->query('TRUNCATE [this];');
 		}
 
 		/** EXTRA */
