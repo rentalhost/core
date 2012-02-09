@@ -54,6 +54,11 @@
 			return (array) $this->_data;
 		}
 
+		// Retorna se o registro existe na tabela
+		public function exists() {
+			return $this->_exists;
+		}
+
 		// Aplica os dados recebidos
 		public function _apply_data($result) {
 			// Se não for informado um resultado...

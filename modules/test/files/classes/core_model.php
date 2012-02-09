@@ -132,4 +132,9 @@
 			$this->test(2, $phones->from());
 			$this->test(3, count($phones));
 		}
+
+		public function test_basic() {
+			$user = model('useful/user', 1);
+			$this->test(1, $user->exists());
+		}
 	}

@@ -2,7 +2,9 @@
 - model: contruir a classe de modelos;
 	- model: inserir, atualizar, salvar e remover;
 	- model: eventos;
-- core: aceitar novos tipos via classe core_types;
+- model: permitir definir tipo padrão da coluna;
+	- deve-se observar ao usar modelos externos!
+- model: métodos create_load() permite gerar e executar uma chave rapidamente;
 
 -- ALTA PRIORIDADE --
 - controller: pensar numa forma de um controller ser chamado sempre antes de todos, para alteração de rotas;
