@@ -148,7 +148,7 @@
 			$this->test(4, $log->save());
 			$this->test(5, $log->exists());
 
-			$this->test(6, $log->load(1));
+			$this->test(6, $log->reload());
 			$this->test(7, $log);
 
 			$this->set_prefix('insert');

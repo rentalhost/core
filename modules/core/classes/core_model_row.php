@@ -61,6 +61,11 @@
 			return $result;
 		}
 
+		// Recarrega o item atual
+		public function reload() {
+			return $this->load($this->_data['id']);
+		}
+
 		// Salva o objeto
 		public function save() {
 			// Argumentos
