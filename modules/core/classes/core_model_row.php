@@ -63,33 +63,23 @@
 
 		// Salva o objeto
 		public function save() {
+			// Argumentos
+			$save_args = array('data' => array());
+
+			// Aplica o valor que será inserido/atualizado na data list
+			foreach($this->_data as $column => $value)
+				$save_args['data'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
+			$save_args['data'] = join(', ', $save_args['data']);
+
 			// Se o objeto já existir, faz um update
 			if($this->_exists === true) {
-				// Gera uma lista de modificações
-				$args = array('setlist' => array());
-
-				// Para cada item de dados, aplica na setlist
-				foreach($this->_data as $column => $value)
-					$args['setlist'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
-				$args['setlist'] = join(', ', $args['setlist']);
-
 				// Atualiza a informação no banco
-				$this->query('UPDATE [this] SET [@setlist(sql)] WHERE `id` = [@this.id(int)];', $args);
-
-				return true;
+				$this->query('UPDATE [this] SET [@data(sql)] WHERE `id` = [@this.id(int)];', $save_args);
 			}
 			// Caso contrário, é uma operação de inserção
 			else {
-				// Gera a lista de inserção
-				$args = array('insertlist' => array());
-
-				// Para cada item de dados, aplica na insertlist
-				foreach($this->_data as $column => $value)
-					$args['insertlist'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
-				$args['insertlist'] = join(', ', $args['insertlist']);
-
 				// Insere a informação no banco
-				$this->query('INSERT INTO [this] SET [@insertlist(sql)]', $args);
+				$this->query('INSERT INTO [this] SET [@data(sql)]', $save_args);
 
 				// Se um ID não foi informado, aplica o ID recebido
 				if(empty($this->_data['id']))
@@ -97,9 +87,9 @@
 
 				// Define que agora a informação existe
 				$this->_exists = true;
-
-				return true;
 			}
+
+			return true;
 		}
 
 		// Retorna se o registro existe na tabela
