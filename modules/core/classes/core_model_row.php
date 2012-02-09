@@ -70,11 +70,11 @@
 
 				// Para cada item de dados, aplica na setlist
 				foreach($this->_data as $column => $value)
-					$args['setlist'][] = "`{$column}` = \"" . $this->_conn->escape($value) . '"';
+					$args['setlist'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
 				$args['setlist'] = join(', ', $args['setlist']);
 
 				// Atualiza a informação no banco
-				$this->query('UPDATE [this] SET [@setlist(sql)] WHERE `id` = [@this.id];', $args);
+				$this->query('UPDATE [this] SET [@setlist(sql)] WHERE `id` = [@this.id(int)];', $args);
 
 				return true;
 			}
@@ -85,7 +85,7 @@
 
 				// Para cada item de dados, aplica na insertlist
 				foreach($this->_data as $column => $value)
-					$args['insertlist'][] = "`{$column}` = \"" . $this->_conn->escape($value) . '"';
+					$args['insertlist'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
 				$args['insertlist'] = join(', ', $args['insertlist']);
 
 				// Insere a informação no banco

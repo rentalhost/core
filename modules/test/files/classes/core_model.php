@@ -147,5 +147,20 @@
 			$this->test(3, $log);
 			$this->test(4, $log->save());
 			$this->test(5, $log->exists());
+
+			$this->test(6, $log->load(1));
+			$this->test(7, $log);
+
+			$this->set_prefix('insert');
+			$log = model('useful/user/log', 1);
+
+			$this->test(1, $log);
+
+			$log->log_date = '2012-02-09 11:22:33';
+			$this->test(2, $log);
+			$this->test(3, $log->exists());
+			$this->test(4, $log->save());
+			$this->test(5, $log);
+			$this->test(6, $log->exists());
 		}
 	}

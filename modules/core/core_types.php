@@ -5,11 +5,26 @@
 		// Adiciona os tipos padrões
 		//TODO: tipo key não pode ser usado para output
 		public function on_require() {
-			$this->add_type('key',		null, null,	false, false);
-			$this->add_type('int',		null, 0,	false, true);
-			$this->add_type('string',	null, '""',	false, false);
-			$this->add_type('float',	null, 0,	false, true);
-			$this->add_type('sql',		null, null,	false, false);
+			$this->add_type('default',	null, 'NULL', 	false, false);
+			$this->add_type('key',		null, null,		false, false);
+			$this->add_type('int',		null, 0,		false, true);
+			$this->add_type('string',	null, '""',		false, false);
+			$this->add_type('float',	null, 0,		false, true);
+			$this->add_type('sql',		null, null,		false, false);
+		}
+
+		/** DEFAULT */
+		// Usado quando um tipo não é determinado
+		public function set_default($input) {
+			if(is_string($input))
+				return $this->set_string($input);
+			else
+			if(is_int($input)
+			|| ctype_digit($input))
+				return (int) $input;
+			else
+			if(is_float($input))
+				return (float) $input;
 		}
 
 		/** KEY */
