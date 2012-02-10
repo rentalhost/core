@@ -68,7 +68,7 @@
 
 			// Define o path prioritário
 			if($priority_path === core::get_path_fixed(CORE_INDEX . '/index.php')) {
-				$priority_path = array('');
+				$priority_path = array('configs.php');
 			}
 			else {
 				$priority_path = core::get_path_clipped($priority_path, CORE_MODULES);
