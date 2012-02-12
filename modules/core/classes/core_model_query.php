@@ -3,8 +3,9 @@
 	// Define algumas constantes externas
 	define('CORE_EX_QUERY_VARIABLE', '/^@(?<this>this\.)?(?<column>[1-9][0-9]*|'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:(?<opt>\?)(?<null>null)?)?$/');
 	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
-	define('CORE_EX_QUERY_OBJECT', '/^(?<object>_*'.CORE_VALID_ID.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
-	define('CORE_EX_QUERY_MULTI', '/^(?<object>_*'.CORE_VALID_ID.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
+	define('CORE_EX_QUERY_PATH', '(?:\/?' . CORE_VALID_PATH_ID . ')+');
+	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_EX_QUERY_PATH.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
+	define('CORE_EX_QUERY_MULTI', '/^(?<object>'.CORE_EX_QUERY_PATH.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
@@ -120,8 +121,9 @@
 		// Adiciona um novo identificador
 		static private function _id_string(&$query_data, $object) {
 			// Se não for [this], considera um modelo
-			if($object['object'] !== 'this')
-				return '`' . core_model::_get_linear($object['object'])->table() . '`';
+			if($object['object'] !== 'this') {
+				return '`' . model($object['object'])->model()->table() . '`';
+			}
 
 			// Senão, anexa this na tabela
 			self::_query_push($query_data, array('object' => 'this'));
