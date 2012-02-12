@@ -189,6 +189,10 @@
 						return new core_model_results($this->_conn, $query, $model->model(), $this);
 				}
 			}
+
+			// Em último caso, executa o método dentro do modelo
+			array_unshift($args, $this);
+			return call_user_func_array(array($this->_model, $func), $args);
 		}
 
 		// Obtém a informação tipada

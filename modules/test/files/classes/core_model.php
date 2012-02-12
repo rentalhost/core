@@ -183,4 +183,11 @@
 			$this->test(2, $log->delete());
 			$this->test(3, $log->exists());
 		}
+
+		public function test_data() {
+			$row = model('useful/user', 1);
+
+			$this->set_prefix('call');
+			$this->test(1, $row->get_date_br());
+		}
 	}
