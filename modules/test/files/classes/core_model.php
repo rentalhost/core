@@ -11,6 +11,10 @@
 			$this->test(3, $row_model->prefix(false));
 			$this->test(4, $row_model->table());
 			$this->test(5, $row_model->table(false));
+
+			$this->set_prefix('model_path');
+			$row = model('useful/new_test');
+			$this->test(1, $row);
 		}
 
 		public function test_query() {
