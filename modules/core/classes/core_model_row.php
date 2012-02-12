@@ -164,7 +164,8 @@
 					// Chave load carrega uma informação para os dados internos
 					case 'load':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
-						return $this->_apply_data($query->fetch_assoc());
+						$this->_apply_data($query->fetch_assoc());
+						return $this;
 						break;
 					// Chave exists apenas retorna true se a informação existir (ao menos um registro)
 					// Chave count retorna a quantidade de registros compatíveis
