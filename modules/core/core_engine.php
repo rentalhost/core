@@ -3,6 +3,9 @@
 	// Ativa o registro de erros
 	error_reporting(E_ALL);
 
+	// Inicia a sessão automaticamente
+	session_start();
+
 	// Inclui as classes principais
 	require_once 'classes/core.php';
 	require_once 'classes/core_config.php';

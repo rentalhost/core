@@ -94,7 +94,7 @@
 			session('/test')->test = true;
 			$this->test(1, session('/test')->test);
 			$this->test(2, isset(session()->test));
-			$this->test(3, $_SESSION['/test']->test);
+			$this->test(3, $_SESSION['core_' . core::get_hash() . '::/test']->test);
 		}
 
 		// Teste para o sistema de testes (non-core)

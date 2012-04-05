@@ -41,6 +41,14 @@
 	// Charset padrão para ser utilizado
 	$config->database_default_charset	= 'utf8';	// string
 
+	/** CONFIGURAÇÕES DE SESSÃO */
+	// Prefixar sessões (isto evita conflito de sessões)
+	//NOTE: altere a informação para true para prefixar automaticamente
+	//NOTE: altere a informação para false para desabilitar a função
+	$config->session_prefix = true;
+	// Ao prefixar automaticamente, também incluir a modular
+	$config->session_prefix_modular = false;
+
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);
 

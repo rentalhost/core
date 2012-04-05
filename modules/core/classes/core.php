@@ -381,6 +381,34 @@
 			return self::get_path_fixed( CORE_MODULES . '/' . join( '/_', self::get_caller_module_path() ) );
 		}
 
+		// Obtém um hash baseado no URL base
+		static public function get_hash($include_modular = false) {
+			return md5(baseurl($include_modular));
+		}
+
+		// Obtém uma sessão
+		static public function &get_session($index_name = '') {
+			// Se for necessário, aplica o prefixo na sessão
+			$session_prefix = config('session_prefix');
+			if($session_prefix !== false) {
+				// Se for true, cria um prefixo automaticamente
+				if($session_prefix === true) {
+					$index_name = 'core_' . self::get_hash(config('session_prefix_modular')) . '::' . $index_name;
+				}
+				// Senão, apenas prefixa o índice
+				else {
+					$index_name = $session_prefix . '::' . $index_name;
+				}
+			}
+
+			// Se o índice da sessão não existir, cria
+			if(!isset($_SESSION[$index_name]))
+				$_SESSION[$index_name] = null;
+
+			// Por fim, retorna a sessão
+			return $_SESSION[$index_name];
+		}
+
 		// Cria uma setlist baseado na informação recebida (array)
 		static public function parse_setlist($data){
 			// Quando está em branco, retorna um array vazio
