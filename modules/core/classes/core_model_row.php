@@ -26,9 +26,21 @@
 
 		}
 
+		// Obtém o valor tipado de uma chave
+		private function _get_typed_value($key, $direction = 'get') {
+			$data = $this->_data[$key];
+
+			// Tipo de saída
+			$type_data = isset($data['type']) ? $data['type'] : array('default', null, true);
+			$type_data[0] = $type_data[0] ? $type_data[0] : 'default';
+
+			// Retorna o valor tipado
+			return core_types::type_return($this->_conn, $type_data[0], $data['internal'], $type_data[1], $type_data[2], $direction);
+		}
+
 		// Obtém o ID atual
 		public function id() {
-			return (int) @$this->_data['id'];
+			return (int) @$this->_data['id']['internal'];
 		}
 
 		// Calcula a quantidade de registros de um modelo
@@ -43,8 +55,14 @@
 		}
 
 		// Obtém os valores armazenados internamente
-		public function values() {
-			return (array) $this->_data;
+		public function values($internal_value = false) {
+			$values = array();
+
+			foreach($this->_data as $key => $data) {
+				$values[$key] = $internal_value === true ? $data['internal'] : $this->_get_typed_value($key);
+			}
+
+			return $values;
 		}
 
 		/** MÉTODOS DE REGISTRO */
@@ -55,15 +73,19 @@
 				array('id' => $id))->fetch_assoc());
 
 			// Se um resultado não for encontrado, aplica ao menos o id informado
-			if($result === false)
-				$this->_data['id'] = $id;
+			if($result === false) {
+				$this->_data['id'] = array(
+					'internal' => $id,
+					'outdated' => true
+				);
+			}
 
 			return $result;
 		}
 
 		// Recarrega o item atual
 		public function reload() {
-			return $this->load($this->_data['id']);
+			return $this->load($this->_data['id']['internal']);
 		}
 
 		// Salva o objeto
@@ -72,8 +94,14 @@
 			$save_args = array('data' => array());
 
 			// Aplica o valor que será inserido/atualizado na data list
-			foreach($this->_data as $column => $value)
-				$save_args['data'][] = "`{$column}` = " . core_types::type_return($this->_conn, 'default', $value, false, true);
+			//NOTA: somente os dados desatualizados serão aplicados
+			foreach($this->_data as $column => $value) {
+				if($this->_data[$column]['outdated'] === true) {
+					$this->_data[$column]['outdated'] = false;
+					$save_args['data'][] = "`{$column}` = " . $this->_get_typed_value($column, 'set');
+				}
+			}
+
 			$save_args['data'] = join(', ', $save_args['data']);
 
 			// Se o objeto já existir, faz um update
@@ -88,7 +116,10 @@
 
 				// Se um ID não foi informado, aplica o ID recebido
 				if(empty($this->_data['id']))
-					$this->_data['id'] = $this->_conn->insert_id;
+					$this->_data['id'] = array(
+						'internal' => $this->_conn->insert_id,
+						'outdated' => false
+					);
 
 				// Define que agora a informação existe
 				$this->_exists = true;
@@ -105,7 +136,7 @@
 				if($this->_exists === false)
 					return true;
 
-				$id = $this->_data['id'];
+				$id = $this->_data['id']['internal'];
 				$this->_exists = false;
 			}
 
@@ -137,11 +168,17 @@
 					// Se for configurado (json), reconfigura
 					if($key[0] === '{') {
 						$key_data = json_decode($key, true);
-						$new_result[$key_data['name']] = core_types::type_return($this->_conn, $key_data['type'],
-							$value, @$key_data['optional'], @$key_data['null'], 'get');
+						$new_result[$key_data['name']] = array(
+							'internal' => $value,
+							'type' => array($key_data['type'], @$key_data['optional'], @$key_data['null']),
+							'outdated' => false
+						);
 					}
 					else
-					$new_result[$key] = $value;
+					$new_result[$key] = array(
+						'internal' => $value,
+						'outdated' => false
+					);
 				}
 
 				$this->_exists = true;
@@ -176,7 +213,7 @@
 						break;
 					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
 					case 'one':
-						$model = model($key->model, $this->_data[$key->column], $this->_conn);
+						$model = model($key->model, $this->_data[$key->column]['internal'], $this->_conn);
 						$model->_from = $this;
 						return $model;
 					// Chave multi retorna múltiplos resultados do mesmo tipo deste modelo
@@ -199,13 +236,16 @@
 		// Obtém a informação tipada
 		//TODO: tipar
 		public function __get($key) {
-			return $this->_data[$key];
+			return $this->_get_typed_value($key, 'get');
 		}
 
 		// Altera a informação tipada
-		//TODO: tipar
 		public function __set($key, $value) {
-			$this->_data[$key] = $value;
+			if(!isset($this->_data[$key]))
+				$this->_data[$key] = array();
+
+			$this->_data[$key]['internal'] = $value;
+			$this->_data[$key]['outdated'] = true;
 		}
 
 		/** MODELO */

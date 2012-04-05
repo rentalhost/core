@@ -403,7 +403,7 @@
 
 			// Se o índice da sessão não existir, cria
 			if(!isset($_SESSION[$index_name]))
-				$_SESSION[$index_name] = null;
+				$_SESSION[$index_name] = new stdclass;
 
 			// Por fim, retorna a sessão
 			return $_SESSION[$index_name];

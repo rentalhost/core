@@ -38,8 +38,8 @@
 			if(is_callable($call_method))
 				return call_user_func($call_method, $data);
 
-			// Em outro caso, retorna um valor padrão
-			return $method === 'get' ? null : 'NULL';
+			// Em outro caso, retorna o próprio valor
+			return $method === 'get' ? $data : 'NULL';
 		}
 
 		// Carrega um novo tipo

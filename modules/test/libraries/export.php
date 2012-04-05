@@ -124,6 +124,7 @@
 				if($data instanceof core_model_row) {
 					unset($object_data["\0core_model_row\0_model"]);
 					unset($object_data["\0core_model_row\0_from"]);
+					unset($object_data["\0core_model_row\0_conn"]);
 				}
 				else
 				if($data instanceof core_model_results) {
