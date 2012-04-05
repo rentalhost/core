@@ -7,6 +7,12 @@
 
 		// Armazena os detalhes de uma configuração
 		static public function save_configs( $modular_path, $config_array, $merge_similar = true ) {
+			// Quando a modular é configs.php, é necessário adicionar uma barra
+			// Este procedimento resolve o bug na busca de configurações quando definidas em /configs.php
+			if($modular_path === 'configs.php') {
+				$modular_path = '/configs.php';
+			}
+
 			// Quando não existe a informação, faz um save rapidamente
 			// Se não for necessário mesclar, faz um save rapidamente
 			if( !isset( self::$_configs[$modular_path] )
