@@ -10,6 +10,16 @@
 		const	TYPE_EXCEPTION	= 16;
 		const	TYPE_ALL		= 31;
 
+		// Nomenclatura dos tipos
+		static private $_type_names = array(
+			self::TYPE_OK			=> 'ok',
+			self::TYPE_INFO			=> 'info',
+			self::TYPE_ERROR		=> 'error',
+			self::TYPE_WARNING		=> 'warning',
+			self::TYPE_EXCEPTION	=> 'exception',
+			self::TYPE_ALL			=> 'all'
+		);
+
 		// Armazena as mensagens
 		private $_messages = array();
 		// Armazena o tipo padrão das mensagens
@@ -114,4 +124,14 @@
   		public function next() { return next($this->_messages); }
   		public function rewind() { return reset($this->_messages); }
   		public function valid() { return key($this->_messages) !== null; }
+
+  		/** OBJECT */
+  		static public function get_type_name($type_code, $rename_list = null) {
+  			// Se for necessário renomear a saída...
+  			$list = self::$_type_names;
+  			if($rename_list !== null)
+  				$list = array_merge($list, $rename_list);
+
+  			return $list[$type_code];
+  		}
 	}
