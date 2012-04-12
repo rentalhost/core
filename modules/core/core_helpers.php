@@ -101,6 +101,6 @@
 
 	/** HELPERS DE SESSÃO */
 	// Obtém um objeto de sessão
-	function &session($index_name = '') {
-		return core::get_session($index_name);
+	function &session($index_name = '', $set_value = -1) {
+		return core::get_session($index_name, $set_value);
 	}

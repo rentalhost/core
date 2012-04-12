@@ -387,7 +387,7 @@
 		}
 
 		// Obtém uma sessão
-		static public function &get_session($index_name = '') {
+		static public function &get_session($index_name = '', $set_value = -1) {
 			// Se for necessário, aplica o prefixo na sessão
 			$session_prefix = config('session_prefix');
 			if($session_prefix !== false) {
@@ -404,6 +404,10 @@
 			// Se o índice da sessão não existir, cria
 			if(!isset($_SESSION[$index_name]))
 				$_SESSION[$index_name] = new stdclass;
+			else
+			// Redefine a informação da sessão, como limpá-la
+			if($set_value !== -1)
+				$_SESSION[$index_name] = $set_value;
 
 			// Por fim, retorna a sessão
 			return $_SESSION[$index_name];
