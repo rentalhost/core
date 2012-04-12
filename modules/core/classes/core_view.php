@@ -85,6 +85,11 @@
 
 		// Carrega a view proposta
 		private function _load_view( $__args ) {
+			// Se existir uma informação global, exporta
+			if( !empty( self::$_global_data ) ) {
+				extract( self::$_global_data, EXTR_REFS );
+			}
+
 			// Se args for um array, exporta seus dados dentro da view
 			if( is_array( $__args ) ) {
 				extract( $__args, EXTR_REFS );
@@ -173,5 +178,24 @@
 		// Obtém a informação modular
 		public function get_modular_data() {
 			return $this->_modular_data;
+		}
+
+		/** ESTÁTICO */
+		// Armazena informações globais, extraídas em todas as views
+		static private $_global_data	= array();
+
+		// Define uma informação global
+		static public function global_set($keyname, $value) {
+			self::$_global_data[$keyname] = $value;
+		}
+
+		// Define uma informação global por referência
+		static public function global_bind($keyname, &$value) {
+			self::$_global_data[$keyname] = $value;
+		}
+
+		// Remove uma informação global
+		static public function global_unset($keyname) {
+			unset( self::$_global_data[$keyname] );
 		}
 	}
