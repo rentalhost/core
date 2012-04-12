@@ -87,7 +87,16 @@
 				throw new $classname(null, $this->_error_code, $this);
 			}
 
+			// Armazena as informações do erro em uma sessão
+			$_SESSION['last-error'] = (object) array(
+				'error_code' => $this->_error_code,
+				'backtrace' => $this->_backtrace,
+				'globals' => $this->_globals,
+				'args' => $this->_args,
+				'id' => $this->_id
+			);
+
 			//TODO: registrar a ocorrência e alterara a página
-			exit('ERROR');
+			header('Location: ' . baseurl(false) . 'core/error');
 		}
 	}

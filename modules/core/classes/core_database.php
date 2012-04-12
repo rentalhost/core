@@ -151,7 +151,20 @@
 				$this->connect();
 
 			// Armazena o resultado da query
-			return $this->_connection->query($this->_last_query = $query_string);
+			$query = $this->_connection->query($this->_last_query = $query_string);
+
+			// Se a query falhar
+			if($query === false) {
+				$error = new core_error('Cx3000', array(
+					'error'	=> $this->_connection->error,
+					'errno'	=> $this->_connection->errno,
+					'sql'	=> $this->_last_query
+				));
+				$error->set_fatal(true);
+				$error->run();
+			}
+
+			return $query;
 		}
 
 		// Protege uma informação

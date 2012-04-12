@@ -24,14 +24,24 @@
 			if(!isset($_SESSION))
 				session_start();
 
+			$error_object = isset($_SESSION['last-error']) ? $_SESSION['last-error'] : null;
+
 			$lang = lang('/core/error');
-			$error_code = isset($_SESSION['last-error-id'])
-				? $_SESSION['last-error-id']
+			$error_code = $error_object !== null
+				? $_SESSION['last-error']->error_code
 				: $lang->unknow_error;
+
+			$error_lang = null;
+			if($error_object !== null) {
+				$error_lang = 'err' . substr($error_code, 2);
+				$error_lang = lang('/core/errors/' . $error_lang);
+			}
 
 			load('/core/error', array(
 				'lang' => $lang,
-				'error_code' => $error_code
+				'error_code' => $error_code,
+				'error' => $error_object,
+				'error_lang' => $error_lang
 			));
 		}
 	}

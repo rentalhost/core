@@ -54,3 +54,23 @@ form.nice strong {
 	width: 180px;
 	vertical-align: middle;
 }
+
+table.args {
+	margin: 10px 40px;
+}
+table.args thead th {
+	text-align: left;
+	padding: 4px 8px;
+	color: gray;
+}
+table.args tbody td {
+	color: purple;
+	font-family: Consolas, "Lucida Console", monospace;
+	padding: 4px 8px;
+}
+table.args tbody td.key {
+	color: #3B064E;
+}
+table.args tbody td.code div {
+	white-space: pre;
+}
