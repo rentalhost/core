@@ -47,6 +47,9 @@
 				return;
 			}
 
+			// Remove os protetores
+			$this->_proposed_view = str_replace(array('[', ']'), null, $this->_proposed_view);
+
 			// Busca pelo caminho da view
 			$view_path_data = core::get_modular_parts(explode('/', $this->_proposed_view), array(
 				'modular_path_auto' => true,
