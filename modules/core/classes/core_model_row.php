@@ -102,6 +102,10 @@
 				}
 			}
 
+			// Se não houve modificações, retorna true
+			if(empty($save_args['data']))
+				return true;
+
 			$save_args['data'] = join(', ', $save_args['data']);
 
 			// Se o objeto já existir, faz um update
@@ -244,8 +248,10 @@
 			if(!isset($this->_data[$key]))
 				$this->_data[$key] = array();
 
+			$old_internal = $this->_data[$key]['internal'];
+
 			$this->_data[$key]['internal'] = $value;
-			$this->_data[$key]['outdated'] = true;
+			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key, 'set');
 		}
 
 		/** MODELO */
