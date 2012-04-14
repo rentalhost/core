@@ -10,6 +10,7 @@
 			$this->add_type('int',		null, 0,		false, true);
 			$this->add_type('string',	null, '""',		false, false);
 			$this->add_type('float',	null, 0,		false, true);
+			$this->add_type('list',		null, null,		false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
 
@@ -48,6 +49,16 @@
 		/** FLOAT */
 		public function both_float($input) {
 			return (float) str_replace(',', '.', $input);
+		}
+
+
+		/** LIST */
+		public function set_list($input) {
+			return join(',', array_unique($input));
+		}
+
+		public function get_list($input) {
+			return split(',', $input);
 		}
 
 		/** SQL */
