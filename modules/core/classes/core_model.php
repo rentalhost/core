@@ -5,6 +5,10 @@
 		// Constante que verifica se o método chamado é uma key
 		const	METHOD_KEY_VALIDATE		= '/^(?<key>one|many|load|exists|count|multi)_/';
 
+		// Constantes de eventos
+		const	ON_INSERT	= 'insert';
+		const	ON_UPDATE	= 'update';
+
 		/** OBJETO */
 		// Armazena as instâncias do modelo
 		static private $_class_instances = array();

@@ -93,6 +93,22 @@
 			// Argumentos
 			$save_args = array('data' => array());
 
+			// Armazena o status de existência atual e o tipo de evento
+			$old_exists = $this->_exists;
+			$event_type = $old_exists === true ? core_model::ON_UPDATE : core_model::ON_INSERT;
+
+			// Executa o evento antes de salvar
+			var_dump($this->_run_event('before_save', $event_type));
+			if(!$this->_run_event('before_save', $event_type)) {
+				var_dump($this->_event_result);
+				return $this->_event_result;
+			}
+
+			// Executa o evento antes de inserir ou atualizar
+			if(!$this->_run_event($old_exists ? 'before_update' : 'before_insert')) {
+				return $this->_event_result;
+			}
+
 			// Aplica o valor que será inserido/atualizado na data list
 			//NOTA: somente os dados desatualizados serão aplicados
 			foreach($this->_data as $column => $value) {
@@ -129,6 +145,12 @@
 				$this->_exists = true;
 			}
 
+			// Executa o evento após salvar, inserir ou atualizar
+			$this->_run_event('on_save', $event_type);
+
+			// Executa o evento antes de inserir ou atualizar
+			$this->_run_event($old_exists === true ? 'on_update' : 'on_insert');
+
 			return true;
 		}
 
@@ -140,9 +162,17 @@
 				if($this->_exists === false)
 					return true;
 
+				// Executa o evento antes de inserir ou atualizar
+				if(!$this->_run_event('before_delete')) {
+					return $this->_event_result;
+				}
+
 				$id = $this->_data['id']['internal'];
 				$this->_exists = false;
 			}
+
+			// Executa o evento antes de inserir ou atualizar
+			$this->_run_event('on_delete');
 
 			return $this->query('DELETE FROM [this] WHERE `id` = [@id(int)]', array('id' => $id));
 		}
@@ -192,6 +222,11 @@
 			}
 		}
 
+		// Informa se uma determinada coluna foi modificada
+		public function is_outdated($key) {
+			return isset($this->_data[$key]['outdated']) ? $this->_data[$key]['outdated'] : false;
+		}
+
 		/** MÁGICO */
 		// Faz uma chamada a um key
 		public function __call($func, $args) {
@@ -238,7 +273,6 @@
 		}
 
 		// Obtém a informação tipada
-		//TODO: tipar
 		public function __get($key) {
 			return $this->_get_typed_value($key, 'get');
 		}
@@ -252,6 +286,11 @@
 
 			$this->_data[$key]['internal'] = $value;
 			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key, 'set');
+		}
+
+		// Verifica se o conteúdo está vazio
+		public function __isset($key) {
+			return isset($this->_data[$key]['internal']);
 		}
 
 		/** MODELO */
@@ -272,5 +311,28 @@
 		// Executa uma query no modelo
 		public function query($query, $args = null, $from = null) {
 			return $this->_model->query($this->_conn, $query, $args, $from ? $from : $this);
+		}
+
+		/** EVENTOS */
+		// Resposta do último evento ocorrido
+		private $_event_result = true;
+
+		// Executa um evento e valida o seu resultado
+		private function _run_event($event_method, $event_argument = null) {
+			$result = call_user_func(array($this->model(), $event_method), $this, $event_argument);
+
+			// Se o evento retornar false, cancela
+			if($result === false) {
+				return $this->_event_result = false;
+			}
+
+			// Chega se uma mensagem de erro foi gerada
+			if($result instanceof core_message
+			&& $result->has('error')) {
+				$this->_event_result = $result;
+				return false;
+			}
+
+			return $this->_event_result = true;
 		}
 	}
