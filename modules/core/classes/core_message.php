@@ -126,11 +126,14 @@
   		public function valid() { return key($this->_messages) !== null; }
 
   		/** OBJECT */
-  		static public function get_type_name($type_code, $rename_list = null) {
+  		static public function get_type_name($type_code, $renamee_list = null) {
   			// Se for necessário renomear a saída...
   			$list = self::$_type_names;
-  			if($rename_list !== null)
-  				$list = array_merge($list, $rename_list);
+  			if($renamee_list !== null) {
+  				foreach($renamee_list as $key => $value) {
+  					$list[$key] = $value;
+  				}
+  			}
 
   			return $list[$type_code];
   		}
