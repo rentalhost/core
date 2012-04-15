@@ -97,19 +97,20 @@
 			// Argumentos
 			$save_args = array('data' => array());
 
+			// Cria uma nova mensagem
+			$this->_event_messages = new core_message;
+
 			// Armazena o status de existência atual e o tipo de evento
 			$old_exists = $this->_exists;
 			$event_type = $old_exists === true ? core_model::ON_UPDATE : core_model::ON_INSERT;
 
 			// Executa o evento antes de salvar
-			if(!$this->_run_event('before_save', $event_type)) {
-				return $this->_event_result;
-			}
+			if(!$this->_run_event('before_save', $event_type))
+				return false;
 
 			// Executa o evento antes de inserir ou atualizar
-			if(!$this->_run_event($old_exists ? 'before_update' : 'before_insert')) {
-				return $this->_event_result;
-			}
+			if(!$this->_run_event($old_exists ? 'before_update' : 'before_insert'))
+				return false;
 
 			// Aplica o valor que será inserido/atualizado na data list
 			//NOTA: somente os dados desatualizados serão aplicados
@@ -161,6 +162,9 @@
 
 		// Remove um registro
 		public function delete($id = null) {
+			// Cria uma nova mensagem
+			$this->_event_messages = new core_message;
+
 			// Se um id não for informado, usa o ID atual
 			if($id === null) {
 				// Se o registro não existir, cancela, mas retorna true
@@ -168,9 +172,8 @@
 					return true;
 
 				// Executa o evento antes de inserir ou atualizar
-				if(!$this->_run_event('before_delete')) {
-					return $this->_event_result;
-				}
+				if(!$this->_run_event('before_delete'))
+					return false;
 
 				$id = $this->_data['id']['internal'];
 				$this->_exists = false;
@@ -288,15 +291,24 @@
 			return $this->_get_typed_value($key, 'get');
 		}
 
+		// Obtém o valor original de uma chave
+		public function get_original($key) {
+			return isset($this->_data[$key]['original']) ? $this->_data[$key]['original'] : $this->_data[$key]['internal'];
+		}
+
 		// Altera a informação tipada
 		public function __set($key, $value) {
 			if(!isset($this->_data[$key]))
 				$this->_data[$key] = array();
 
 			$old_internal = isset($this->_data[$key]['internal']) ? $this->_data[$key]['internal'] : null;
+			$old_outdated = isset($this->_data[$key]['outdated']) ? $this->_data[$key]['outdated'] : false;
 
 			$this->_data[$key]['internal'] = $value;
 			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key, 'set');
+
+			if($old_outdated !== $this->_data[$key]['outdated'])
+				$this->_data[$key]['original'] = $old_internal;
 		}
 
 		// Verifica se o conteúdo está vazio
@@ -338,12 +350,26 @@
 			}
 
 			// Chega se uma mensagem de erro foi gerada
-			if($result instanceof core_message
-			&& $result->has('error')) {
-				$this->_event_result = $result;
-				return false;
+			if($result instanceof core_message) {
+				// Anexa as mensagens recebidas
+				$this->_event_messages->append($result);
+
+				// Se conter erros, retorna false
+				if($result->has('error')) {
+					$this->_event_result = $result;
+					return false;
+				}
 			}
 
 			return $this->_event_result = true;
+		}
+
+		/** MENSAGENS */
+		// Armazena as mensagens de um determinado evento
+		private $_event_messages;
+
+		// Obtém as mensagens do último evento
+		public function get_last_event_messages() {
+			return $this->_event_messages;
 		}
 	}
