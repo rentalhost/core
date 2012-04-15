@@ -33,7 +33,7 @@
 		// Conversor de tipagem
 		private function _type_transform($type_data, $default_type = null) {
 			if($type_data === null)
-				return $default_type;
+				$type_data = $default_type;
 
 			if(is_string($type_data)
 			|| is_array($type_data)) {
