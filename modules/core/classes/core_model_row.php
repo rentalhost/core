@@ -243,13 +243,13 @@
 				// Obtém as configurações da chave
 				$key = $this->_model->_get_key($func);
 
-				// Armazena o método de carregamento
-				$this->_loader_method = array(array($this, '__call'), array($func, $args));
-
 				// A depender do tipo de chave...
 				switch($key->type) {
 					// Chave load carrega uma informação para os dados internos
 					case 'load':
+						// Armazena o método de carregamento
+						$this->_loader_method = array(array($this, '__call'), array($func, $args));
+
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
 						$this->_apply_data($query->fetch_assoc());
 						return $this;
