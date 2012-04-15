@@ -5,7 +5,7 @@
 	define('CORE_EX_QUERY_COLUMN', '(?<column>'.CORE_VALID_ID.')(?:\((?<type>_*'.CORE_VALID_ID.')\))?(?:\s+as\s+(?<name>'.CORE_VALID_ID.'))?');
 	define('CORE_EX_QUERY_PATH', '(?:\/?' . CORE_VALID_PATH_ID . ')+');
 	define('CORE_EX_QUERY_OBJECT', '/^(?<object>'.CORE_EX_QUERY_PATH.')(?:\.'.CORE_EX_QUERY_COLUMN.')?$/');
-	define('CORE_EX_QUERY_MULTI', '/^(?<object>'.CORE_EX_QUERY_PATH.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/');
+	define('CORE_EX_QUERY_MULTI', '/^(?<object>'.CORE_EX_QUERY_PATH.'):\s*(?!\,)(?<columns>(?:(?:\,\s*)?('.CORE_EX_QUERY_COLUMN.'))+\s*)$/m');
 
 	// Esta classe é apenas para ajudar com assuntos de query
 	class core_model_query {
