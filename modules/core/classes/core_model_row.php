@@ -68,6 +68,9 @@
 		/** MÉTODOS DE REGISTRO */
 		// Carrega o objeto do modelo por ID
 		public function load($id) {
+			// Define o método de carregamento
+			$this->_loader_method = array(array($this, 'load'), array($id));
+
 			// Faz a busca e aplica uma informação recebida
 			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
 				array('id' => $id))->fetch_assoc());
@@ -85,7 +88,8 @@
 
 		// Recarrega o item atual
 		public function reload() {
-			return $this->load($this->_data['id']['internal']);
+			if($this->_loader_method !== false)
+				return call_user_func_array($this->_loader_method[0], $this->_loader_method[1]);
 		}
 
 		// Salva o objeto
@@ -98,9 +102,7 @@
 			$event_type = $old_exists === true ? core_model::ON_UPDATE : core_model::ON_INSERT;
 
 			// Executa o evento antes de salvar
-			var_dump($this->_run_event('before_save', $event_type));
 			if(!$this->_run_event('before_save', $event_type)) {
-				var_dump($this->_event_result);
 				return $this->_event_result;
 			}
 
@@ -144,6 +146,9 @@
 				// Define que agora a informação existe
 				$this->_exists = true;
 			}
+
+			// Recarrega o elemento
+			$this->reload();
 
 			// Executa o evento após salvar, inserir ou atualizar
 			$this->_run_event('on_save', $event_type);
@@ -228,12 +233,18 @@
 		}
 
 		/** MÁGICO */
+		// Armazena o método de carregamento
+		private $_loader_method = false;
+
 		// Faz uma chamada a um key
 		public function __call($func, $args) {
 			// Se for um key válido
 			if(preg_match(core_model::METHOD_KEY_VALIDATE, $func)) {
 				// Obtém as configurações da chave
 				$key = $this->_model->_get_key($func);
+
+				// Armazena o método de carregamento
+				$this->_loader_method = array(array($this, '__call'), array($func, $args));
 
 				// A depender do tipo de chave...
 				switch($key->type) {
