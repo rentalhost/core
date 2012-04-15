@@ -88,7 +88,7 @@
 
 		// Recarrega o item atual
 		public function reload() {
-			if($this->_loader_method !== false)
+			if($this->_loader_method !== null)
 				return call_user_func_array($this->_loader_method[0], $this->_loader_method[1]);
 		}
 
@@ -234,7 +234,7 @@
 
 		/** MÁGICO */
 		// Armazena o método de carregamento
-		private $_loader_method = false;
+		private $_loader_method;
 
 		// Faz uma chamada a um key
 		public function __call($func, $args) {
@@ -293,7 +293,7 @@
 			if(!isset($this->_data[$key]))
 				$this->_data[$key] = array();
 
-			$old_internal = $this->_data[$key]['internal'];
+			$old_internal = isset($this->_data[$key]['internal']) ? $this->_data[$key]['internal'] : null;
 
 			$this->_data[$key]['internal'] = $value;
 			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key, 'set');

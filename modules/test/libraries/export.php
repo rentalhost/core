@@ -125,6 +125,9 @@
 					unset($object_data["\0core_model_row\0_model"]);
 					unset($object_data["\0core_model_row\0_from"]);
 					unset($object_data["\0core_model_row\0_conn"]);
+
+					if(isset($object_data["\0core_model_row\0_loader_method"][0][0]))
+						$object_data["\0core_model_row\0_loader_method"][0][0] = null;
 				}
 				else
 				if($data instanceof core_model_results) {

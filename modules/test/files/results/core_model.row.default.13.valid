@@ -1,1 +1,1 @@
-["object",{"_data":["object",[],"array"],"_exists":["boolean",false]},"core_model_row"]
+["object",{"_data":["object",[],"array"],"_event_result":["boolean",true],"_exists":["boolean",false],"_loader_method":["object",[["object",[["null",null],["string","__call"]],"array"],["object",[["string","load_default"],["object",[["string","fake"]],"array"]],"array"]],"array"]},"core_model_row"]
