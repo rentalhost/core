@@ -266,7 +266,7 @@
 						break;
 					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
 					case 'one':
-						$model = model($key->model, $this->_data[$key->column]['internal'], $this->_conn);
+						$model = model($key->model, $this->_get_typed_value($key->column), $this->_conn);
 						$model->_from = $this;
 						return $model;
 					// Chave multi retorna múltiplos resultados do mesmo tipo deste modelo
