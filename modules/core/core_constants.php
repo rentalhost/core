@@ -11,7 +11,7 @@
 
 	// Define o tipo de informação aceito em um nome de arquivo ou pasta
 	// Organizado por ordem de prioridade; apenas caracteres singulares para flexibilidade de sub-definições
-	define('CORE_VALID_PATH_ID', '[a-z_0-9A-Z\x7f-\xff]');
+	define('CORE_VALID_PATH_ID', '[a-z_\-0-9A-Z\x7f-\xff]');
 	// Define o ID de variáveis (usado em nomes de classes ou métodos, por exemplo)
 	define('CORE_VALID_ID', '[a-zA-Z\x7f-\xff]' . CORE_VALID_PATH_ID . '*');
 	// Define um path válido para views e outras ocasiões
