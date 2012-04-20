@@ -83,7 +83,7 @@
 				);
 			}
 
-			return $result;
+			return $this;
 		}
 
 		// Recarrega o item atual
