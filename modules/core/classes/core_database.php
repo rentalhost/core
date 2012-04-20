@@ -253,6 +253,16 @@
 			return $this->_connection_array[$property];
 		}
 
+		// Obtém a conexão armazenada
+		public function get_connection($autoconnect = true) {
+			// Inicia a conexão, se necessário
+			if($this->_connected === false
+			&& $autoconnect === true)
+				$this->connect();
+
+			return $this->_connection;
+		}
+
 		/** OBJETO */
 		// Cria uma nova conexão na prioridade atual (configurações)
 		//TODO: se o alias já existir, gera um erro

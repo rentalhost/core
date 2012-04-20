@@ -140,7 +140,7 @@
 				// Se um ID não foi informado, aplica o ID recebido
 				if(empty($this->_data['id']))
 					$this->_data['id'] = array(
-						'internal' => $this->_conn->insert_id,
+						'internal' => $this->_conn->get_connection()->insert_id,
 						'outdated' => false
 					);
 
