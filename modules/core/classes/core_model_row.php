@@ -235,6 +235,14 @@
 			return isset($this->_data[$key]['outdated']) ? $this->_data[$key]['outdated'] : false;
 		}
 
+		// Altera o tipo de uma coluna
+		public function set_type($key, $type, $optional = true, $nullable = true) {
+			if(!isset($this->_data[$key]))
+				$this->_data[$key] = array();
+
+			$this->_data[$key]['type'] = array($type, $optional, $nullable);
+		}
+
 		/** MÁGICO */
 		// Armazena o método de carregamento
 		private $_loader_method;

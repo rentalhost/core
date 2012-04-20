@@ -54,10 +54,12 @@
 
 		/** LIST */
 		public function set_list($input) {
-			return join(',', array_unique($input));
+			if(is_string($input)) return $input;
+			return '"' . join(',', array_unique($input)) . '"';
 		}
 
 		public function get_list($input) {
+			if(is_array($input)) return $input;
 			return explode(',', $input);
 		}
 
