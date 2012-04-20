@@ -34,6 +34,10 @@
 			$call_method = ($type['method'] === true ? 'both' : $method) . '_' . $type['alias'];
 			$call_method = array($type['object'], $call_method);
 
+			// Se a informação foi instancia de um core_model_row, obtém apenas o ID
+			if($data instanceof core_model_row)
+				$data = $data->id;
+
 			// Se for chamável
 			if(is_callable($call_method))
 				return call_user_func($call_method, $data);
