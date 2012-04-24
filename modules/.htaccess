@@ -2,4 +2,10 @@
 # Qualquer outra informação resultará em um Forbidden
 
 RewriteEngine On
+
+# Bloqueia o acesso as pastas públicas
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.+/publics/.+$ - [F,L]
+
+# Gerenciador de arquivos públicos diversos
 RewriteRule !^.+/publics/.+$ - [F,L]
