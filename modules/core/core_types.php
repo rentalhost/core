@@ -60,6 +60,7 @@
 
 		public function get_list($input) {
 			if(is_array($input)) return $input;
+			if(empty($input)) return array();
 			return explode(',', $input);
 		}
 
