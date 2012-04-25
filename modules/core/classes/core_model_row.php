@@ -15,6 +15,9 @@
 		// A linha existe?
 		private $_exists = false;
 
+		// Armazena dados privados
+		private $_private_data = array();
+
 		// Constrói um row
 		public function __construct($conn, $model_instance, $load_id) {
 			$this->_conn = $conn;
@@ -63,6 +66,15 @@
 			}
 
 			return $values;
+		}
+
+		/** DADOS PRIVADOS */
+		// Obtém ou altera os dados
+		public function data($key, $value = null) {
+			if($value === null)
+				return $this->_private_data[$key];
+
+			$this->_private_data[$key] = $value;
 		}
 
 		/** MÉTODOS DE REGISTRO */
