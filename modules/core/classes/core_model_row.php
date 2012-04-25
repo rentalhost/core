@@ -93,7 +93,7 @@
 		}
 
 		// Salva o objeto
-		public function save() {
+		public function save($ignore_events = false) {
 			// Argumentos
 			$save_args = array('data' => array());
 
@@ -105,11 +105,13 @@
 			$event_type = $old_exists === true ? core_model::ON_UPDATE : core_model::ON_INSERT;
 
 			// Executa o evento antes de salvar
-			if(!$this->_run_event('before_save', $event_type))
+			if($ignore_events === false
+			&& !$this->_run_event('before_save', $event_type))
 				return false;
 
 			// Executa o evento antes de inserir ou atualizar
-			if(!$this->_run_event($old_exists ? 'before_update' : 'before_insert'))
+			if($ignore_events === false
+			&& !$this->_run_event($old_exists ? 'before_update' : 'before_insert'))
 				return false;
 
 			// Aplica o valor que será inserido/atualizado na data list
@@ -151,11 +153,14 @@
 			// Recarrega o elemento
 			$this->reload();
 
-			// Executa o evento após salvar, inserir ou atualizar
-			$this->_run_event('on_save', $event_type);
+			// Se não puder ignorar os eventos...
+			if($ignore_events === false) {
+				// Executa o evento após salvar, inserir ou atualizar
+				$this->_run_event('on_save', $event_type);
 
-			// Executa o evento antes de inserir ou atualizar
-			$this->_run_event($old_exists === true ? 'on_update' : 'on_insert');
+				// Executa o evento antes de inserir ou atualizar
+				$this->_run_event($old_exists === true ? 'on_update' : 'on_insert');
+			}
 
 			return true;
 		}
