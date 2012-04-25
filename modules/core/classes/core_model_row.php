@@ -290,7 +290,23 @@
 					case 'exists':
 					case 'count':
 						$query = $this->query($key->sql, core_model_query::merge_args($args, $key));
-						return $key->type === 'exists' ? $query->num_rows > 0 : $query->num_rows;
+
+						// Se for exists, retorna se existe algum registro
+						if($key->type === 'exists')
+							return $query->num_rows > 0;
+
+						// Em outro caso (count) verifica se há somente uma coluna e se ela se chama COUNT(...)
+						$fields = $query->fetch_fields();
+
+						// Se houver apenas um campo e este for COUNT(*) retorna o seu valor
+						if(count($fields) === 1
+						&& preg_match('/^COUNT(.+)$/i', $fields[0]->name)) {
+							$fetch = $query->fetch_row();
+							return intval($fetch[0]);
+						}
+
+						// Em último caso, retorna o número de resultados encontrados
+						return $query->num_rows;
 						break;
 					// Chave one retorna um objeto de outro modelo (ou o mesmo) baseado em uma coluna local
 					case 'one':
