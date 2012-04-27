@@ -72,7 +72,7 @@
 		// Obtém ou altera os dados
 		public function data($key, $value = null) {
 			if($value === null)
-				return $this->_private_data[$key];
+				return isset($this->_private_data[$key]) ? $this->_private_data[$key] : null;
 
 			$this->_private_data[$key] = $value;
 		}
