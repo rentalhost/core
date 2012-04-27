@@ -349,7 +349,7 @@
 			$old_outdated = isset($this->_data[$key]['outdated']) ? $this->_data[$key]['outdated'] : false;
 
 			$this->_data[$key]['internal'] = $value;
-			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key, 'set');
+			$this->_data[$key]['outdated'] = $old_internal !== $this->_get_typed_value($key);
 
 			if($old_outdated !== $this->_data[$key]['outdated'])
 				$this->_data[$key]['original'] = $old_internal;
