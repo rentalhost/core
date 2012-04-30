@@ -10,7 +10,7 @@
 			$this->add_type('int',		null, 0,		false, true);
 			$this->add_type('string',	null, '""',		false, false);
 			$this->add_type('float',	null, 0,		false, true);
-			$this->add_type('list',		null, null,		false, false);
+			$this->add_type('list',		null, array(),	false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
 

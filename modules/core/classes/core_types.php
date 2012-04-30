@@ -22,10 +22,13 @@
 
 			// Se for opcional e o valor estiver vazio
 			if($data === null) {
-				if($optional === null
-				|| $type['optional'] === null)
-					return null; //TODO: se não for opcional para o valor ou para o tipo, informa um erro
-
+				if($method === 'get') {
+					if($optional === null
+					|| $type['optional'] === null)
+						//TODO: se não for opcional para o valor ou para o tipo, informa um erro
+						return null;
+				}
+				else
 				// Em outro caso, retorna o valor opcional
 				return $nullable !== true ? $type['optional'] : 'NULL';
 			}
