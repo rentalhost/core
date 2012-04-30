@@ -18,5 +18,4 @@ php_value output_handler ob_gzhandler
 # Faz o cache dos arquivos públicos
 <filesMatch "\.(jpg|png|js|css)$">
 	FileETag MTime
-	Header set Cache-Control "max-age=31536000, public"
 </filesMatch>
