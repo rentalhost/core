@@ -13,7 +13,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
 
 # Compacta o código com GZIP
-php_value output_handler ob_gzhandler
+<IfModule mod_php5.c>
+	php_value output_handler ob_gzhandler
+</IfModule>
 
 # Faz o cache dos arquivos públicos
 <filesMatch "\.(jpg|png|js|css)$">
