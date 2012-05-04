@@ -74,6 +74,7 @@
 			$container->code = $code;
 
 			$this->_messages[] = $container;
+			return $this;
 		}
 
   		// Conta quantas mensagens existem de um tipo específico
