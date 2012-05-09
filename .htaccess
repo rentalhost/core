@@ -5,8 +5,9 @@ Header unset Pragma
 Header unset Last-Modified
 
 # Proteção contra o CVE-2012-1823
-RewriteCond %{QUERY_STRING} ^(%2d|-)[^=]+$ [NC]
-RewriteRule ^(.*) $1? [L]
+RewriteCond %{QUERY_STRING} ^[^=]*$
+RewriteCond %{QUERY_STRING} %2d|\- [NC]
+RewriteRule .? - [F,L]
 
 # Redireciona arquivos públicos diretamente
 RewriteRule ^(.+/publics/.+)$ ./modules/$1 [L]
