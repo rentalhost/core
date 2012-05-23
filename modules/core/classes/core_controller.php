@@ -99,11 +99,23 @@
 
 			// Nesta etapa, é necessário receber os dados retornado pela função e gerado
 			ob_start();
-			$this->_result_data = call_user_func_array( array( $this, $this->_modular_data->method ), $this->_modular_data->args );
+			$this->_result_data = $this->_execute_method($this, $this->_modular_data->method, $this->_modular_data->args);
 			$this->_result_contents = ob_get_contents();
 			ob_end_clean();
 
 			return $this;
+		}
+
+		// Executa o método, verificando se os argumentos passados são suficientes
+		private function _execute_method($class, $method, $args) {
+			$reflection = new ReflectionMethod($class, $method);
+
+			// Verifica se a quantidade de parâmetros passados são suficientes
+			if(count($args) < $reflection->getNumberOfRequiredParameters())
+				return call_user_func_array(array($class, '__error'), array_merge(array($class), (array) $args));
+
+			// Em situações normais, executa o método e retorna o valor obtido
+			return call_user_func_array(array($class, $method), $args);
 		}
 
 		// Imprime o conteúdo gerado
