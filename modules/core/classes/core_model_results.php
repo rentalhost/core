@@ -78,4 +78,9 @@
 		public function count(){
 			return $this->_query->num_rows;
 		}
+
+		// Conta a quantidade total (sem limitação) de objetos encontrados
+		public function count_unlimited() {
+			return (int) array_pop($this->_conn->query('SELECT FOUND_ROWS();')->fetch_row());
+		}
 	}
