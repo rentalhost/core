@@ -167,7 +167,12 @@
 			$args_order = setlist($key->args_order);
 			$args_data = array();
 
-			// Preenche as informações e retorna
+			// Se for uma informação determinada por um array...
+			if(isset($args[0])
+			&& is_array($args[0]))
+				return array_merge($key->args_default, $args[0]);
+
+			// Em outro caso, preenche as informações pela ordem determinada
 			// Usa o valor padrão somente quando necessário
 			foreach($args_order as $index => $var)
 				$args_data[$var] = isset($args[$index]) ? $args[$index] :
