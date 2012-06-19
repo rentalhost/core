@@ -11,6 +11,7 @@
 			$this->add_type('string',	null, '""',		false, false);
 			$this->add_type('float',	null, 0,		false, true);
 			$this->add_type('list',		null, array(),	false, false);
+			$this->add_type('bool',		null, false,	false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
 
@@ -62,6 +63,16 @@
 			if(is_array($input)) return $input;
 			if(empty($input)) return array();
 			return explode(',', $input);
+		}
+
+
+		/** BOOL */
+		public function set_bool($input) {
+			return $input ? 'TRUE' : 'FALSE';
+		}
+
+		public function get_bool($input) {
+			return core::get_state($input, 'y');
 		}
 
 		/** SQL */

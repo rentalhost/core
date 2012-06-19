@@ -82,12 +82,12 @@
 		}
 
 		// Obtém o estado booleano de uma informação
-		static public function get_state($info) {
+		static public function get_state($info, $additional_states) {
 			//NOTE: esta é a verificação direta do PHP
 			if(!is_string($info))
 				return (bool) $info;
 
-			static $on_mode = array('true', 'on', 'yes');
+			$on_mode = array('true', 'on', 'yes') + setlist($additional_states);
 			return in_array($info, $on_mode);
 		}
 
