@@ -73,7 +73,7 @@
 		}
 
 		public function get_bool($input) {
-			return core::get_state($input, 'y');
+			return core::get_state(strtolower($input), 'y');
 		}
 
 		/** PASSWORD */
