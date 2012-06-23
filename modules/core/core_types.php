@@ -12,6 +12,7 @@
 			$this->add_type('float',	null, 0,		false, true);
 			$this->add_type('list',		null, array(),	false, false);
 			$this->add_type('bool',		null, false,	false, false);
+			$this->add_type('password',	null, null,		false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
 
@@ -73,6 +74,11 @@
 
 		public function get_bool($input) {
 			return core::get_state($input, 'y');
+		}
+
+		/** PASSWORD */
+		public function set_password($input) {
+			return '"' . hash_hmac('sha256', $input, config('security_key'), false) . '"';
 		}
 
 		/** SQL */

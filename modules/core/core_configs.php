@@ -49,6 +49,11 @@
 	// Ao prefixar automaticamente, também incluir a modular
 	$config->session_prefix_modular = false;
 
+	/** CONFIGURAÇÕES DE SEGURANÇA */
+	// Chave de segurança para SHA256
+	//NOTE: prefira utilizar um dos itens em: http://bit.ly/aHeU8I
+	$config->security_key = 'default';
+
 	// Salva as configurações na raiz
 	core_config::save_configs('', $config);
 
