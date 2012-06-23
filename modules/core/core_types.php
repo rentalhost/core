@@ -13,6 +13,7 @@
 			$this->add_type('list',		null, array(),	false, false);
 			$this->add_type('bool',		null, false,	false, false);
 			$this->add_type('password',	null, null,		false, false);
+			$this->add_type('ipv4', 	null, null, 	false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
 
@@ -53,7 +54,6 @@
 			return (float) str_replace(',', '.', $input);
 		}
 
-
 		/** LIST */
 		public function set_list($input) {
 			if(is_string($input)) return $input;
@@ -65,7 +65,6 @@
 			if(empty($input)) return array();
 			return explode(',', $input);
 		}
-
 
 		/** BOOL */
 		public function set_bool($input) {
@@ -79,6 +78,15 @@
 		/** PASSWORD */
 		public function set_password($input) {
 			return '"' . hash_hmac('sha256', $input, config('security_key'), false) . '"';
+		}
+
+		/** IPv4 */
+		public function set_ipv4($input) {
+			return ip2long($data);
+		}
+
+		public function get_ipv4($input) {
+			return long2ip($data);
 		}
 
 		/** SQL */
