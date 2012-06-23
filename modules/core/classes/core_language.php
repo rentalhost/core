@@ -71,7 +71,7 @@
 
 				// Se o arquivo não estiver sido carregado, o faz
 				if($this->_lang_dir[$lang_key] === null) {
-					$this->_lang_dir[$lang_key] = parse_ini_file($lang_path, false);
+					$this->_lang_dir[$lang_key] = parse_ini_string(utf8_decode(file_get_contents($lang_path)), false);
 				}
 
 				// Se a chave não existir, avança
