@@ -11,6 +11,7 @@
 			$this->add_type('string',	null, '""',		false, false);
 			$this->add_type('float',	null, 0,		false, true);
 			$this->add_type('list',		null, array(),	false, false);
+			$this->add_type('json', 	null, null, 	false, false);
 			$this->add_type('bool',		null, false,	false, false);
 			$this->add_type('password',	null, null,		false, false);
 			$this->add_type('ipv4', 	null, null, 	false, false);
@@ -64,6 +65,15 @@
 			if(is_array($input)) return $input;
 			if(empty($input)) return array();
 			return explode(',', $input);
+		}
+
+		/** JSON */
+		public function set_json($input) {
+			return '"' . self::conn()->escape(json_encode($input)) . '"';
+		}
+
+		public function get_json($input) {
+			return json_decode($input, true);
 		}
 
 		/** BOOL */
