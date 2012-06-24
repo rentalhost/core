@@ -4,4 +4,4 @@
 	define('CORE_DEBUG', TRUE);
 
 	// Inicializa o Core
-	require_once dirname( __FILE__ ) . '/modules/core/core_engine.php';
+	require_once 'modules/core/core_engine.php';
