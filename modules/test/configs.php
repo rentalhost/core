@@ -1,5 +1,7 @@
 <?php
 
+	set_time_limit(15);
+
 	// Define uma informação para testes, apenas
 	$config->test = true;
 

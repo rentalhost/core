@@ -308,8 +308,13 @@
 
 				// Se a modular não for definida, retorna um controller neutro
 				if( isset( $modular_path_data->modular ) === false ) {
-					return new self( $modular_path, null, $cancel_print,
-						self::STATUS_CONTROLLER_INVALID | self::STATUS_MODULAR_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
+					if( $strict_route === true ) {
+						return new self( $modular_path, null, $cancel_print,
+							self::STATUS_CONTROLLER_INVALID | self::STATUS_MODULAR_REQUIRED, self::RETURN_TYPE_DEFAULT, false );
+					}
+					else {
+						$modular_path_data->modular = (array) core_config::get_config(null, 'route_default_modular');
+					}
 				}
 
 				// Senão, armazena a informação
