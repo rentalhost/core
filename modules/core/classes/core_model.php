@@ -69,6 +69,12 @@
 		// Armazena as keys do modelo
 		private $_keys = array();
 
+		// Armazena os tipos padrões das colunas
+		private $_column_types = array();
+
+		// Coluna primária
+		public	$primary_key = 'id';
+
 		// Obtém ou altera o prefixo da tabela
 		public function prefix($model_prefix = null, $use_as_full = false) {
 			// Se for uma string, é uma alteração de prefixo
@@ -175,6 +181,19 @@
 
 			// Preenche a key
 			$this->_keys[$keyname] = $object;
+		}
+
+		// Define o tipo de uma coluna
+		public function set_column_type($key, $type, $optional = true, $nullable = true) {
+			$this->_column_types[$key] = array($type, $optional, $nullable);
+		}
+
+		// Obtém a definição do tipo de uma coluna
+		public function get_column_type($key) {
+			if(!isset($this->_column_types[$key]))
+				return null;
+
+			return $this->_column_types[$key];
 		}
 
 		// Obtém a configuração de uma chave

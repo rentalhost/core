@@ -88,6 +88,17 @@
 			return $helper;
 		}
 
+		// Cria um novo objeto de uma library
+		static public function create_library($library, $args) {
+			$object = self::load_library($library);
+			$reflection = new ReflectionClass($object);
+
+			if($reflection->hasMethod('__construct'))
+				return $reflection->newInstanceArgs($args);
+
+			return $reflection->newInstance();
+		}
+
 		// Obtém uma instância do caller
 		static public function get_instance() {
 			// Se o caller não for definido, carrega

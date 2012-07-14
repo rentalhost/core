@@ -16,6 +16,9 @@
 		const	STATUS_METHOD_REQUIRED		= 16;
 		// Indica que o arquivo não foi encontrado
 		const	STATUS_CONTROLLER_NOT_FOUND	= 32;
+		// Indica que o método final não foi atingido pois foi bloqueado
+		// por um roteador
+		const	STATUS_DESTINY_ROUTED		= 64;
 
 		// Indica que o tipo de retorno é padrão
 		const   RETURN_TYPE_DEFAULT			= 'default';
@@ -36,6 +39,10 @@
 		// Armazena a informação se o conteúdo foi impresso
 		private $_result_printed	= false;
 
+		// Permite controlar se um routeramento é ou não forçado
+		// Por padrão, se o método existir, ele não será routerado
+		protected $force_router = false;
+
 		// Cria uma nova instância
 		//DEBUG: verificar se o método chamado entra em conflito com os métodos do core_controller
 		private function __construct( $modular_data, $controller_args, $cancel_print,
@@ -49,8 +56,26 @@
 			$this->_result_type = $default_result_type;
 
 			// Verifica se um dado método pode ser chamado
-			if(isset($modular_data->method) === true
-			&& method_exists($this, $modular_data->method) === false) {
+			$method_exists = false;
+			if(isset($modular_data->method) === true) {
+				$method_exists = method_exists($this, $modular_data->method);
+
+				// Se o método não existir,
+				// ou se for necessário forçar a rota...
+				if(!$method_exists
+				||  $this->force_router === true) {
+					// Verifica se o método possui routeador
+					// Se possui, deve verificar se deve prosseguir
+					if(method_exists($this, '__router')
+					&& $this->__router($method_exists, $modular_data, $modular_data->args) === false) {
+						$this->_status|= self::STATUS_DESTINY_ROUTED;
+						$method_exists = true;
+					}
+				}
+			}
+
+			// Verifica se um método existe, ou se foi roteado
+			if($method_exists === false) {
 				$this->_status|= self::STATUS_METHOD_NOT_EXISTS;
 			}
 
@@ -92,8 +117,13 @@
 
 		// Executa o controller
 		private function _execute() {
+			// Se for routeado, apenas retorna o objeto
+			if($this->_status === self::STATUS_DESTINY_ROUTED) {
+				return $this;
+			}
+			else
 			// Se houve algum erro, evita que seja executado
-			if( $this->_status !== self::STATUS_SUCCESS ) {
+			if($this->_status !== self::STATUS_SUCCESS) {
 				$this->_throw_exception();
 			}
 
@@ -136,8 +166,10 @@
 		}
 
 		// Se o arquivo for requerido, ele não poderá ter nenhum erro
+		// Pode, somente, ter sua rota bloqueada
 		public function required() {
-			if( $this->_status !== self::STATUS_SUCCESS ) {
+			if( $this->_status !== self::STATUS_SUCCESS
+			&&  $this->_status !== self::STATUS_DESTINY_ROUTED ) {
 				$this->_throw_exception();
 			}
 

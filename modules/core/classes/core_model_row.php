@@ -43,7 +43,7 @@
 
 		// Obtém o ID atual
 		public function id() {
-			return (int) @$this->_data['id']['internal'];
+			return (int) @$this->_data[$this->_model->primary_key]['internal'];
 		}
 
 		// Calcula a quantidade de registros de um modelo
@@ -84,12 +84,12 @@
 			$this->_loader_method = array(array($this, 'load'), array($id));
 
 			// Faz a busca e aplica uma informação recebida
-			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE `id` = [@id(int)];',
-				array('id' => $id))->fetch_assoc());
+			$result = $this->_apply_data($this->query('SELECT [*] FROM [this] WHERE [@primaryColumn(key)] = [@id(int)];',
+				array('primaryColumn' => $this->_model->primary_key, 'id' => $id))->fetch_assoc());
 
 			// Se um resultado não for encontrado, aplica ao menos o id informado
 			if($result === false) {
-				$this->_data['id'] = array(
+				$this->_data[$this->_model->primary_key] = array(
 					'internal' => $id,
 					'outdated' => true
 				);
@@ -144,7 +144,8 @@
 			// Se o objeto já existir, faz um update
 			if($this->_exists === true) {
 				// Atualiza a informação no banco
-				$this->query('UPDATE [this] SET [@data(sql)] WHERE `id` = [@this.id(int)];', $save_args);
+				$save_args['primaryColumn'] = $this->_model->primary_key;
+				$this->query('UPDATE [this] SET [@data(sql)] WHERE [@primaryColumn(key)] = [@this.id(int)];', $save_args);
 			}
 			// Caso contrário, é uma operação de inserção
 			else {
@@ -152,8 +153,8 @@
 				$this->query('INSERT INTO [this] SET [@data(sql)]', $save_args);
 
 				// Se um ID não foi informado, aplica o ID recebido
-				if(empty($this->_data['id']))
-					$this->_data['id'] = array(
+				if(empty($this->_data[$this->_model->primary_key]))
+					$this->_data[$this->_model->primary_key] = array(
 						'internal' => $this->_conn->get_connection()->insert_id,
 						'outdated' => false
 					);
@@ -192,14 +193,15 @@
 				if(!$this->_run_event('before_delete'))
 					return false;
 
-				$id = $this->_data['id']['internal'];
+				$id = $this->_data[$this->_model->primary_key]['internal'];
 				$this->_exists = false;
 			}
 
 			// Executa o evento antes de inserir ou atualizar
 			$this->_run_event('on_delete');
 
-			return $this->query('DELETE FROM [this] WHERE `id` = [@id(int)]', array('id' => $id));
+			return $this->query('DELETE FROM [this] WHERE [@primaryColumn(key)] = [@id(int)]',
+				array('primaryColumn' => $this->_model->primary_key, 'id' => $id));
 		}
 
 		// Retorna se o registro existe na tabela
@@ -238,6 +240,24 @@
 						'internal' => $value,
 						'outdated' => false
 					);
+				}
+
+				// Define o tipo do resultado, se necessário
+				foreach($new_result as $key => $value) {
+					$key_type = $this->_model->get_column_type($key);
+					if($key_type !== null) {
+						if(!isset($new_result[$key]['type'])) {
+							$new_result[$key]['type'] = $key_type;
+							continue;
+						}
+
+						for($i=0; $i<2; $i++) {
+							if(isset($new_result[$key]['type'][$i])
+							&& $new_result[$key]['type'][$i] === null) {
+								$new_result[$key]['type'][$i] = $key_type[$i];
+							}
+						}
+					}
 				}
 
 				$this->_exists = true;
@@ -325,9 +345,14 @@
 				}
 			}
 
-			// Em último caso, executa o método dentro do modelo
-			array_unshift($args, $this);
-			return call_user_func_array(array($this->_model, $func), $args);
+			// Se o método existir no modelo, executa
+			if(method_exists($this->_model, $func)) {
+				array_unshift($args, $this);
+				return call_user_func_array(array($this->_model, $func), $args);
+			}
+
+			// Em último caso, retorna o valor armazenado normalmente
+			return $this->__get($func);
 		}
 
 		// Obtém a informação tipada
@@ -378,6 +403,11 @@
 		// Executa uma query no modelo
 		public function query($query, $args = null, $from = null) {
 			return $this->_model->query($this->_conn, $query, $args, $from ? $from : $this);
+		}
+
+		// Retorna a conexão
+		public function conn() {
+			return $this->_conn;
 		}
 
 		/** EVENTOS */

@@ -54,6 +54,12 @@
 		return true;
 	}
 
+	// Cria um novo objeto de uma library
+	function create($library) {
+		$args = func_get_args();
+		return core_caller::create_library($library, array_slice($args, 1));
+	}
+
 	/** HELPERS DE DADOS */
 	// Converte uma string separada por vírgula em um array
 	function setlist($data) {

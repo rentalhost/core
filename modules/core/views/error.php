@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title><?php echo $lang->head_title; ?></title>
-		<meta http-equiv="Content-type" content="text/html; charset=<?php echo $lang->head_charset; ?>" />
+		<meta http-equiv="Content-type" content="text/html" />
 		<base href="<?php echo baseurl(); ?>" />
 		<link href="publics/default.css" rel="stylesheet" type="text/css" />
 		<link href="publics/default-extra.css" rel="stylesheet" type="text/css" />

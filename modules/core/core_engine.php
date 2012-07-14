@@ -4,7 +4,8 @@
 	error_reporting(E_ALL);
 
 	// Inicia a sessão automaticamente
-	session_start();
+	if(!isset($_SESSION))
+		session_start();
 
 	// Inclui as classes principais
 	require_once 'classes/core.php';

@@ -10,10 +10,14 @@
 			$this->add_type('int',		null, 0,		false, true);
 			$this->add_type('string',	null, '""',		false, false);
 			$this->add_type('float',	null, 0,		false, true);
+			$this->add_type('date', 	null, null, 	false, false);
+			$this->add_type('time',		null, null, 	false, false);
+			$this->add_type('datetime',	null, null, 	false, false);
 			$this->add_type('list',		null, array(),	false, false);
 			$this->add_type('json', 	null, null, 	false, false);
 			$this->add_type('bool',		null, false,	false, false);
 			$this->add_type('password',	null, null,		false, false);
+			$this->add_type('bytes', 	null, null, 	false, false);
 			$this->add_type('ipv4', 	null, null, 	false, false);
 			$this->add_type('sql',		null, null,		false, false);
 		}
@@ -55,6 +59,30 @@
 			return (float) str_replace(',', '.', $input);
 		}
 
+		/** DATE */
+		public function set_date($input) {
+		}
+
+		public function get_date($input) {
+			return date(lang('/core/date')->date_format, strtotime($input));
+		}
+
+		/** TIME */
+		public function set_time($input) {
+		}
+
+		public function get_time($input) {
+			return date(lang('/core/date')->time_format, strtotime($input));
+		}
+
+		/** DATETIME */
+		public function set_datetime($input) {
+		}
+
+		public function get_datetime($input) {
+			return date(lang('/core/date')->datetime_format, strtotime($input));
+		}
+
 		/** LIST */
 		public function set_list($input) {
 			if(is_string($input)) return $input;
@@ -88,6 +116,30 @@
 		/** PASSWORD */
 		public function set_password($input) {
 			return '"' . hash_hmac('sha256', $input, config('security_key'), false) . '"';
+		}
+
+		/** BOOL */
+		public function set_bytes($input) {
+			if(!preg_match('/^(?<size>\d+(?:[\.\,]\d+)?)\s?(?<level>B|KB|MB|GB|TB)?$/i', $input, $match))
+				return null;
+
+			$levels = array('B', 'KB', 'MB', 'GB', 'TB');
+			$level = $match['level'] ? array_search($match['level'], $levels) : 0;
+
+			return ((float) str_replace(',', '.', $match['size'])) * pow(1024, $level);
+		}
+
+		public function get_bytes($input) {
+			$levels = array('B', 'KB', 'MB', 'GB', 'TB');
+			$level = 0;
+
+			while($input > 1024 && $level < 4) {
+				$level++;
+				$input/= 1024;
+			}
+
+			$input = number_format($input, $level === 0 ? 0 : 2, '.', '');
+			return "{$input} {$levels[$level]}";
 		}
 
 		/** IPv4 */

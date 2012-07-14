@@ -72,5 +72,5 @@ table.args tbody td.key {
 	color: #3B064E;
 }
 table.args tbody td.code div {
-	white-space: pre-line;
+	white-space: pre-wrap;
 }
